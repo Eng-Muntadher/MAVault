@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  --landing-page-bg: #f9fafbed;
+  --text-color: #0a0a0a;
+  --text-color-2: #fff;
+  --text-color-secondary: #dbeafe;
+  --nav-links-color: #364153;
+  --input-placeholder: #4a5565;
+  --input-placeholder-2: #717182;
+  --input-color: #f3f4f6;
+  --nav-links-hover: #2d3bff;
+  --selected-btn-pagination: #155dfc;
+}
+
+.active {
+  color: var(--nav-links-hover);
+}
+
+.purple-bg {
+  background: linear-gradient(135deg, #2b7fff 0%, #9810fa 100%);
+}
+
+.landing-bg {
+  background: linear-gradient(170deg, #155dfc 0%, #9810fa 50%, #e60076 100%);
+}
+
+.btn-bg {
+  background: linear-gradient(90deg, #155dfc 0%, #9810fa 100%);
+}
+
+.btn-bg:hover {
+  background: linear-gradient(90deg, #0d47d9 0%, #780cc6 100%);
+}
+
+.text {
+  background: linear-gradient(90deg, #155dfc 0%, #9810fa 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.txt {
+  font-family: "Cambria Math", Cambria, "Times New Roman", serif;
+}
