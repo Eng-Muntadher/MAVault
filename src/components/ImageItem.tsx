@@ -17,7 +17,7 @@ function ImageItem({
   describtion,
 }: ImageItemProps) {
   return (
-    <div className="min-w-74 relative">
+    <div className="min-w-[286px] relative">
       <img src={image} className="rounded-xl mb-3" />
 
       <span className="flex px-3 py-1 text-xs text-(--text-color-2) absolute left-3 top-[0.85rem] rounded-full bg-black/50 backdrop-blur-sm">
