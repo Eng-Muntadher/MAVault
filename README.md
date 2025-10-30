@@ -21,6 +21,7 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - **Lucide Icons**
 - **Supabase**
 - **Day.js**
+- **React Dropzone**
 - **Framer Motion**
 - **React Error Boundary**
 
@@ -30,6 +31,8 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 
 - ✅ Responsive homepage built with React, TypeScript, and Tailwind CSS
 - ✅ Project routing structure initialized with React Router
+- ✅ Responsive Explore page (still static)
+- ✅ Responsive Upload page with form validation + drag and drop support for image uploading (still static)
 
 ---
 
