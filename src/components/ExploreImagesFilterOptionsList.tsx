@@ -1,15 +1,26 @@
-import { Clock, Flame, Star } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import ExploreImagesFilterOption from "./ExploreImagesFilterOption";
 import { useState } from "react";
 
-const buttonsData = [
-  { icon: Flame, name: "Trending" },
-  { icon: Star, name: "Featured" },
-  { icon: Clock, name: "Recent" },
-];
+interface buttonsDataShape {
+  icon: LucideIcon;
+  name: string;
+}
 
-function ExploreImagesFilterOptionsList() {
-  const [selectedBtn, setSelectedBtn] = useState("Trending");
+interface buttonsDataProp {
+  buttonsData: buttonsDataShape[];
+  addedClassesForContainer?: string;
+  addedClassesForElements?: string;
+  ariaLabel?: string;
+}
+
+function ExploreImagesFilterOptionsList({
+  buttonsData,
+  addedClassesForContainer,
+  addedClassesForElements,
+  ariaLabel,
+}: buttonsDataProp) {
+  const [selectedBtn, setSelectedBtn] = useState(buttonsData[0].name);
 
   function handleClick(name: string) {
     setSelectedBtn(name);
@@ -17,9 +28,9 @@ function ExploreImagesFilterOptionsList() {
 
   return (
     <section
-      className="flex justify-between w-md bg-[#ECECF0] px-0.5 py-[0.185rem] rounded-[0.875rem] max-w-full text-sm font-semibold mb-10"
+      className={`flex justify-between bg-[#ECECF0] px-0.5 py-[0.185rem] rounded-[0.875rem] max-w-full text-sm font-semibold mb-10 ${addedClassesForContainer}`}
       role="radiogroup"
-      aria-label="Filter images by date, most rated or featured"
+      aria-label={ariaLabel ? ariaLabel : ""}
     >
       {buttonsData.map((btn) => (
         <ExploreImagesFilterOption
@@ -28,6 +39,7 @@ function ExploreImagesFilterOptionsList() {
           name={btn.name}
           isSelected={btn.name === selectedBtn}
           onClick={() => handleClick(btn.name)}
+          addedClasses={addedClassesForElements}
         />
       ))}
     </section>

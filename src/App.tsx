@@ -4,6 +4,7 @@ import About from "./pages/About";
 import AppLayout from "./components/AppLayout";
 import Explore from "./pages/Explore";
 import Upload from "./pages/Upload";
+import UserProfile from "./pages/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/user-profile/:userId",
+        element: <UserProfile />,
       },
     ],
   },

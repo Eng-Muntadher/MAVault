@@ -4,16 +4,18 @@ import GuestImage from "../assets/guest.jpeg";
 
 interface ImagesListProps {
   tempData: number[];
-  usedInExplorePage?: boolean;
+  usedOutsideHomePage?: boolean;
+  addedClasses?: string;
 }
 
-function ImagesList({ tempData, usedInExplorePage = false }: ImagesListProps) {
-  const classes = usedInExplorePage
-    ? "grid grid-cols-4 gap-6 max-xl:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1"
-    : "grid grid-cols-3 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 max-lg:grid-cols-2 max-sm:grid-cols-1";
+function ImagesList({
+  tempData,
+  usedOutsideHomePage = false,
+  addedClasses,
+}: ImagesListProps) {
   return (
-    <div className={`${usedInExplorePage || "bg-(--landing-page-bg) pt-12"}`}>
-      <section className={classes}>
+    <div className={`${usedOutsideHomePage || "bg-(--landing-page-bg) pt-12"}`}>
+      <section className={addedClasses}>
         {tempData.map((el) => (
           <ImageItem
             key={el}
@@ -28,7 +30,7 @@ function ImagesList({ tempData, usedInExplorePage = false }: ImagesListProps) {
       </section>
 
       {/* Images pagination */}
-      {usedInExplorePage || (
+      {usedOutsideHomePage || (
         <>
           <div
             className="flex gap-2 justify-center items-center mt-12 pb-12"

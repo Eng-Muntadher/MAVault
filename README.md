@@ -33,6 +33,8 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - ✅ Project routing structure initialized with React Router
 - ✅ Responsive Explore page (still static)
 - ✅ Responsive Upload page with form validation + drag and drop support for image uploading (still static)
+- ✅ Responsive About page with detailed info about me and about this project
+- ✅ Responsive User Profile page (still static)
 
 ---
 
