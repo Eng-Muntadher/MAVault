@@ -35,6 +35,7 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - ✅ Responsive Upload page with form validation + drag and drop support for image uploading (still static)
 - ✅ Responsive About page with detailed info about me and about this project
 - ✅ Responsive User Profile page (still static)
+- ✅ Responsive Profile Settings page (still static)
 
 ---
 

@@ -5,6 +5,7 @@ import AppLayout from "./components/AppLayout";
 import Explore from "./pages/Explore";
 import Upload from "./pages/Upload";
 import UserProfile from "./pages/UserProfile";
+import UserSettings from "./pages/UserSettings";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/user-profile/:userId",
         element: <UserProfile />,
+      },
+      {
+        path: "/user-settings/:userId",
+        element: <UserSettings />,
       },
     ],
   },

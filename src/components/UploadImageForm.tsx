@@ -87,13 +87,16 @@ function UploadImageForm() {
           Select an image file from your device
         </label>
 
-        <div
+        <fieldset
           className={`flex flex-col items-center border-2 border-dashed border-[#D1D5DC] rounded-[0.875rem] p-12 bg-[#F9FAFB] hover:bg-blue-50 hover:border-blue-400 focus:outline-none focus:bg-blue-50 focus:border-blue-400 transition-all duration-200 cursor-pointer text-center max-sm:p-8 
             ${
               isDragActive ? "border-blue-400 bg-blue-50" : "border-[#D1D5DC]"
             }`}
           {...getRootProps()}
         >
+          {/* This legend is for screen readers only */}
+          <legend className="sr-only">Image Upload</legend>
+
           <input {...getInputProps()} id="image-input" />
           <UploadIcon
             aria-hidden="true"
@@ -117,10 +120,13 @@ function UploadImageForm() {
           </p>
 
           {fileError && <p className="text-red-600 mt-2">{fileError}</p>}
-        </div>
+        </fieldset>
       </div>
 
-      <div className="rounded-[0.875rem] border border-[rgba(0,0,0,0.10)] bg-white p-6">
+      <fieldset className="rounded-[0.875rem] border border-[rgba(0,0,0,0.10)] bg-white p-6">
+        {/* This legend is for screen readers only */}
+        <legend className="sr-only">Image details</legend>
+
         <h2 className="text-(--text-color) font-semibold mb-1.5">
           Image Details
         </h2>
@@ -202,19 +208,19 @@ function UploadImageForm() {
         <p className="text-xs text-[#6A7282]">
           Separate tags with commas to help others discover your image
         </p>
-      </div>
+      </fieldset>
 
       <div className="flex gap-3 justify-end mb-6">
         <button
           type="button"
-          className="py-2 px-4 rounded-lg border border-[rgba(0,0,0,0.10)] bg-white cursor-pointer hover:bg-[#e9ebef] transition-colors duration-200 ease-in-out"
+          className="py-2 px-4 text-sm font-semibold rounded-lg border border-[rgba(0,0,0,0.10)] bg-white cursor-pointer hover:bg-[#e9ebef] transition-colors duration-200 ease-in-out"
           onClick={handleReset}
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="flex items-center gap-2 py-2 px-3 btn-bg text-(--text-color-2) rounded-lg cursor-pointer disabled:opacity-50"
+          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-(--text-color-2) rounded-lg cursor-pointer disabled:opacity-50"
           disabled={!checkBeforeSubmit}
         >
           <UploadIcon size={16} aria-hidden="true" /> Upload Image
