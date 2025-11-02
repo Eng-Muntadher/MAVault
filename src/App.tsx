@@ -6,6 +6,8 @@ import Explore from "./pages/Explore";
 import Upload from "./pages/Upload";
 import UserProfile from "./pages/UserProfile";
 import UserSettings from "./pages/UserSettings";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
       {
         path: "/user-settings/:userId",
         element: <UserSettings />,
+      },
+      {
+        path: "/sign-up",
+        element: <SignUp />,
+      },
+      {
+        path: "/sign-in",
+        element: <SignIn />,
       },
     ],
   },

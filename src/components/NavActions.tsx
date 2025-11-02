@@ -1,4 +1,5 @@
 import { Menu, Moon, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function NavActions() {
   return (
@@ -23,13 +24,19 @@ function NavActions() {
         <Moon size={16} />
       </button>
 
-      <button className="text-sm font-semibold px-4 py-2 cursor-pointer max-[890px]:hidden text-(--text-color) hover:bg-[#e9ebef] rounded-md">
+      <Link
+        to="/sign-in"
+        className="text-sm font-semibold px-4 py-2 cursor-pointer max-[890px]:hidden text-(--text-color) hover:bg-[#e9ebef] rounded-md"
+      >
         Sign In
-      </button>
+      </Link>
 
-      <button className="btn-bg text-(--text-color-2) font-semibold text-sm px-4 py-2 rounded-lg cursor-pointer max-[890px]:hidden">
+      <Link
+        to="/sign-up"
+        className="btn-bg text-(--text-color-2) font-semibold text-sm px-4 py-2 rounded-lg cursor-pointer max-[890px]:hidden"
+      >
         Sign Up
-      </button>
+      </Link>
 
       <button className="w-9 h-9 justify-center items-center rounded-md max-[890px]:flex min-[890px]:hidden cursor-pointer text-(--text-color) hover:bg-[#e9ebef]">
         <Menu size={16} aria-hidden="true" />

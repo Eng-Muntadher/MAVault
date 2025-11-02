@@ -36,6 +36,7 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - ✅ Responsive About page with detailed info about me and about this project
 - ✅ Responsive User Profile page (still static)
 - ✅ Responsive Profile Settings page (still static)
+- ✅ Responsive Sign up and Sign in pages (still static)
 
 ---
 
