@@ -8,6 +8,7 @@ import UserProfile from "./pages/UserProfile";
 import UserSettings from "./pages/UserSettings";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
+import ImageDetails from "./pages/ImageDetails";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/sign-in",
         element: <SignIn />,
+      },
+      {
+        path: "/image-details/:imageId",
+        element: <ImageDetails />,
       },
     ],
   },
