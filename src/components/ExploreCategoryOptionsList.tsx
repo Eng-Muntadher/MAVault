@@ -1,6 +1,7 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { Clock, Flame, Star, Stars, TrendingUp } from "lucide-react";
 import ExploreCategoryOption from "./ExploreCategoryOption";
-import { useState } from "react";
 
 const buttonsData = [
   { icon: Stars, name: "All", count: 1247 },
@@ -18,7 +19,10 @@ function ExploreCategoryOptionsList() {
   }
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 }}
       className="flex gap-3 flex-wrap mb-8"
       aria-label="Explore categories"
     >
@@ -32,7 +36,7 @@ function ExploreCategoryOptionsList() {
           onClick={() => handleClick(btn.name)}
         />
       ))}
-    </section>
+    </motion.section>
   );
 }
 

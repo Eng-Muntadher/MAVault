@@ -29,14 +29,10 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 
 ## ✨ Current Features
 
-- ✅ Responsive homepage built with React, TypeScript, and Tailwind CSS
 - ✅ Project routing structure initialized with React Router
-- ✅ Responsive Explore page (still static)
-- ✅ Responsive Upload page with form validation + drag and drop support for image uploading (still static)
-- ✅ Responsive About page with detailed info about me and about this project
-- ✅ Responsive User Profile page (still static)
-- ✅ Responsive Profile Settings page (still static)
-- ✅ Responsive Sign up and Sign in pages (still static)
+- ✅ Full Static layout for all pages with states and basic interaction
+- ✅ Framer Motion animations for all pages
+- ✅ A fully functional command pallete with search, keyboard navigation and full page navigation
 
 ---
 
@@ -47,22 +43,21 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - ⏳ User profile customization
 - ⏳ Image filtering, sorting, and search with pagination
 - ⏳ Dark mode toggle
-- ⏳ Command palette for app-wide navigation
 
 ---
 
 ## 🌍 Pages
 
-- **Home** — Currently implemented
-- **Explore** — Planned
-- **About** — Planned
-- **Upload** — Planned
-- **User Profile** — Planned
-- **Settings** — Planned
-- **Single Image Page** — Planned
-- **Sign Up / Sign In** — Planned
+- **Home**
+- **Explore**
+- **About**
+- **Upload**
+- **User Profile**
+- **Settings**
+- **Single Image Page**
+- **Sign Up / Sign In**
 
-_All pages will be fully responsive and optimized for all screen sizes._
+_All are fully responsive and optimized for all screen sizes._
 
 ---
 

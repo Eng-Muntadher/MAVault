@@ -1,4 +1,5 @@
 import { Bookmark, Download, Heart, Share2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const buttonClasses =
   "flex items-center gap-2 rounded-lg border border-black/10  py-2 px-3 text-sm font-semibold hover:bg-[#e9ebef] cursor-pointer transition-all";
@@ -12,7 +13,10 @@ function ImageDetailsButtons() {
   ];
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 }}
       className="my-6 flex gap-3 flex-wrap"
       role="group"
       aria-label="Image actions"
@@ -22,7 +26,7 @@ function ImageDetailsButtons() {
           <Icon size={16} aria-hidden="true" /> {label}
         </button>
       ))}
-    </div>
+    </motion.div>
   );
 }
 

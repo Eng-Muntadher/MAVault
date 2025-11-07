@@ -1,4 +1,5 @@
 import { Bookmark, Heart, MessageSquare, Upload } from "lucide-react";
+import { motion } from "framer-motion";
 import UserStatsCard from "./UserStatsCard";
 
 const cardsData = [
@@ -10,7 +11,12 @@ const cardsData = [
 
 function UserStatsCardsList() {
   return (
-    <ul className="grid grid-cols-4 gap-4 max-md:grid-cols-2">
+    <motion.ul
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 }}
+      className="grid grid-cols-4 gap-4 max-md:grid-cols-2"
+    >
       {cardsData.map((card) => (
         <UserStatsCard
           key={card.text}
@@ -19,7 +25,7 @@ function UserStatsCardsList() {
           text={card.text}
         />
       ))}
-    </ul>
+    </motion.ul>
   );
 }
 

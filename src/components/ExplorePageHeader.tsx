@@ -1,8 +1,13 @@
 import { TrendingUp } from "lucide-react";
+import { motion } from "framer-motion";
 
 function ExplorePageHeader() {
   return (
-    <section aria-labelledby="explore-heading">
+    <motion.section
+      aria-labelledby="explore-heading"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
       <h1 className="flex gap-3 items-center mb-4" id="explore-heading">
         <span
           className="p-2 text-(--text-color-2) purple-bg rounded-[0.625rem]"
@@ -17,7 +22,7 @@ function ExplorePageHeader() {
         Discover trending images, featured collections, and fresh content from
         our community
       </p>
-    </section>
+    </motion.section>
   );
 }
 

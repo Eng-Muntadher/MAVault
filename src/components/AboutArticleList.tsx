@@ -1,9 +1,24 @@
 import { Code, Rocket, Target } from "lucide-react";
 import AboutArticle from "./AboutArticle";
+import { motion } from "framer-motion";
 
+const cardsAnimations = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 function AboutArticleList() {
   return (
-    <div className="flex flex-col gap-12 mb-12">
+    <motion.div
+      variants={cardsAnimations}
+      initial="hidden"
+      animate="visible"
+      className="flex flex-col gap-12 mb-12"
+    >
       <AboutArticle
         ariaLabelledBy="about-the-developer"
         icon={Code}
@@ -50,7 +65,7 @@ function AboutArticleList() {
           and user experience design. MAVault is meant to reflect (and blend) my passion for photography and web development.`,
         ]}
       />
-    </div>
+    </motion.div>
   );
 }
 

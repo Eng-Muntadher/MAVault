@@ -1,7 +1,8 @@
+import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
 import guestImage from "../assets/guest.jpeg";
 import Input from "./Input";
-import { useRef, useState } from "react";
 
 function UpdateUserInfoForm() {
   const [image, setImage] = useState<null | string>(null);
@@ -49,17 +50,21 @@ function UpdateUserInfoForm() {
           <button
             aria-label="Upload new profile picture"
             type="button"
-            className="relative cursor-pointer"
+            className="relative cursor-pointer group"
             onClick={handleFocus}
           >
             <img
               src={image ? image : guestImage}
               alt="Current user image"
-              className="w-[92px] h-[92px] rounded-full"
+              className="w-[92px] h-[92px] rounded-full transition-all duration-300 group-hover:brightness-75"
             />
-            <span className="btn-bg p-2 absolute right-0 bottom-0 text-white rounded-full shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)]">
+            <motion.span
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="btn-bg p-2 absolute right-0 bottom-0 text-white rounded-full shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)]"
+            >
               <Plus size={16} aria-hidden="true" />
-            </span>
+            </motion.span>
 
             <input
               ref={inputRef}

@@ -1,9 +1,10 @@
+import { motion } from "framer-motion";
+import { useEffect } from "react";
 import image from "../assets/photo-1561896196-2fdcc3691049.jfif";
 import BackButton from "../components/BackButton";
 import ImageDetailsBox from "../components/ImageDetailsBox";
 import ImageCommentsBox from "../components/ImageCommentsBox";
 import ImageDetailsButtons from "../components/ImageDetailsButtons";
-import { useEffect } from "react";
 
 function ImageDetails() {
   /* This use effect resets the scroll of the page so that when
@@ -18,7 +19,10 @@ function ImageDetails() {
 
       <div className="flex gap-8 mt-8 justify-center px-4 sm:px-6 lg:px-6 max-[1140px]:flex-col">
         <div>
-          <figure>
+          <motion.figure
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
             <img
               className="rounded-[0.875rem] h-[555px] max-[1140px]:w-full max-[1140px]:h-fit mx-auto"
               src={image}
@@ -27,7 +31,7 @@ function ImageDetails() {
 
             {/* Image description for accessibility */}
             <figcaption className="sr-only">...</figcaption>
-          </figure>
+          </motion.figure>
 
           <ImageDetailsButtons />
 

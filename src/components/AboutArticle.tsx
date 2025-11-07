@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface AboutArticleProps {
   icon: LucideIcon;
@@ -8,6 +9,10 @@ interface AboutArticleProps {
   bodyText: string[]; // each element is a text to be used in a seperate p element with margin to seperate them
   ariaLabelledBy: string; // passing a label to link the section to the h2
 }
+const animations = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
 function AboutArticle({
   icon: Icon,
@@ -18,7 +23,8 @@ function AboutArticle({
   ariaLabelledBy,
 }: AboutArticleProps) {
   return (
-    <article
+    <motion.article
+      variants={animations}
       className="rounded-[0.875rem] border-2 border-gray-200 bg-white shadow-lg p-8 pb-2"
       aria-labelledby={ariaLabelledBy}
     >
@@ -40,7 +46,7 @@ function AboutArticle({
           {el}
         </p>
       ))}
-    </article>
+    </motion.article>
   );
 }
 

@@ -1,10 +1,14 @@
+import { motion } from "framer-motion";
 import userImage from "../assets/guest.jpeg";
 import Input from "../components/Input";
 import ImageComment from "./ImageComment";
 
 function ImageCommentsBox() {
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
       aria-label="comments"
       className="rounded-[0.875rem] border border-black/10 bg-white shadow-lg p-6 mb-10 max-[1140px]:mb-0"
     >
@@ -45,7 +49,7 @@ function ImageCommentsBox() {
         date="15"
         commentText="This is amazing work. Love the modern aesthetic!"
       />
-    </section>
+    </motion.section>
   );
 }
 

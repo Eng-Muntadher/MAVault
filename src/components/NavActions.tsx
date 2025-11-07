@@ -1,11 +1,16 @@
 import { Menu, Moon, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 
-function NavActions() {
+interface NavActionsProps {
+  openCommandPallete: () => void;
+}
+
+function NavActions({ openCommandPallete }: NavActionsProps) {
   return (
     <div className="flex gap-3 items-center justify-end">
       <button
         aria-label="Open Command Palette"
+        onClick={openCommandPallete}
         className="flex items-center gap-2 text-(--input-placeholder) px-2 py-1.5 rounded-[0.625rem] bg-(--input-color) text-xs w-[126.6px] cursor-pointer max-xl:hidden hover:text-gray-900 hover:bg-gray-200"
       >
         <span>

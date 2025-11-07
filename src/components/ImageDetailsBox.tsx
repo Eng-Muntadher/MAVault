@@ -1,10 +1,13 @@
-import userImage from "../assets/guest.jpeg";
+import { motion } from "framer-motion";
 import { Calendar, Eye } from "lucide-react";
+import userImage from "../assets/guest.jpeg";
 import ImageTagsList from "./ImageTagsList";
 
 function ImageDetailsBox() {
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
       aria-label="image details"
       className="flex flex-col gap-4 p-6 rounded-[0.875rem] border border-[rgba(0,0,0,0.10)] bg-white max-w-96 h-fit sticky top-8 z-10 max-[1140px]:max-w-full max-[1140px]:mb-8"
     >
@@ -65,7 +68,7 @@ function ImageDetailsBox() {
         <h4 className="text-[#6A7282] text-sm">Dimensions</h4>
         <span className="text-(--text-color) text-sm">1080 × 720 px</span>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

@@ -1,12 +1,17 @@
 import { Calendar, MapPin, Settings } from "lucide-react";
+import { motion } from "framer-motion";
 import guestImage from "../assets/guest.jpeg";
 import UserStatsCardsList from "../components/UserStatsCardsList";
+import { useNavigate } from "react-router-dom";
 
 function UserProfileMainSection() {
+  const navigate = useNavigate();
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       aria-labelledby="user-profile-heading"
-      className="landing-bg px-40 py-16 max-sm:px-6 max-xl:px-6"
+      className="bg-linear-to-br from-blue-600 via-purple-600 to-pink-600 px-40 py-16 max-sm:px-6 max-xl:px-6"
     >
       <div className="flex gap-6 items-start mb-8 max-md:flex-col max-md:items-center max-md:text-center">
         <img
@@ -19,7 +24,11 @@ function UserProfileMainSection() {
             <h1 className="text-4xl text-white" id="user-profile-heading">
               johndoe
             </h1>
-            <button className="flex items-center gap-2 bg-[#ECEEF2] px-3 py-2 rounded-lg text-sm font-semibold max-md:hidden">
+
+            <button
+              className="flex items-center gap-2 bg-[#ECEEF2] px-3 py-2 rounded-lg text-sm font-semibold max-md:hidden hover:bg-[#cccdd1] cursor-pointer transition-colors duration-200"
+              onClick={() => navigate("/user-settings/9")}
+            >
               <Settings size={16} aria-hidden="true" />
               Edit Profile
             </button>
@@ -37,20 +46,23 @@ function UserProfileMainSection() {
             </div>
 
             <div className="flex gap-2 items-center text-white">
-              <Calendar size={16} />{" "}
+              <Calendar size={16} />
               <span className="text-(--text-color-secondary) text-sm">
                 Joined January 15, 2023
               </span>
             </div>
           </div>
-          <button className="hidden items-center gap-2 bg-[#ECEEF2] px-3 py-2 rounded-lg text-sm font-semibold max-md:flex w-fit mx-auto mt-4">
+          <button
+            className="hidden items-center gap-2 bg-[#ECEEF2] hover:bg-[#cccdd1] px-3 py-2 rounded-lg text-sm font-semibold max-md:flex w-fit mx-auto mt-4 transition-colors duration-200 cursor-pointer"
+            onClick={() => navigate("/user-settings/9")}
+          >
             <Settings size={16} />
             Edit Profile
-          </button>{" "}
+          </button>
         </div>
       </div>
       <UserStatsCardsList />
-    </section>
+    </motion.section>
   );
 }
 

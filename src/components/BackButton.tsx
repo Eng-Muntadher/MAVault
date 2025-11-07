@@ -4,15 +4,20 @@ import { useNavigate } from "react-router-dom";
 interface BackButtonProps {
   text: string;
   addedClasses?: string;
+  to?: string;
 }
 
-function BackButton({ text, addedClasses }: BackButtonProps) {
+function BackButton({ text, addedClasses, to }: BackButtonProps) {
   const navigate = useNavigate();
 
   return (
     <button
       aria-label="Go back to previous page"
-      onClick={() => navigate(-1)}
+      onClick={() => {
+        if (to) {
+          navigate(to);
+        } else navigate(-1);
+      }}
       className={`flex items-center gap-2 text-(--text-color) text-sm font-semibold cursor-pointer hover:text-(--nav-links-hover) ${addedClasses}`}
     >
       <span>

@@ -1,11 +1,15 @@
 import { Stars } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function UploadImageFromExplore() {
   const navigate = useNavigate();
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3 }}
       className="flex flex-col items-center pt-8 pb-6 px-6 text-center mt-24 mb-8 text-(--text-color-2) purple-bg rounded-[0.875rem]"
       aria-labelledby="upload-heading"
     >
@@ -23,7 +27,7 @@ function UploadImageFromExplore() {
       >
         Upload Your Images
       </button>
-    </section>
+    </motion.section>
   );
 }
 
