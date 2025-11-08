@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
 import Input from "../components/Input";
 import { useState } from "react";
+import { useSignIn } from "../hooks/useSignIn";
 
 function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { signIn, isPending } = useSignIn();
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log({ email, password });
+    signIn({ email, password });
   }
 
   return (
