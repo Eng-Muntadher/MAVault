@@ -11,12 +11,13 @@ interface UploadImageArguments {
 }
 
 export async function getImages() {
-  const { data: images, error } = await supabase.from("Images").select("*");
+  const { data, error } = await supabase
+    .from("Images")
+    .select("*")
+    .order("created_at", { ascending: true }); // <-- stable order
 
-  if (error) throw new Error("Error fetching images");
-
-  //   console.log(images);
-  return images;
+  if (error) throw error;
+  return data;
 }
 
 export async function uploadImage({
@@ -72,4 +73,23 @@ export async function uploadImage({
     throw new Error(`Could not upload image ${imageError.message}`);
 
   return image?.at(0);
+}
+
+export async function increaseViews(imageId: number) {
+  const { data, error } = await supabase
+    .from("Images")
+    .select("views")
+    .eq("id", imageId)
+    .single();
+
+  if (error) throw error;
+
+  const newViews = (data.views ?? 0) + 1;
+
+  const { error: updateError } = await supabase
+    .from("Images")
+    .update({ views: newViews })
+    .eq("id", imageId);
+
+  if (updateError) throw updateError;
 }

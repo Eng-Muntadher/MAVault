@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
 import guestImage from "../assets/guest.jpeg";
@@ -7,18 +7,29 @@ import { useUpdateUserData } from "../hooks/useUpdateUser";
 import LoadingSpinner from "./LoadingSpinner";
 import { useUser } from "../hooks/useUser";
 import dayjs from "dayjs";
+import { useGetUserInfo } from "../hooks/useGetUserInfo";
 
 function UpdateUserInfoForm() {
-  const { data } = useUser();
+  const { data: user } = useUser();
 
-  const [image, setImage] = useState<null | string>(
-    data?.user_metadata.avatarUrl || null
+  const { data: userData, isPending: isFetchingData } = useGetUserInfo(
+    user?.id || ""
   );
+
+  const [image, setImage] = useState<null | string>(null);
   const [userName, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [location, setLocation] = useState("");
   const [charCount, setCharCount] = useState(0);
   const [avatar, setAvatar] = useState<File | null>(null);
+
+  useEffect(() => {
+    setImage(userData?.at(0)?.avatar);
+    setUsername(userData?.at(0)?.user_name);
+    setBio(userData?.at(0)?.bio);
+    setLocation(userData?.at(0)?.location);
+    setCharCount(userData?.at(0)?.bio?.length);
+  }, [userData]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -128,7 +139,8 @@ function UpdateUserInfoForm() {
         </label>
         <Input
           type="text"
-          value={userName}
+          disabled={isFetchingData || isPending}
+          value={isFetchingData ? "loading..." : userName}
           id="username"
           name="username"
           required={true}
@@ -148,7 +160,8 @@ function UpdateUserInfoForm() {
         </label>
         <Input
           type="textarea"
-          value={bio}
+          disabled={isFetchingData || isPending}
+          value={isFetchingData ? "loading..." : bio}
           id="bio"
           name="bio"
           autoComplete="bio"
@@ -171,7 +184,8 @@ function UpdateUserInfoForm() {
         </label>
         <Input
           type="text"
-          value={location}
+          disabled={isFetchingData || isPending}
+          value={isFetchingData ? "loading..." : location}
           id="location"
           name="location"
           autoComplete="location"
@@ -205,7 +219,7 @@ function UpdateUserInfoForm() {
         </label>
         <Input
           type="text"
-          value={data?.email || "loading..."}
+          value={user?.email || "loading..."}
           id="email"
           name="email"
           onChange={() => {}}
@@ -222,8 +236,8 @@ function UpdateUserInfoForm() {
         <Input
           type="text"
           value={
-            (data?.confirmed_at
-              ? dayjs(data.confirmed_at).format("MMMM D, YYYY")
+            (user?.confirmed_at
+              ? dayjs(user.confirmed_at).format("MMMM D, YYYY")
               : "Unknown") || "loading..."
           }
           id="joindate"

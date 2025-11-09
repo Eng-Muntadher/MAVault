@@ -1,32 +1,61 @@
 import ImageItem from "./ImageItem";
-import image from "../assets/photo-1561896196-2fdcc3691049.jfif";
 import GuestImage from "../assets/guest.jpeg";
+import { useGetImages } from "../hooks/useGetImages";
+import SkeletonImageLoading from "./SkeletonImageLoading";
+import { useGetUserInfo } from "../hooks/useGetUserInfo";
+import { useUser } from "../hooks/useUser";
 
 interface ImagesListProps {
-  tempData: number[];
   usedOutsideHomePage?: boolean;
   addedClasses?: string;
 }
 
+interface Image {
+  id: number;
+  created_at: string;
+  title: string;
+  describtion: string;
+  category: string;
+  tags: string;
+  url: string;
+  likes: number;
+  views: number;
+  publisher_id: string;
+}
+const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 function ImagesList({
-  tempData,
   usedOutsideHomePage = false,
   addedClasses,
 }: ImagesListProps) {
+  const { data, isPending } = useGetImages();
+  const { data: user } = useUser();
+
+  const { data: userInfo } = useGetUserInfo(user?.id || "");
+
+  const images: Image[] | undefined = data;
+
   return (
     <div className={`${usedOutsideHomePage || "bg-(--landing-page-bg) pt-12"}`}>
       <section className={addedClasses}>
-        {tempData.map((el) => (
-          <ImageItem
-            key={el}
-            image={image}
-            artistImage={GuestImage}
-            category="Automotive"
-            describtion="Classic Vintage Car"
-            artist="Photomaster"
-            likes={534}
-          />
-        ))}
+        {/* Return skeleton placholder if isPending is true */}
+        {isPending && skeleton.map((el) => <SkeletonImageLoading key={el} />)}
+
+        {/* Return The images grid if isPending is false and data arrives */}
+        {isPending ||
+          images?.map((image) => (
+            <ImageItem
+              key={image?.id}
+              image={image?.url}
+              imageId={image?.id}
+              title={image?.title}
+              category={image?.category}
+              describtion={image?.describtion}
+              artistName={userInfo?.at(0).user_name}
+              artistImage={userInfo?.at(0).avatar || GuestImage}
+              likes={image?.likes}
+            />
+          ))}
       </section>
 
       {/* Images pagination */}

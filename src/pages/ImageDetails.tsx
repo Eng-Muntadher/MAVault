@@ -1,10 +1,14 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import image from "../assets/photo-1561896196-2fdcc3691049.jfif";
 import BackButton from "../components/BackButton";
 import ImageDetailsBox from "../components/ImageDetailsBox";
 import ImageCommentsBox from "../components/ImageCommentsBox";
 import ImageDetailsButtons from "../components/ImageDetailsButtons";
+import { useParams } from "react-router-dom";
+import { useGetImages } from "../hooks/useGetImages";
+import dayjs from "dayjs";
+import { increaseViews } from "../services/imagesApi";
+import SkeletonImageLoading from "../components/SkeletonImageLoading";
 
 function ImageDetails() {
   /* This use effect resets the scroll of the page so that when
@@ -12,6 +16,18 @@ function ImageDetails() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const { imageId } = useParams(); // get the image id from the URL
+
+  const { data: images, isPending } = useGetImages();
+
+  const image = images?.find((img) => img?.id === Number(imageId));
+
+  // Update the views in the DB for the image when someone clicks it
+  useEffect(() => {
+    if (!image) return; // exit if image not ready
+    increaseViews(image.id);
+  }, [image]);
 
   return (
     <div className="bg-[#F9FAFB] pt-8 border-t border-b border-gray-200 backdrop-blur-md mb-8">
@@ -23,22 +39,41 @@ function ImageDetails() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <img
-              className="rounded-[0.875rem] h-[555px] max-[1140px]:w-full max-[1140px]:h-fit mx-auto"
-              src={image}
-              alt="image..."
-            />
+            {isPending ? (
+              <SkeletonImageLoading heightClass="h-[555px]" />
+            ) : (
+              <img
+                className="rounded-[0.875rem] h-[555px] w-3xl max-[1140px]:w-full mx-auto object-cover"
+                src={image?.url}
+                alt="image..."
+              />
+            )}
 
             {/* Image description for accessibility */}
             <figcaption className="sr-only">...</figcaption>
           </motion.figure>
 
-          <ImageDetailsButtons />
+          <ImageDetailsButtons
+            likes={image?.likes}
+            url={image?.url}
+            title={image?.title}
+          />
 
           <ImageCommentsBox />
         </div>
 
-        <ImageDetailsBox />
+        <ImageDetailsBox
+          title={image?.title}
+          describtion={image?.describtion}
+          date={
+            image?.created_at
+              ? dayjs(image?.created_at).format("MMMM D, YYYY")
+              : "Unknown"
+          }
+          views={image?.views}
+          tags={image?.tags}
+          publisherId={image?.publisher_id}
+        />
       </div>
     </div>
   );

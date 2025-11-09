@@ -2,6 +2,7 @@ import type { User } from "@supabase/supabase-js";
 import { Menu, Moon, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import guestImage from "../assets/guest.jpeg";
+import { useGetUserInfo } from "../hooks/useGetUserInfo";
 
 interface NavActionsProps {
   openCommandPallete: () => void;
@@ -14,6 +15,9 @@ function NavActions({
   openMobileNavBar,
   user,
 }: NavActionsProps) {
+  // get the user data if there is a signed in user
+  const { data: userData } = useGetUserInfo(user?.id || "");
+
   return (
     <div className="flex gap-3 items-center justify-end">
       {/* Command Pallete */}
@@ -43,7 +47,7 @@ function NavActions({
       {user ? (
         <Link to="/user-profile/9" className="max-[890px]:hidden">
           <img
-            src={user.user_metadata?.avatarUrl || guestImage}
+            src={userData?.at(0)?.avatar || guestImage}
             alt="User image"
             aria-label="Navigate to profile page"
             className="w-8 h-8 cursor-pointer max-[890px]:hidden rounded-full transition-all duration-300 hover:brightness-75 hover:scale-110"

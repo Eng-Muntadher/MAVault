@@ -23,7 +23,7 @@ function UserProfile() {
           ariaLabel="Filter the images by the ones you uploaded, liked, bookmarked or commented on"
         />
         <ImagesList
-          tempData={[1, 2, 3, 4]}
+          // tempData={[1, 2, 3, 4]}
           usedOutsideHomePage={true}
           addedClasses="grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-sm:grid-cols-1"
         />

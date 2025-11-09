@@ -44,49 +44,101 @@ export async function signOut() {
   }
 }
 
-export async function updateUserData(data: userUpdatedData) {
-  const { error } = await supabase.auth.updateUser({ data });
-  uploadUserImage(data?.avatar);
-
-  if (error) {
-    console.error("Failed to update user data:", error);
-    throw error; // optional — lets the caller handle it
-  }
-
-  return;
-}
-
-export async function uploadUserImage(file: File | null) {
-  // Ensure a file was provided
-  if (!file) return;
-
-  // Get current user
+export async function updateUserData({
+  userName,
+  bio,
+  location,
+  avatar,
+}: userUpdatedData) {
+  // Get current user once
   const {
     data: { user },
     error: userError,
   } = await supabase.auth.getUser();
   if (userError || !user) throw new Error("User not signed in");
 
-  // Create a unique filename (avoids overwriting)
-  const fileName = `avatar-${user.id}-${file.name}`;
+  console.log(user.id);
 
-  // Upload image to the 'images' bucket
-  const { error: uploadError } = await supabase.storage
-    .from("avatars")
-    .upload(fileName, file);
+  // Prepare update object
+  const updateObj: Record<string, string> = {
+    user_name: userName,
+    bio,
+    location,
+  };
 
-  if (uploadError) throw new Error(`Error uploading ${uploadError.message}`);
+  // If avatar exists, upload it and add the URL to update object
+  if (avatar) {
+    const fileName = `avatar-${user.id}-${avatar.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(fileName, avatar, { upsert: true });
 
-  // Get the public URL of the uploaded image
-  const { data } = supabase.storage.from("avatars").getPublicUrl(fileName);
-  if (!data?.publicUrl) throw new Error(`Failed to get public URL`);
+    if (uploadError)
+      throw new Error(`Error uploading avatar: ${uploadError.message}`);
 
-  const url = data.publicUrl;
+    const { data } = supabase.storage.from("avatars").getPublicUrl(fileName);
+    if (!data?.publicUrl) throw new Error("Failed to get avatar public URL");
 
-  // Update user metadata
-  const { error: updateError } = await supabase.auth.updateUser({
-    data: { ...user.user_metadata, avatarUrl: url },
-  });
+    updateObj.avatar = data.publicUrl;
+  }
 
-  if (updateError) throw new Error("Error updating user avatar");
+  console.log(updateObj);
+  // Update users_info in one go
+  const { error, data: sheep } = await supabase
+    .from("users_info")
+    .update(updateObj)
+    .eq("user_id", "39a0020d-a078-4516-a9f7-788a2140e5df")
+    .select();
+
+  if (error) throw new Error("Failed to update user data: " + error.message);
+
+  console.log(sheep);
+}
+
+// export async function uploadUserImage(file: File | null) {
+//   // Ensure a file was provided
+//   if (!file) return;
+
+//   // Get current user
+//   const {
+//     data: { user },
+//     error: userError,
+//   } = await supabase.auth.getUser();
+//   if (userError || !user) throw new Error("User not signed in");
+
+//   // Create a unique filename (avoids overwriting)
+//   const fileName = `avatar-${user.id}-${file.name}`;
+
+//   // Upload image to the 'images' bucket
+//   const { error: uploadError } = await supabase.storage
+//     .from("avatars")
+//     .upload(fileName, file);
+
+//   if (uploadError) throw new Error(`Error uploading ${uploadError.message}`);
+
+//   // Get the public URL of the uploaded image
+//   const { data } = supabase.storage.from("avatars").getPublicUrl(fileName);
+//   if (!data?.publicUrl) throw new Error(`Failed to get public URL`);
+
+//   const url = data.publicUrl;
+
+//   // Update user metadata
+//   const { error: updateError } = await supabase
+//     .from("users_info")
+//     .update({ avatar: url })
+//     .eq("user_id", user.id);
+
+//   if (updateError) throw new Error("Error updating user avatar");
+// }
+
+export async function getUserData(userId: string) {
+  if (!userId) return;
+
+  const { data, error } = await supabase
+    .from("users_info")
+    .select("*")
+    .eq("user_id", userId);
+  if (error) throw new Error("Unable to fetch user data from users_info");
+
+  return data;
 }

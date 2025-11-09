@@ -43,6 +43,7 @@ function Input({
           id={id}
           name={name}
           value={value}
+          disabled={disabled}
           defaultValue={defaultValue}
           onChange={onChange as React.ChangeEventHandler<HTMLTextAreaElement>}
           placeholder={placeholder}

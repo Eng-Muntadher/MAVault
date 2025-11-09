@@ -4,19 +4,25 @@ import { Link } from "react-router-dom";
 
 interface ImageItemProps {
   image: string;
+  imageId: number;
+  title: string;
   artistImage: string;
   category: string;
-  artist: string;
+  artistName: string;
   likes: number;
   describtion: string;
+  imageWidth?: number;
+  imageheight?: number;
 }
 function ImageItem({
   image,
+  imageId,
   artistImage,
   category,
-  artist,
+  artistName,
   likes,
   describtion,
+  title,
 }: ImageItemProps) {
   return (
     <motion.div
@@ -25,11 +31,14 @@ function ImageItem({
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3 }}
     >
-      <Link to="/image-details/:9" className="min-w-[286px] relative group">
+      <Link
+        to={`/image-details/${imageId}`}
+        className="min-w-[286px] relative group"
+      >
         <div className="relative overflow-hidden rounded-xl mb-3">
           <img
             src={image}
-            className="rounded-xl transition-transform duration-500 group-hover:scale-110"
+            className="rounded-xl transition-transform duration-500 group-hover:scale-110 max-h-72 w-full object-cover"
           />
 
           {/* Image info on hover */}
@@ -59,9 +68,9 @@ function ImageItem({
 
             {/* Bottom Info */}
             <div className="text-white">
-              <h3 className="text-lg mb-1 line-clamp-1">{describtion}</h3>
+              <h3 className="text-lg mb-1 line-clamp-1">{title}</h3>
               <p className="text-sm text-gray-200 line-clamp-2 mb-3">
-                Timeless beauty of classic automobiles
+                {describtion}
               </p>
             </div>
           </motion.div>
@@ -79,7 +88,9 @@ function ImageItem({
               className="h-[26px] w-[26px] rounded-full"
               alt={describtion}
             />
-            <span className="text-(--nav-links-color) text-sm">{artist}</span>
+            <span className="text-(--nav-links-color) text-sm">
+              {artistName}
+            </span>
           </div>
 
           <div className="flex items-center gap-1 text-(--input-placeholder)">
@@ -88,7 +99,7 @@ function ImageItem({
           </div>
         </div>
 
-        <p className="text-(--text-color)">{describtion}</p>
+        <p className="text-(--text-color)">{title}</p>
       </Link>
     </motion.div>
   );

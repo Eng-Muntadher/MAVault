@@ -3,12 +3,16 @@ import { motion } from "framer-motion";
 import guestImage from "../assets/guest.jpeg";
 import UserStatsCardsList from "../components/UserStatsCardsList";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
 import dayjs from "dayjs";
+import { useGetUserInfo } from "../hooks/useGetUserInfo";
+import { useUser } from "../hooks/useUser";
+
+// interface userData {}
 
 function UserProfileMainSection() {
   const { data } = useUser();
-  const user = data?.user_metadata;
+  const userId = data?.id;
+  const { data: user } = useGetUserInfo(userId || "");
 
   const navigate = useNavigate();
   return (
@@ -20,14 +24,14 @@ function UserProfileMainSection() {
     >
       <div className="flex gap-6 items-start mb-8 max-md:flex-col max-md:items-center max-md:text-center">
         <img
-          src={user?.avatarUrl || guestImage}
+          src={user?.at(0)?.avatar || guestImage}
           alt="User Image"
-          className="w-32 h-32 rounded-full"
+          className="w-32 h-32 rounded-full object-cover"
         />
         <div className="flex flex-col gap-2 grow">
           <div className="flex items-center justify-between max-md:justify-center">
             <h1 className="text-4xl text-white" id="user-profile-heading">
-              {user?.userName}
+              {user?.at(0)?.userName}
             </h1>
 
             <button
@@ -39,12 +43,12 @@ function UserProfileMainSection() {
             </button>
           </div>
           <p className="text-(--text-color-secondary) mb-2">{data?.email}</p>
-          <p className="text-white opacity-90 mb-2">{user?.bio}</p>
+          <p className="text-white opacity-90 mb-2">{user?.at(0)?.bio}</p>
           <div className="flex gap-4 flex-wrap max-[350px]:justify-center">
             <div className="flex gap-2 items-center text-white">
               <MapPin size={16} aria-hidden="true" />
               <span className="text-(--text-color-secondary) text-sm">
-                {user?.location}
+                {user?.at(0)?.location}
               </span>
             </div>
 
