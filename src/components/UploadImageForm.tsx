@@ -3,6 +3,8 @@ import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "lucide-react";
 import Input from "./Input";
 import { type FileRejection } from "react-dropzone";
+import { useUploadImage } from "../hooks/useUploadImage";
+import LoadingSpinner from "./LoadingSpinner";
 
 function UploadImageForm() {
   const [title, setTitle] = useState("");
@@ -11,6 +13,8 @@ function UploadImageForm() {
   const [tags, setTags] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
+
+  const { uploadImage, isPending } = useUploadImage();
 
   const maxSize = 10 * 1024 * 1024; // 10MB
   const acceptedFormats = {
@@ -60,7 +64,7 @@ function UploadImageForm() {
     e.preventDefault();
 
     if (checkBeforeSubmit) {
-      console.log(title, description, category, tags, file);
+      uploadImage({ title, description, category, tags, file });
       handleReset();
     }
   }
@@ -76,6 +80,7 @@ function UploadImageForm() {
 
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+      {isPending && <LoadingSpinner />}
       <div className="rounded-[0.875rem] border border-[rgba(0,0,0,0.10)] bg-white p-6">
         <h2 className="text-(--text-color) font-semibold mb-1.5">
           Upload Image

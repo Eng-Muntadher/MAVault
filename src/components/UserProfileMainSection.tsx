@@ -3,8 +3,13 @@ import { motion } from "framer-motion";
 import guestImage from "../assets/guest.jpeg";
 import UserStatsCardsList from "../components/UserStatsCardsList";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
+import dayjs from "dayjs";
 
 function UserProfileMainSection() {
+  const { data } = useUser();
+  const user = data?.user_metadata;
+
   const navigate = useNavigate();
   return (
     <motion.section
@@ -15,14 +20,14 @@ function UserProfileMainSection() {
     >
       <div className="flex gap-6 items-start mb-8 max-md:flex-col max-md:items-center max-md:text-center">
         <img
-          src={guestImage}
+          src={user?.avatarUrl || guestImage}
           alt="User Image"
           className="w-32 h-32 rounded-full"
         />
         <div className="flex flex-col gap-2 grow">
           <div className="flex items-center justify-between max-md:justify-center">
             <h1 className="text-4xl text-white" id="user-profile-heading">
-              johndoe
+              {user?.userName}
             </h1>
 
             <button
@@ -33,22 +38,23 @@ function UserProfileMainSection() {
               Edit Profile
             </button>
           </div>
-          <p className="text-(--text-color-secondary) mb-2">john@example.com</p>
-          <p className="text-white opacity-90 mb-2">
-            Professional photographer and visual artist
-          </p>
+          <p className="text-(--text-color-secondary) mb-2">{data?.email}</p>
+          <p className="text-white opacity-90 mb-2">{user?.bio}</p>
           <div className="flex gap-4 flex-wrap max-[350px]:justify-center">
             <div className="flex gap-2 items-center text-white">
               <MapPin size={16} aria-hidden="true" />
               <span className="text-(--text-color-secondary) text-sm">
-                New York, USA
+                {user?.location}
               </span>
             </div>
 
             <div className="flex gap-2 items-center text-white">
               <Calendar size={16} />
               <span className="text-(--text-color-secondary) text-sm">
-                Joined January 15, 2023
+                Joined{" "}
+                {data?.confirmed_at
+                  ? dayjs(data.confirmed_at).format("MMMM D, YYYY")
+                  : "Unknown"}
               </span>
             </div>
           </div>

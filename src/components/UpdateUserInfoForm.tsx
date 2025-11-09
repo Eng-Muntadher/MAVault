@@ -3,19 +3,30 @@ import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
 import guestImage from "../assets/guest.jpeg";
 import Input from "./Input";
+import { useUpdateUserData } from "../hooks/useUpdateUser";
+import LoadingSpinner from "./LoadingSpinner";
+import { useUser } from "../hooks/useUser";
+import dayjs from "dayjs";
 
 function UpdateUserInfoForm() {
-  const [image, setImage] = useState<null | string>(null);
-  const [username, setUsername] = useState("");
+  const { data } = useUser();
+
+  const [image, setImage] = useState<null | string>(
+    data?.user_metadata.avatarUrl || null
+  );
+  const [userName, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [location, setLocation] = useState("");
   const [charCount, setCharCount] = useState(0);
+  const [avatar, setAvatar] = useState<File | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const { updateUserData, isPending } = useUpdateUserData();
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log({ image, username, bio, location });
+    updateUserData({ avatar, userName, bio, location });
     handleReset();
   }
 
@@ -32,6 +43,8 @@ function UpdateUserInfoForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6 mb-8">
+      {isPending && <LoadingSpinner />}
+
       <fieldset className="rounded-[0.875rem] border border-[rgba(0,0,0,0.1)] p-6">
         {/* This legend is for screen readers only */}
         <legend className="sr-only">User image</legend>
@@ -76,6 +89,7 @@ function UpdateUserInfoForm() {
                 if (file) {
                   const imageURL = URL.createObjectURL(file);
                   setImage(imageURL);
+                  setAvatar(file);
                 }
               }}
               type="file"
@@ -114,7 +128,7 @@ function UpdateUserInfoForm() {
         </label>
         <Input
           type="text"
-          value={username}
+          value={userName}
           id="username"
           name="username"
           required={true}
@@ -191,7 +205,7 @@ function UpdateUserInfoForm() {
         </label>
         <Input
           type="text"
-          value="john@example.com"
+          value={data?.email || "loading..."}
           id="email"
           name="email"
           onChange={() => {}}
@@ -207,7 +221,11 @@ function UpdateUserInfoForm() {
         </label>
         <Input
           type="text"
-          value="January 15, 2023"
+          value={
+            (data?.confirmed_at
+              ? dayjs(data.confirmed_at).format("MMMM D, YYYY")
+              : "Unknown") || "loading..."
+          }
           id="joindate"
           name="joindate"
           onChange={() => {}}
