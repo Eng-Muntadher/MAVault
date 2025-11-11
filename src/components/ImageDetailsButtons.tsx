@@ -1,19 +1,34 @@
 import { Bookmark, Download, Heart, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
+import { useLikeImage } from "../hooks/useLikeImage";
+import { useUser } from "../hooks/useUser";
+import { useBookMarkImage } from "../hooks/useBookMarkImage";
 
 interface ImageDetailsButtonsProps {
   likes: number;
   title: string;
   url: string;
+  imageId: number;
 }
 
 const buttonClasses =
-  "flex items-center gap-2 rounded-lg border border-black/10  py-2 px-3 text-sm font-semibold hover:bg-[#e9ebef] cursor-pointer transition-all";
+  "flex items-center gap-2 rounded-lg border border-black/10  py-2 px-3 text-sm font-semibold hover:bg-[#e9ebef] disabled:bg-gray-400 cursor-pointer transition-all ";
 
-function ImageDetailsButtons({ likes, title, url }: ImageDetailsButtonsProps) {
+function ImageDetailsButtons({
+  likes,
+  title,
+  url,
+  imageId,
+}: ImageDetailsButtonsProps) {
+  const { toggleLike, isPending } = useLikeImage();
+  const { bookmark, isPending: isSaving } = useBookMarkImage();
+  const { data } = useUser();
+
+  const isAlreadyLiked = data?.user_metadata?.liked_images.includes(imageId);
+  const isAlreadySaved = data?.user_metadata?.saved_images.includes(imageId);
+
   async function handleDownload(url: string, title: string) {
-    console.log("siii");
     const response = await fetch(url);
     const blob = await response.blob();
     const blobUrl = window.URL.createObjectURL(blob);
@@ -42,16 +57,22 @@ function ImageDetailsButtons({ likes, title, url }: ImageDetailsButtonsProps) {
       icon: Heart,
       label: `Likes (${likes})`,
       aria: `Like this image, ${likes} likes`,
+      addedClasses: `${
+        isAlreadyLiked ? "bg-red-600 text-white hover:bg-red-700" : ""
+      } `,
       onClick: () => {
-        console.log("saved!");
+        toggleLike(imageId);
       },
     },
     {
       icon: Bookmark,
-      label: "Save",
+      label: `${isAlreadySaved ? "Saved" : "Save"}`,
       aria: "Save this image",
+      addedClasses: `${
+        isAlreadySaved ? "bg-green-600 text-white hover:bg-green-700" : ""
+      }`,
       onClick: () => {
-        console.log("saved!");
+        bookmark(imageId);
       },
     },
     {
@@ -77,16 +98,36 @@ function ImageDetailsButtons({ likes, title, url }: ImageDetailsButtonsProps) {
       role="group"
       aria-label="Image actions"
     >
-      {buttons.map(({ icon: Icon, label, aria, onClick }) => (
-        <button
-          key={label}
-          className={buttonClasses}
-          aria-label={aria}
-          onClick={onClick}
-        >
-          <Icon size={16} aria-hidden="true" /> {label}
-        </button>
-      ))}
+      {buttons.map(
+        ({ icon: Icon, label, aria, onClick, addedClasses }, index) => (
+          <button
+            key={label}
+            className={
+              index === 0 || index === 1
+                ? buttonClasses + addedClasses
+                : buttonClasses
+            }
+            aria-label={aria}
+            onClick={onClick}
+            disabled={
+              index === 0 ? isPending : index === 1 ? isSaving : undefined
+            }
+          >
+            <Icon
+              size={16}
+              aria-hidden="true"
+              className={`${
+                index === 0
+                  ? isAlreadyLiked && "fill-current"
+                  : index === 1
+                  ? isAlreadySaved && "fill-current"
+                  : ""
+              }`}
+            />
+            {label}
+          </button>
+        )
+      )}
     </motion.div>
   );
 }

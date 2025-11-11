@@ -33,14 +33,14 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - ✅ Full Static layout for all pages with states and basic interaction
 - ✅ Framer Motion animations for all pages
 - ✅ A fully functional command pallete with search, keyboard navigation and full page navigation
+- ✅ Authentication & authorization system with Supabase
+- ✅ A fully functional Upload, like, and comment system for authenticated users
+- ✅ User profile customization including user info and profile picture
 
 ---
 
 ## ✨ Future Features
 
-- ⏳ Authentication & authorization system with Supabase
-- ⏳ Upload, like, and comment system
-- ⏳ User profile customization
 - ⏳ Image filtering, sorting, and search with pagination
 - ⏳ Dark mode toggle
 

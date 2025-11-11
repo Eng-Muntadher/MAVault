@@ -9,8 +9,10 @@ export function useUploadImage() {
     onSuccess: () => {
       toast.success("Image successfully uploaded!");
     },
-    onError: () =>
-      toast.error("Faild to upload! Please check your connection."),
+    onError: (error) => {
+      toast.error("Faild to upload! Please check your connection.");
+      console.error(error);
+    },
   });
 
   return { uploadImage, isPending };

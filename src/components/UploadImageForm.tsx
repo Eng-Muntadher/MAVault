@@ -8,7 +8,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 function UploadImageForm() {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [describtion, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -64,7 +64,7 @@ function UploadImageForm() {
     e.preventDefault();
 
     if (checkBeforeSubmit) {
-      uploadImage({ title, description, category, tags, file });
+      uploadImage({ title, describtion, category, tags, file });
       handleReset();
     }
   }
@@ -165,7 +165,7 @@ function UploadImageForm() {
         </label>
         <Input
           type="textarea"
-          value={description}
+          value={describtion}
           id="image-description"
           name="image-description"
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>

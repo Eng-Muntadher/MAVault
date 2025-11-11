@@ -10,11 +10,18 @@ import { useUser } from "../hooks/useUser";
 // interface userData {}
 
 function UserProfileMainSection() {
-  const { data } = useUser();
-  const userId = data?.id;
-  const { data: user } = useGetUserInfo(userId || "");
+  const { data: user } = useUser();
+  const userId = user?.id;
+
+  const { data: userInfo } = useGetUserInfo(userId || "");
 
   const navigate = useNavigate();
+
+  const uploadedImagesCount = user?.user_metadata?.uploads_images?.length;
+  const likedImagesCount = user?.user_metadata?.liked_images?.length;
+  const savedImagesCount = user?.user_metadata?.saved_images?.length;
+  const commentsOnImagesCount = user?.user_metadata?.comments_images?.length;
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
@@ -24,14 +31,14 @@ function UserProfileMainSection() {
     >
       <div className="flex gap-6 items-start mb-8 max-md:flex-col max-md:items-center max-md:text-center">
         <img
-          src={user?.at(0)?.avatar || guestImage}
+          src={userInfo?.at(0)?.avatar || guestImage}
           alt="User Image"
           className="w-32 h-32 rounded-full object-cover"
         />
         <div className="flex flex-col gap-2 grow">
           <div className="flex items-center justify-between max-md:justify-center">
             <h1 className="text-4xl text-white" id="user-profile-heading">
-              {user?.at(0)?.userName}
+              {userInfo?.at(0)?.userName}
             </h1>
 
             <button
@@ -42,13 +49,13 @@ function UserProfileMainSection() {
               Edit Profile
             </button>
           </div>
-          <p className="text-(--text-color-secondary) mb-2">{data?.email}</p>
-          <p className="text-white opacity-90 mb-2">{user?.at(0)?.bio}</p>
+          <p className="text-(--text-color-secondary) mb-2">{user?.email}</p>
+          <p className="text-white opacity-90 mb-2">{userInfo?.at(0)?.bio}</p>
           <div className="flex gap-4 flex-wrap max-[350px]:justify-center">
             <div className="flex gap-2 items-center text-white">
               <MapPin size={16} aria-hidden="true" />
               <span className="text-(--text-color-secondary) text-sm">
-                {user?.at(0)?.location}
+                {userInfo?.at(0)?.location}
               </span>
             </div>
 
@@ -56,8 +63,8 @@ function UserProfileMainSection() {
               <Calendar size={16} />
               <span className="text-(--text-color-secondary) text-sm">
                 Joined{" "}
-                {data?.confirmed_at
-                  ? dayjs(data.confirmed_at).format("MMMM D, YYYY")
+                {user?.confirmed_at
+                  ? dayjs(user.confirmed_at).format("MMMM D, YYYY")
                   : "Unknown"}
               </span>
             </div>
@@ -71,7 +78,13 @@ function UserProfileMainSection() {
           </button>
         </div>
       </div>
-      <UserStatsCardsList />
+
+      <UserStatsCardsList
+        uploads={uploadedImagesCount}
+        likes={likedImagesCount}
+        saved={savedImagesCount}
+        comments={commentsOnImagesCount}
+      />
     </motion.section>
   );
 }

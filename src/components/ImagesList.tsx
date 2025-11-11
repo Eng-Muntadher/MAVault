@@ -1,14 +1,5 @@
 import ImageItem from "./ImageItem";
-import GuestImage from "../assets/guest.jpeg";
-import { useGetImages } from "../hooks/useGetImages";
 import SkeletonImageLoading from "./SkeletonImageLoading";
-import { useGetUserInfo } from "../hooks/useGetUserInfo";
-import { useUser } from "../hooks/useUser";
-
-interface ImagesListProps {
-  usedOutsideHomePage?: boolean;
-  addedClasses?: string;
-}
 
 interface Image {
   id: number;
@@ -22,19 +13,21 @@ interface Image {
   views: number;
   publisher_id: string;
 }
+
+interface ImagesListProps {
+  usedOutsideHomePage?: boolean;
+  addedClasses?: string;
+  images: Image[] | undefined | null;
+  isPending: boolean;
+}
 const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function ImagesList({
   usedOutsideHomePage = false,
   addedClasses,
+  images,
+  isPending,
 }: ImagesListProps) {
-  const { data, isPending } = useGetImages();
-  const { data: user } = useUser();
-
-  const { data: userInfo } = useGetUserInfo(user?.id || "");
-
-  const images: Image[] | undefined = data;
-
   return (
     <div className={`${usedOutsideHomePage || "bg-(--landing-page-bg) pt-12"}`}>
       <section className={addedClasses}>
@@ -51,8 +44,7 @@ function ImagesList({
               title={image?.title}
               category={image?.category}
               describtion={image?.describtion}
-              artistName={userInfo?.at(0).user_name}
-              artistImage={userInfo?.at(0).avatar || GuestImage}
+              publisherId={image?.publisher_id}
               likes={image?.likes}
             />
           ))}

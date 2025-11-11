@@ -57,9 +57,10 @@ function ImageDetails() {
             likes={image?.likes}
             url={image?.url}
             title={image?.title}
+            imageId={Number(imageId)}
           />
 
-          <ImageCommentsBox />
+          <ImageCommentsBox imageId={Number(imageId)} />
         </div>
 
         <ImageDetailsBox

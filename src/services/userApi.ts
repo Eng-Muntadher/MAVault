@@ -87,7 +87,7 @@ export async function updateUserData({
   const { error, data: sheep } = await supabase
     .from("users_info")
     .update(updateObj)
-    .eq("user_id", "39a0020d-a078-4516-a9f7-788a2140e5df")
+    .eq("user_id", user.id)
     .select();
 
   if (error) throw new Error("Failed to update user data: " + error.message);
@@ -141,4 +141,102 @@ export async function getUserData(userId: string) {
   if (error) throw new Error("Unable to fetch user data from users_info");
 
   return data;
+}
+
+export async function getPublishersInfo(userId: string) {
+  if (!userId) return;
+
+  const { data, error } = await supabase
+    .from("users_info")
+    .select("*")
+    .eq("user_id", userId);
+  if (error) throw new Error("Unable to fetch user data from users_info");
+
+  return data;
+}
+
+/**
+ * Toggles like state for a specific image:
+ * - Updates image likes count in DB
+ * - Updates liked_images array in user's metadata
+ */
+export async function toggleImageLike(imageId: number) {
+  if (!imageId) throw new Error("Invalid image ID");
+
+  // 1️⃣ Get user and current image likes in parallel
+  const [
+    { data: userData, error: userError },
+    { data: imageData, error: fetchError },
+  ] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase.from("Images").select("likes").eq("id", imageId).single(),
+  ]);
+
+  const user = userData?.user;
+
+  if (userError || !user) throw new Error("User not authenticated");
+  if (fetchError || !imageData) throw new Error("Image not found");
+
+  // 2️⃣ Compute new likes
+  const likedImages: number[] = user.user_metadata?.liked_images || [];
+
+  const alreadyLiked = likedImages.includes(imageId);
+  const newLikes = alreadyLiked
+    ? Math.max(imageData.likes - 1, 0)
+    : imageData.likes + 1;
+
+  // 3️⃣ Prepare updates
+  const updatedLikedImages = alreadyLiked
+    ? likedImages.filter((id) => id !== imageId)
+    : [...likedImages, imageId];
+
+  // 4️⃣ Run the updates in parallel
+  const [{ error: updateError }, { error: metaError }] = await Promise.all([
+    supabase.from("Images").update({ likes: newLikes }).eq("id", imageId),
+    supabase.auth.updateUser({
+      data: {
+        ...user.user_metadata,
+        liked_images: updatedLikedImages,
+      },
+    }),
+  ]);
+
+  if (updateError) throw new Error("Failed to update image likes");
+  if (metaError) throw new Error("Failed to update user metadata");
+
+  // 5️⃣ Return the new like state and count
+  return {
+    liked: !alreadyLiked,
+    likes: newLikes,
+  };
+}
+
+export async function bookmarkImage(imageId: number) {
+  if (!imageId) return;
+
+  // Get the current user
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) throw new Error("User not authenticated");
+
+  // Get current the bookmarked images from the user's metadata
+  const savedImages = user.user_metadata?.saved_images || [];
+  const alreadyBookmarked = savedImages.includes(imageId);
+
+  // Update the user metadata
+  const updatedSavedImages = alreadyBookmarked
+    ? savedImages.filter((id: number) => id !== imageId)
+    : [...savedImages, imageId];
+
+  const { error: metaError } = await supabase.auth.updateUser({
+    data: {
+      ...user.user_metadata, // keep existing fields
+      saved_images: updatedSavedImages, // only update this field
+    },
+  });
+
+  if (metaError) throw new Error("Failed to update user metadata");
 }

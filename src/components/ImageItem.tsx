@@ -1,15 +1,19 @@
 import { motion } from "framer-motion";
 import { Bookmark, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useFetchPublisherInfo } from "../hooks/useFetchPublisherInfo";
+import GuestImage from "../assets/guest.jpeg";
+import { useUser } from "../hooks/useUser";
+import { useBookMarkImage } from "../hooks/useBookMarkImage";
+import { useLikeImage } from "../hooks/useLikeImage";
 
 interface ImageItemProps {
   image: string;
   imageId: number;
   title: string;
-  artistImage: string;
   category: string;
-  artistName: string;
   likes: number;
+  publisherId: string;
   describtion: string;
   imageWidth?: number;
   imageheight?: number;
@@ -17,13 +21,21 @@ interface ImageItemProps {
 function ImageItem({
   image,
   imageId,
-  artistImage,
   category,
-  artistName,
   likes,
   describtion,
+  publisherId,
   title,
 }: ImageItemProps) {
+  const { data: publisher } = useFetchPublisherInfo(publisherId || "");
+  const { bookmark } = useBookMarkImage();
+  const { toggleLike } = useLikeImage();
+
+  const { data: user } = useUser();
+
+  const isAlreadyLiked = user?.user_metadata?.liked_images.includes(imageId);
+  const isAlreadySaved = user?.user_metadata?.saved_images.includes(imageId);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -37,6 +49,7 @@ function ImageItem({
       >
         <div className="relative overflow-hidden rounded-xl mb-3">
           <img
+            loading="lazy"
             src={image}
             className="rounded-xl transition-transform duration-500 group-hover:scale-110 max-h-72 w-full object-cover"
           />
@@ -52,17 +65,41 @@ function ImageItem({
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-full bg-white/40 transition-colors cursor-pointer"
+                className={`p-2 rounded-full transition-colors cursor-pointer ${
+                  isAlreadyLiked ? "bg-red-600" : "bg-white/40"
+                }`}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  toggleLike(imageId);
+                }}
               >
-                <Heart className="w-5 h-5" aria-hidden="true" />
+                <Heart
+                  className={`w-5 h-5 ${
+                    isAlreadyLiked ? "fill-white stroke-white" : ""
+                  }`}
+                  aria-hidden="true"
+                />
               </motion.button>
 
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-full bg-white/40 transition-colors cursor-pointer"
+                className={`p-2 rounded-full transition-colors cursor-pointer ${
+                  isAlreadySaved ? "bg-green-600" : "bg-white/40"
+                }`}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  bookmark(imageId);
+                }}
               >
-                <Bookmark className="w-5 h-5" aria-hidden="true" />
+                <Bookmark
+                  className={`w-5 h-5 ${
+                    isAlreadySaved ? "fill-white stroke-white" : ""
+                  }`}
+                  aria-hidden="true"
+                />
               </motion.button>
             </div>
 
@@ -83,13 +120,14 @@ function ImageItem({
         {/* Image footer */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
+            {/* Publisher image */}
             <img
-              src={artistImage}
+              src={publisher?.at(0)?.avatar || GuestImage}
               className="h-[26px] w-[26px] rounded-full"
-              alt={describtion}
+              alt="Publisher image"
             />
             <span className="text-(--nav-links-color) text-sm">
-              {artistName}
+              {publisher?.at(0)?.user_name || "loading..."}
             </span>
           </div>
 

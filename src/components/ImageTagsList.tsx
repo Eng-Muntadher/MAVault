@@ -1,9 +1,11 @@
 import ImageTag from "./ImageTag";
 
-function ImageTagsList({ tags }: { tags: string[] }) {
+function ImageTagsList({ tags }: { tags: string }) {
+  const tagsList = tags?.split(",");
+
   return (
     <ul className="flex gap-2 flex-wrap">
-      {tags.map((tag) => (
+      {tagsList?.map((tag) => (
         <ImageTag key={tag} tag={tag} />
       ))}
     </ul>

@@ -4,8 +4,14 @@ import ExploreImagesFilterOptionsList from "../components/ExploreImagesFilterOpt
 import ExplorePageHeader from "../components/ExplorePageHeader";
 import ImagesList from "../components/ImagesList";
 import UploadImageFromExplore from "../components/UploadImageFromExplore";
+import { useGetImages } from "../hooks/useGetImages";
+import { useState } from "react";
 
 function Explore() {
+  const [filter, setFilter] = useState("trending");
+
+  const { data: images, isPending } = useGetImages();
+
   const filterButtonsData = [
     { icon: Flame, name: "Trending" },
     { icon: Star, name: "Featured" },
@@ -21,9 +27,11 @@ function Explore() {
           buttonsData={filterButtonsData}
           addedClassesForContainer="w-md"
           ariaLabel="Filter images by date, most rated or featured"
+          setterFunction={(filter) => setFilter(filter)}
         />
         <ImagesList
-          tempData={[1, 2, 3, 4]}
+          images={images}
+          isPending={isPending}
           usedOutsideHomePage={true}
           addedClasses="grid grid-cols-4 gap-6 max-xl:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1"
         />

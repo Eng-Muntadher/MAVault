@@ -50,7 +50,7 @@ function NavActions({
             src={userData?.at(0)?.avatar || guestImage}
             alt="User image"
             aria-label="Navigate to profile page"
-            className="w-8 h-8 cursor-pointer max-[890px]:hidden rounded-full transition-all duration-300 hover:brightness-75 hover:scale-110"
+            className="w-8 h-8 cursor-pointer max-[890px]:hidden rounded-full transition-all duration-300 hover:brightness-75 hover:scale-110 object-cover"
           />
         </Link>
       ) : (

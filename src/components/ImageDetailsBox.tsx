@@ -37,7 +37,7 @@ function ImageDetailsBox({
         <div className="flex gap-3">
           <img
             src={data?.at(0)?.avatar || userImage}
-            className="w-12 h-12 rounded-full"
+            className="w-12 h-12 rounded-full object-cover"
             alt=""
           />
           <div className="flex flex-col">
@@ -75,7 +75,7 @@ function ImageDetailsBox({
       <div>
         <h3 className="text-[#6A7282] text-sm mb-3">Tags</h3>
 
-        <ImageTagsList tags={[tags]} />
+        <ImageTagsList tags={tags} />
       </div>
 
       <hr className="border-0 h-[0.5px] bg-black/10 mb-2" role="presentation" />

@@ -5,9 +5,14 @@ import supabase from "./supabase";
 interface UploadImageArguments {
   file: File;
   title: string;
-  description: string;
+  describtion: string;
   category: string;
   tags: string;
+}
+
+export interface CommentStructure {
+  imageId: number;
+  comment: string;
 }
 
 export async function getImages() {
@@ -20,10 +25,72 @@ export async function getImages() {
   return data;
 }
 
+export async function getUserImages(filter: string) {
+  // Get the current user
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) throw new Error("User not authenticated");
+
+  const currentImageFilter = user?.user_metadata[filter + "_" + "images"];
+
+  const { data, error } = await supabase
+    .from("Images")
+    .select("*")
+    .in("id", currentImageFilter); // Fetch all liked images
+
+  if (error) {
+    console.error(error);
+  }
+
+  return data;
+}
+
+export async function getImageComments(imageId: number) {
+  const { data: comments, error } = await supabase
+    .from("comments")
+    .select("*")
+    .eq("image_id", imageId);
+
+  if (error) throw new Error("Error getting comments!");
+
+  return comments;
+}
+
+export async function addComment({ imageId, comment }: CommentStructure) {
+  // Get the current user
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) throw new Error("No signed in user");
+
+  const { error } = await supabase
+    .from("comments")
+    .insert([{ comment: comment, user_id: user.id, image_id: imageId }]);
+
+  if (error) throw new Error("Unable to post comment!");
+
+  const commentsOnImages = user?.user_metadata?.comments_images || [];
+  commentsOnImages.push(imageId);
+
+  const { error: metaError } = await supabase.auth.updateUser({
+    data: {
+      ...user?.user_metadata, // keep existing fields
+      comments_images: commentsOnImages, // only update this field
+    },
+  });
+
+  if (metaError) throw new Error("Cannot access current user");
+}
+
 export async function uploadImage({
   file,
   title,
-  description,
+  describtion,
   category,
   tags,
 }: UploadImageArguments) {
@@ -65,14 +132,28 @@ export async function uploadImage({
   const { data: image, error: imageError } = await supabase
     .from("Images")
     .insert([
-      { title, description, category, tags, url, likes, views, publisher_id },
+      { title, describtion, category, tags, url, likes, views, publisher_id },
     ])
-    .select();
+    .select()
+    .single();
+  console.log(image);
 
   if (imageError)
     throw new Error(`Could not upload image ${imageError.message}`);
 
-  return image?.at(0);
+  const uploadedImages = user?.user_metadata?.uploads_images || [];
+  uploadedImages.push(image.id);
+
+  const { error: metaError } = await supabase.auth.updateUser({
+    data: {
+      ...user?.user_metadata, // keep existing fields
+      uploads_images: uploadedImages, // only update this field
+    },
+  });
+
+  if (metaError) throw new Error("Cannot access current user");
+
+  return image;
 }
 
 export async function increaseViews(imageId: number) {
