@@ -1,13 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Input from "../components/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSignIn } from "../hooks/useSignIn";
+import toast from "react-hot-toast";
+import LoadingSpinner from "./LoadingSpinner";
 
 function SignInForm() {
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirect");
+
+  useEffect(() => {
+    if (redirectTo) {
+      toast.error("Please sign in to access this page!");
+    }
+  }, [redirectTo]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn, isPending } = useSignIn();
+  const { signIn, isPending } = useSignIn(redirectTo || "/");
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -19,9 +30,10 @@ function SignInForm() {
       onSubmit={handleSubmit}
       className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6 w-md max-w-full"
     >
-      <h2 className="text-(--text-color) font-semibold mb-1.5">Sign Up</h2>
+      {isPending ? <LoadingSpinner /> : null}
+      <h2 className="text-(--text-color) font-semibold mb-1.5">Sign In</h2>
       <p className="block text-(--input-placeholder-2) mb-6">
-        Enter your details to create a new account
+        Enter your credentials to access your account
       </p>
 
       <label

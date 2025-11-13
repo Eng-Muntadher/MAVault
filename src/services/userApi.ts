@@ -4,6 +4,7 @@ import supabase from "./supabase";
 export interface LoginArguments {
   email: string;
   password: string;
+  userName?: string;
 }
 
 export interface userUpdatedData {
@@ -22,6 +23,47 @@ export async function login({ email, password }: LoginArguments) {
   if (error) {
     throw new Error(error.message);
   }
+  return data;
+}
+
+export async function signUp({ email, password, userName }: LoginArguments) {
+  // const emailIsTaken = await checkEmailExists(email);
+
+  // if (emailIsTaken) {
+  //   toast.error("This email is already taken. Try signing in instead");
+  //   throw Error("Email is taken");
+  // }
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: "http://localhost:5173/auth/callback",
+    },
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  // Insert into users_info (temporary, linked to auth.user.id)
+  if (!error) {
+    // Supabase returns the user id immediately even before email confirmation
+    const userId = data.user?.id;
+    await supabase.from("users_info").upsert({
+      user_id: userId, // FK to auth.users
+      user_name: userName,
+    });
+  }
+
+  // Add the email to the "emails" table in Supabase
+  // const { error: insertError } = await supabase
+  //   .from("emails")
+  //   .insert([{ email }])
+  //   .select();
+
+  // if (insertError) throw new Error(insertError.message);
+
   return data;
 }
 

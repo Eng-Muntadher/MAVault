@@ -9,10 +9,14 @@ import UserSettings from "./pages/UserSettings";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import ImageDetails from "./pages/ImageDetails";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AuthCallback from "./pages/AuthCallback";
+import ErrorComponent from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
+    errorElement: <ErrorComponent />,
     children: [
       {
         path: "/",
@@ -24,19 +28,35 @@ const router = createBrowserRouter([
       },
       {
         path: "/upload",
-        element: <Upload />,
+        element: (
+          <ProtectedRoute>
+            <Upload />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/about",
         element: <About />,
       },
       {
-        path: "/user-profile/:userId",
-        element: <UserProfile />,
+        path: "/user-profile",
+        element: (
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "/user-settings/:userId",
-        element: <UserSettings />,
+        path: "/auth/callback",
+        element: <AuthCallback />,
+      },
+      {
+        path: "/user-settings",
+        element: (
+          <ProtectedRoute>
+            <UserSettings />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/sign-up",

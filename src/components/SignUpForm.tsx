@@ -1,19 +1,24 @@
 import { Link } from "react-router-dom";
 import Input from "../components/Input";
 import { useState } from "react";
+import { useSignUp } from "../hooks/useSignUp";
+import toast from "react-hot-toast";
+import LoadingSpinner from "./LoadingSpinner";
 
 function SignUpForm() {
-  const [username, setUsername] = useState("");
+  const [userName, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const { signUp, isPending } = useSignUp();
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (password === confirmPassword) {
-      console.log({ username, email, password, confirmPassword });
+      signUp({ email, password, userName });
     } else {
-      window.alert("Passwords must match!");
+      toast.error("Passwords must match!");
     }
   }
   return (
@@ -21,6 +26,8 @@ function SignUpForm() {
       onSubmit={handleSubmit}
       className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6 w-md max-w-full"
     >
+      {isPending ? <LoadingSpinner /> : null}
+
       <h2 className="text-(--text-color) font-semibold mb-1.5">Sign Up</h2>
       <p className="block text-(--input-placeholder-2) mb-6">
         Enter your details to create a new account{" "}
@@ -35,7 +42,7 @@ function SignUpForm() {
       <Input
         type="text"
         required={true}
-        value={username}
+        value={userName}
         id="username"
         name="username"
         autoComplete="username"
@@ -93,7 +100,7 @@ function SignUpForm() {
         Confirm Password
       </label>
       <Input
-        type="confirm-password"
+        type="password"
         required={true}
         value={confirmPassword}
         id="confirm-password"

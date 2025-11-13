@@ -66,12 +66,12 @@ export function CommandPalette({
     {
       label: "My Profile",
       icon: <User className="w-5 h-5" />,
-      onSelect: () => navigate("/user-profile/9"),
+      onSelect: () => navigate("/user-profile"),
     },
     {
       label: "Settings",
       icon: <Settings className="w-5 h-5" />,
-      onSelect: () => navigate("/user-settings/9"),
+      onSelect: () => navigate("/user-settings"),
     },
     {
       label: "Toggle Theme",

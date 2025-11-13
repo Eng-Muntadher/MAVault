@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 
 type LoginResult = Awaited<ReturnType<typeof login>>;
 
-export function useSignIn() {
+export function useSignIn(redirectTo: string = "/") {
   const navigate = useNavigate();
 
   const { mutate: signIn, isPending } = useMutation<
@@ -18,7 +18,7 @@ export function useSignIn() {
     LoginArguments
   >({
     mutationFn: ({ email, password }) => signInApi({ email, password }),
-    onSuccess: () => navigate("/"),
+    onSuccess: () => navigate(redirectTo),
     onError: (error) => {
       console.log(error);
       toast.error(

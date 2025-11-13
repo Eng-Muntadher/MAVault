@@ -43,7 +43,7 @@ function UserProfileMainSection() {
 
             <button
               className="flex items-center gap-2 bg-[#ECEEF2] px-3 py-2 rounded-lg text-sm font-semibold max-md:hidden hover:bg-[#cccdd1] cursor-pointer transition-all ease-in duration-100 focus:outline-none focus:ring-4 focus:ring-[#155dfc]"
-              onClick={() => navigate("/user-settings/9")}
+              onClick={() => navigate("/user-settings")}
             >
               <Settings size={16} aria-hidden="true" />
               Edit Profile
@@ -71,7 +71,7 @@ function UserProfileMainSection() {
           </div>
           <button
             className="hidden items-center gap-2 bg-[#ECEEF2] hover:bg-[#cccdd1] px-3 py-2 rounded-lg text-sm font-semibold max-md:flex w-fit mx-auto mt-4 transition-colors duration-200 cursor-pointer"
-            onClick={() => navigate("/user-settings/9")}
+            onClick={() => navigate("/user-settings")}
           >
             <Settings size={16} />
             Edit Profile

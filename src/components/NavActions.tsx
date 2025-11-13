@@ -84,7 +84,7 @@ function NavActions({
       {/* Auth buttons */}
       {user ? (
         <Link
-          to="/user-profile/9"
+          to="/user-profile"
           className="max-[890px]:hidden transition-and-focus-ring rounded-full"
         >
           <img

@@ -19,7 +19,7 @@ function ImageComment({ date, commentText, userId }: ImageCommentProps) {
       <div>
         <div className="flex gap-2 items-baseline">
           <span className="text-(--text-color) text-sm">
-            {data?.at(0).user_name}
+            {data?.at(0)?.user_name}
           </span>
 
           <time dateTime="" className="text-[#6A7282] text-xs">

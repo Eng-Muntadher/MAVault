@@ -32,8 +32,8 @@ function ImageItem({
 
   const { data: user } = useUser();
 
-  const isAlreadyLiked = user?.user_metadata?.liked_images.includes(imageId);
-  const isAlreadySaved = user?.user_metadata?.saved_images.includes(imageId);
+  const isAlreadyLiked = user?.user_metadata?.liked_images?.includes(imageId);
+  const isAlreadySaved = user?.user_metadata?.saved_images?.includes(imageId);
 
   return (
     <motion.div
