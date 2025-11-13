@@ -58,35 +58,35 @@ function ImagesList({
             aria-label="Images pagination"
           >
             <button
-              className="text-(--text-color) text-sm font-semibold rounded-lg opacity-50 py-2 px-4 border border-black/10 cursor-pointer"
+              className="text-(--text-color) bg-(--pagination-btn-bg) hover:bg-(--command-pallete-hover) text-sm font-semibold rounded-lg opacity-50 py-2 px-4 border border-(--border-color) cursor-pointer transition-and-focus-ring"
               aria-label="Go back one page. Current page is 1"
             >
               Previous
             </button>
 
             <button
-              className="text-sm text-(--text-color-2) font-semibold px-4 py-2 rounded-lg bg-(--selected-btn-pagination) cursor-pointer hover:bg-blue-700"
+              className="text-sm text-(--text-color-2) font-semibold px-4 py-2 rounded-lg bg-(--selected-btn-pagination) cursor-pointer hover:bg-blue-700 transition-and-focus-ring"
               aria-label="Go to page 1"
             >
               1
             </button>
 
             <button
-              className="text-sm text-(--text-color) font-semibold px-4 py-2 rounded-lg border border-black/10 cursor-pointer hover:bg-[#e9ebef]"
+              className="text-sm text-(--text-color) bg-(--pagination-btn-bg) font-semibold px-4 py-2 rounded-lg border border-(--border-color) cursor-pointer hover:bg-(--command-pallete-hover) transition-and-focus-ring"
               aria-label="Go to page 2"
             >
               2
             </button>
 
             <button
-              className="text-(--text-color) text-sm font-semibold rounded-lg py-2 px-4 border border-black/10 cursor-pointer hover:bg-[#e9ebef]"
+              className="text-(--text-color) bg-(--pagination-btn-bg) text-sm font-semibold rounded-lg py-2 px-4 border border-(--border-color) cursor-pointer hover:bg-(--command-pallete-hover) transition-and-focus-ring"
               aria-label="Go forward one page. Current page is 1"
             >
               Next
             </button>
           </div>
 
-          <hr className="flex px-20 pt-[0.05rem] border-t border-gray-200 bg-white mb-8" />
+          <hr className="flex px-20 pt-[0.05rem] border-t border-(--border-color) mb-8" />
         </>
       )}
     </div>

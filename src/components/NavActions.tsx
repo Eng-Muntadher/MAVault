@@ -3,6 +3,7 @@ import { Menu, Moon, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import guestImage from "../assets/guest.jpeg";
 import { useGetUserInfo } from "../hooks/useGetUserInfo";
+import { useLayoutEffect, useState } from "react";
 
 interface NavActionsProps {
   openCommandPallete: () => void;
@@ -18,20 +19,54 @@ function NavActions({
   // get the user data if there is a signed in user
   const { data: userData } = useGetUserInfo(user?.id || "");
 
+  const [darkMode, setDarkMode] = useState(() => {
+    try {
+      const stored = localStorage.getItem("theme");
+      if (stored === "dark") return true;
+      if (stored === "light") return false;
+      return (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      );
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  });
+
+  function toggleDarkMode() {
+    setDarkMode((prev) => !prev);
+  }
+
+  useLayoutEffect(() => {
+    const el = document.documentElement;
+    try {
+      if (darkMode) {
+        el.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        el.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [darkMode]);
+
   return (
     <div className="flex gap-3 items-center justify-end">
       {/* Command Pallete */}
       <button
         aria-label="Open Command Palette"
         onClick={openCommandPallete}
-        className="flex items-center gap-2 text-(--input-placeholder) px-2 py-1.5 rounded-[0.625rem] bg-(--input-color) text-xs w-[126.6px] cursor-pointer max-xl:hidden hover:text-gray-900 hover:bg-gray-200"
+        className="flex items-center gap-2 text-(--input-placeholder) px-2 py-1.5 rounded-[0.625rem] bg-(--pallete-bg) text-xs w-[126.6px] cursor-pointer max-xl:hidden hover:text-(--command-pallete-text-hover) hover:bg-(--command-pallete-hover) transition-and-focus-ring"
       >
         <span>
           <Search size={16} aria-hidden="true" />
         </span>
         <span>Search</span>
 
-        <div className="border border-[#D1D5DC] px-2 py-0.5 rounded-sm bg-(--text-color-2)">
+        <div className="border border-(--drag-upload-border) px-2 py-0.5 rounded-sm bg-(--text-color-2)">
           <span className="txt" aria-hidden="true">
             ⌘K
           </span>
@@ -39,13 +74,19 @@ function NavActions({
       </button>
 
       {/* Dark mode toggle */}
-      <button className="w-9 h-9 flex items-center justify-center cursor-pointer text-(--text-color) hover:bg-[#e9ebef] rounded-full">
+      <button
+        onClick={toggleDarkMode}
+        className="w-9 h-9 flex items-center justify-center cursor-pointer text-(--text-color) hover:bg-(--border-color) rounded-full transition-and-focus-ring"
+      >
         <Moon size={16} />
       </button>
 
       {/* Auth buttons */}
       {user ? (
-        <Link to="/user-profile/9" className="max-[890px]:hidden">
+        <Link
+          to="/user-profile/9"
+          className="max-[890px]:hidden transition-and-focus-ring rounded-full"
+        >
           <img
             src={userData?.at(0)?.avatar || guestImage}
             alt="User image"
@@ -57,14 +98,14 @@ function NavActions({
         <>
           <Link
             to="/sign-in"
-            className="text-sm font-semibold px-4 py-2 cursor-pointer max-[890px]:hidden text-(--text-color) hover:bg-[#e9ebef] rounded-md"
+            className="text-sm font-semibold px-4 py-2 cursor-pointer max-[890px]:hidden text-(--text-color) hover:bg-(--border-color) rounded-md transition-and-focus-ring"
           >
             Sign In
           </Link>
 
           <Link
             to="/sign-up"
-            className="btn-bg text-(--text-color-2) font-semibold text-sm px-4 py-2 rounded-lg cursor-pointer max-[890px]:hidden"
+            className="btn-bg text-(--text-color-2) font-semibold text-sm px-4 py-2 rounded-lg cursor-pointer max-[890px]:hidden transition-and-focus-ring"
           >
             Sign Up
           </Link>
@@ -73,7 +114,7 @@ function NavActions({
 
       {/* Burger icon shown on smaller screens */}
       <button
-        className="w-9 h-9 justify-center items-center rounded-md max-[890px]:flex min-[890px]:hidden cursor-pointer text-(--text-color) hover:bg-[#e9ebef]"
+        className="w-9 h-9 justify-center items-center rounded-md max-[890px]:flex min-[890px]:hidden cursor-pointer text-(--text-color) hover:bg-(--border-color)"
         onClick={openMobileNavBar}
       >
         <Menu size={16} aria-hidden="true" />

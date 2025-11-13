@@ -6,7 +6,7 @@ function SignIn() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center py-12 bg-linear-to-br from-blue-50 via-purple-50 to-pink-50 border-t border-b border-gray-200 backdrop-blur-md mb-8 px-4 sm:px-6 lg:px-6"
+      className="flex flex-col items-center py-12 sign-up-bg border-t border-b border-(--border-color) backdrop-blur-md mb-8 px-4 sm:px-6 lg:px-6"
     >
       <h1 className="text-3xl text-(--text-color) mb-2 text-center">
         Welcome back
@@ -28,7 +28,7 @@ function SignIn() {
         >
           Demo Access Emails
         </h2>
-        <ul className="space-y-2 list-disc ml-5">
+        <ul className="space-y-2 list-disc ml-5 text-(--text-color)">
           <li>a@b.com</li>
           <li>Ahmed@b.com</li>
           <li>Muntadher@a.com</li>

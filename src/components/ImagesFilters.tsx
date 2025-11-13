@@ -4,7 +4,7 @@ function ImagesFilters() {
   return (
     <section
       aria-label="Filter images by category and date"
-      className="relative border-b border-gray-200 shadow-sm py-4"
+      className="relative border-b border-(--border-color) shadow-sm py-4"
     >
       <div className="flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 max-sm:flex-col max-sm:items-start max-sm:gap-4">
         <div className="flex gap-3 max-[410px]:flex-col">

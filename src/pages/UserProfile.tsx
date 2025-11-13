@@ -37,7 +37,7 @@ function UserProfile() {
         />
       </div>
 
-      <hr className="border-0 h-px bg-black/10 mb-8" />
+      <hr className="flex px-20 pt-[0.05rem] border-t border-(--border-color) mb-8" />
     </>
   );
 }

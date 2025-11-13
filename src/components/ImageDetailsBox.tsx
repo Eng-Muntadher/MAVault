@@ -26,7 +26,7 @@ function ImageDetailsBox({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       aria-label="image details"
-      className="flex flex-col gap-4 p-6 rounded-[0.875rem] border border-[rgba(0,0,0,0.10)] bg-white lg:min-w-96 min-h-[555px] h-fit sticky top-8 z-10 max-[1140px]:max-w-full max-[1140px]:mb-8"
+      className="flex flex-col gap-4 p-6 rounded-[0.875rem] border border-(--border-color) bg-(--comments-section-bg) lg:min-w-96 min-h-[555px] h-fit sticky top-8 z-10 max-[1140px]:max-w-full max-[1140px]:mb-8"
     >
       <h1 className="text-(--text-color) text-2xl">{title}</h1>
 
@@ -48,7 +48,10 @@ function ImageDetailsBox({
           </div>
         </div>
       </div>
-      <hr className="border-0 h-[0.5px] bg-black/10" role="presentation" />
+      <hr
+        className="border-0 h-[0.5px] bg-(--border-color)"
+        role="presentation"
+      />
 
       <div>
         <div className="flex gap-3 text-(--input-placeholder) mb-4 items-center">
@@ -70,7 +73,10 @@ function ImageDetailsBox({
         </div>
       </div>
 
-      <hr className="border-0 h-[0.5px] bg-black/10 mb-2" role="presentation" />
+      <hr
+        className="border-0 h-[0.5px] bg-(--border-color) mb-2"
+        role="presentation"
+      />
 
       <div>
         <h3 className="text-[#6A7282] text-sm mb-3">Tags</h3>
@@ -78,7 +84,10 @@ function ImageDetailsBox({
         <ImageTagsList tags={tags} />
       </div>
 
-      <hr className="border-0 h-[0.5px] bg-black/10 mb-2" role="presentation" />
+      <hr
+        className="border-0 h-[0.5px] bg-(--border-color) mb-2"
+        role="presentation"
+      />
 
       <div>
         <h4 className="text-[#6A7282] text-sm">Dimensions</h4>

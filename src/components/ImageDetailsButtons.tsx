@@ -13,7 +13,7 @@ interface ImageDetailsButtonsProps {
 }
 
 const buttonClasses =
-  "flex items-center gap-2 rounded-lg border border-black/10  py-2 px-3 text-sm font-semibold hover:bg-[#e9ebef] disabled:bg-gray-400 cursor-pointer transition-all ";
+  "flex items-center text-(--text-color) gap-2 bg-(--pagination-btn-bg) hover:bg-(--command-pallete-hover) rounded-lg border border-black/10  py-2 px-3 text-sm font-semibold disabled:bg-gray-400 cursor-pointer transition-and-focus-ring ";
 
 function ImageDetailsButtons({
   likes,

@@ -60,7 +60,7 @@ function CustomSelect({
         aria-haspopup="listbox"
         aria-expanded={menuIsOpen}
         ref={buttonRef}
-        className={`bg-(--input-color) rounded-lg px-3 py-2 text-sm focus:outline-none flex justify-between items-center cursor-pointer focus:ring-3 focus:ring-(--text-color-secondary) transition-all ease-in duration-100 ${addedClasses}`}
+        className={`bg-(--home-page-filter-bg) rounded-lg px-3 py-2 text-sm focus:outline-none flex justify-between items-center cursor-pointer transition-and-focus-ring ${addedClasses}`}
         onClick={handleOpenCloseMenu}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown" && menuIsOpen) {
@@ -90,7 +90,7 @@ function CustomSelect({
       {menuIsOpen && (
         <div
           ref={dropdownRef}
-          className="border border-[rgba(0,0,0,0.1)] text-sm bg-(--text-color-2) text-(--text-color) rounded-lg absolute w-full px-1.5 py-2 flex flex-col mt-1.5 transition-all ease-in-out duration-300 z-10"
+          className="border border-(--border-color) text-sm bg-(--text-color-2) text-(--text-color) rounded-lg absolute w-full px-1.5 py-2 flex flex-col mt-1.5 transition-all ease-in-out duration-300 z-10"
         >
           <ul role="listbox">
             {optionsArray.map((option, i) => (
@@ -101,7 +101,7 @@ function CustomSelect({
                   optionRefs.current[i] = el;
                 }}
                 tabIndex={0}
-                className="px-1 py-2 rounded-sm cursor-pointer hover:bg-(--input-color) focus:bg-(--input-color) outline-none"
+                className="px-1 py-2 rounded-sm cursor-pointer hover:bg-(--border-color) focus:bg-(--input-color) outline-none"
                 onClick={() => handleChangeStatus(option)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {

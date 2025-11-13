@@ -8,7 +8,7 @@ function Footer() {
           <h2 className="text-(--text-color) text-sm mb-3">Portfolio</h2>
           <a
             href="https://linkedin.com"
-            className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover)"
+            className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover) transition-and-focus-ring"
           >
             <Globe size={16} aria-hidden="true" />
             <span>MuntadherAhmed.com</span>
@@ -19,7 +19,7 @@ function Footer() {
           <h2 className="text-(--text-color) text-sm mb-3">GitHub</h2>
           <a
             href="https://linkedin.com"
-            className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover)"
+            className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover) transition-and-focus-ring"
           >
             <Github size={16} aria-hidden="true" />
             <span>Eng-Muntadher.com</span>
@@ -30,7 +30,7 @@ function Footer() {
           <h2 className="text-(--text-color) text-sm mb-3">Email</h2>
           <a
             href="mailto:Muntadheralshammari@gmail.com"
-            className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover)"
+            className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover) transition-and-focus-ring"
           >
             <Mail size={16} aria-hidden="true" />
             <span>Muntadheralshammari@gmail.com</span>
@@ -38,7 +38,7 @@ function Footer() {
         </div>
       </div>
 
-      <hr className="flex px-20 pt-[0.05rem] border-t border-gray-200 bg-white mb-8" />
+      <hr className="flex px-20 pt-[0.05rem] border-t border-(--border-color) mb-8" />
 
       <div className="text-center text-(--input-placeholder)">
         <p>© 2025 MAVault. All rights reserved.</p>

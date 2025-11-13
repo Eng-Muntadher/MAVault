@@ -19,11 +19,11 @@ export default function ExploreCategoryOption({
     <button
       onClick={onClick}
       aria-pressed={isSelected}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors duration-200 cursor-pointer select-none
+      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors duration-200 cursor-pointer select-none transition-and-focus-ring
         ${
           isSelected
             ? "btn-bg text-white"
-            : "border border-gray-200 hover:bg-gray-200 text-[--nav-links-color]"
+            : "border border-(--border-color) bg-(--explore-option-bg) hover:bg-(--border-color) text-(--nav-links-color)"
         }`}
     >
       <Icon size={16} aria-hidden={true} />
@@ -35,7 +35,7 @@ export default function ExploreCategoryOption({
           ${
             isSelected
               ? "bg-white/20 text-white"
-              : "bg-gray-200 text-[--text-color]"
+              : "bg-(--border-color) text-(--text-color)"
           }`}
       >
         {count}

@@ -31,7 +31,7 @@ function ExploreImagesFilterOptionsList({
 
   return (
     <section
-      className={`flex justify-between bg-[#ECECF0] px-0.5 py-[0.185rem] rounded-[0.875rem] max-w-full text-sm font-semibold mb-10 ${addedClassesForContainer}`}
+      className={`flex justify-between text-(--text-color) bg-(--explore-filter-bg) px-0.5 py-[0.185rem] rounded-[0.875rem] max-w-full text-sm font-semibold mb-10 ${addedClassesForContainer}`}
       role="radiogroup"
       aria-label={ariaLabel ? ariaLabel : ""}
     >

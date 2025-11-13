@@ -118,7 +118,7 @@ function MobileNavMenu({ open, onOpenChange, user }: CommandPaletteProps) {
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="fixed left-1/2 top-[15%] z-50 w-full max-w-xl -translate-x-1/2 px-4"
           >
-            <div className="rounded-xl border border-border/50 bg-linear-to-b from-white to-gray-50 shadow-2xl overflow-hidden">
+            <div className="rounded-xl border border-(--border-color) bg-(--comments-section-bg) text-(--text-color) shadow-2xl overflow-hidden">
               {/* Command List */}
               <div className="max-h-[400px] overflow-y-auto p-2">
                 <div className="space-y-1">
@@ -126,7 +126,7 @@ function MobileNavMenu({ open, onOpenChange, user }: CommandPaletteProps) {
                     <button
                       key={index}
                       onClick={() => handleSelect(command)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all hover:bg-[#e9ebef] cursor-pointer hover:shadow-sm active:scale-[0.98] group ${
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all hover:bg-(--border-color) cursor-pointer hover:shadow-sm active:scale-[0.98] transition-and-focus-ring group ${
                         command.label === "Sign out" ? "text-red-700" : ""
                       }`}
                     >

@@ -1,6 +1,6 @@
 function ImageTag({ tag }: { tag: string }) {
   return (
-    <li className="py-1 px-3 text-[#364153] text-sm bg-[#F3F4F6] rounded-full">
+    <li className="py-1 px-3 text-(--tag-text-color) text-sm bg-(--pallete-bg) rounded-full">
       {tag}
     </li>
   );

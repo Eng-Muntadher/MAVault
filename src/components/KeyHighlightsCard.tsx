@@ -11,7 +11,7 @@ function KeyHighlightsCard({
   text,
 }: KeyHighlightsCardProps) {
   return (
-    <li className="flex gap-4 rounded-[0.875rem] border-2 border-gray-200 bg-white p-[1.6rem]">
+    <li className="flex gap-4 rounded-[0.875rem] border-2 border-(--border-color) bg-(--text-color-2) p-[1.6rem]">
       <div className="purple-bg p-2 rounded-[0.625rem] h-10 w-10 flex items-center text-white">
         <Icon size={24} aria-hidden="true" />
       </div>

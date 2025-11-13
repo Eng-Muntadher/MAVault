@@ -11,7 +11,7 @@ function AboutPageConnectInfo() {
       </p>
       <button
         aria-label="Visit my Linkedin account"
-        className="flex gap-2 items-center bg-(--selected-btn-pagination) px-6 py-3 text-white rounded-[0.625rem] mb-16 cursor-pointer hover:bg-blue-700 hover:scale-105 transition-all"
+        className="flex gap-2 items-center bg-(--selected-btn-pagination) px-6 py-3 text-white rounded-[0.625rem] mb-16 cursor-pointer hover:bg-blue-700 hover:scale-105 transition-all transition-and-focus-ring"
       >
         <Linkedin size={20} aria-hidden="true" />
         <span>LinkedIn</span>

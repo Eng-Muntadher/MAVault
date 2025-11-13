@@ -13,7 +13,7 @@ function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-6xl mb-4 text-(--text-color-2) text-center max-md:text-4xl"
+          className="text-6xl mb-4 text-center max-md:text-4xl text-white"
         >
           Discover Amazing Images
         </motion.h1>
@@ -42,7 +42,7 @@ function HeroSection() {
             type="text"
             name="search-images"
             id="search-images"
-            className="text-sm py-3.5 pr-4 pl-12 bg-(--text-color-2) rounded-lg w-full"
+            className="text-sm py-3.5 pr-4 pl-12 bg-(--input-color) rounded-lg w-full transition-all ease-in duration-200 focus:outline-none focus:ring-4 focus:ring-[#155dfc]"
             placeholder="Search images, tags, or artists..."
           />
           <Search
@@ -50,7 +50,7 @@ function HeroSection() {
             size={20}
             // this does not allow the icon to block focus click or typing
             pointerEvents="none"
-            className="absolute text-[#99A1AF] left-4 -translate-y-1/2 top-1/2"
+            className="absolute left-4 -translate-y-1/2 top-1/2"
           />
         </motion.div>
       </div>

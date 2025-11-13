@@ -10,7 +10,7 @@ function ExplorePageHeader() {
     >
       <h1 className="flex gap-3 items-center mb-4" id="explore-heading">
         <span
-          className="p-2 text-(--text-color-2) purple-bg rounded-[0.625rem]"
+          className="p-2 purple-bg text-white rounded-[0.625rem]"
           aria-hidden={true}
         >
           <TrendingUp size={24} />

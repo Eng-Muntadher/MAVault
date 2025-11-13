@@ -11,13 +11,84 @@
   --input-color: #f3f4f6;
   --nav-links-hover: #2d3bff;
   --selected-btn-pagination: #155dfc;
-  --about-page-icons-bg-bslue: #2b7fff1a;
+  --about-page-icons-bg-blue: #2b7fff1a;
   --about-page-icons-bg-purple: rgba(173, 70, 255, 0.1);
   --about-page-icons-bg-green: rgba(0, 201, 80, 0.1);
+  --border-color: #e5e7eb;
+  --explore-option-bg: #f9fafbed;
+  --explore-filter-bg: #ececf0;
+  --pallete-bg: #f3f4f6;
+  --drag-upload-bg: #f9fafb;
+  --drag-upload-border: #d1d5dc;
+  --home-page-filter-bg: #f3f4f6;
+  --pagination-btn-bg: transparent;
+  --comments-section-bg: #fff;
+  --tag-text-color: #364153;
+  --post-comment-bg: #030213;
+  --focus-ring: #d4b8fa;
+  --drag-drop-upload-bg: #eff6ff;
+  --command-pallete-hover: #e5e7eb;
+  --command-pallete-text-hover: #101828;
+
+  .skill-class {
+    /* Border */
+    border-color: #bedbff;
+
+    /* Background gradient */
+    background-image: linear-gradient(to right, #eff6ff, #faf5ff);
+  }
+
+  .sign-up-bg {
+    background: linear-gradient(
+      to bottom right,
+      rgb(239 246 255),
+      rgb(245 243 255),
+      rgb(253 242 248)
+    );
+  }
+}
+
+:root.dark {
+  --landing-page-bg: oklch(0.13 0.03 261.7);
+  background-color: oklch(0.2 0.03 264.95);
+  --nav-links-color: oklch(0.8 0.01 264.66);
+  --text-color: #fff;
+  --text-color-2: #0a0a0a;
+  --input-placeholder: oklch(0.71 0.02 261.83);
+  --input-placeholder-2: #99a1af;
+  --input-color: oklch(0.21 0.03 263.45);
+  --border-color: oklch(0.28 0.03 257.69);
+  --explore-option-bg: oklch(0.2 0.03 264.95);
+  --explore-filter-bg: oklch(0.27 0 0);
+  --pallete-bg: oklch(0.28 0.03 257.69);
+  --drag-upload-bg: #0d1119;
+  --drag-upload-border: #292c30;
+  --home-page-filter-bg: #2e1065;
+  --pagination-btn-bg: oklch(0.28 0.03 257.69);
+  --comments-section-bg: oklch(0.21 0.03 263.45);
+  --tag-text-color: oklch(0.84 0.01 256.87);
+  --post-comment-bg: #38393a;
+  --focus-ring: #9810fa;
+  --drag-drop-upload-bg: transparent;
+  --command-pallete-hover: oklch(0.38 0.05 257.69);
+  --command-pallete-text-hover: #cfcaca;
+
+  .skill-class {
+    background-image: linear-gradient(to right, #0a0a55, #2e1065);
+    border-color: #1e40af;
+  }
+
+  .sign-up-bg {
+    background: oklch(0.19 0.03 264.5);
+  }
 }
 
 .active {
   color: var(--nav-links-hover);
+}
+
+.transition-and-focus-ring {
+  @apply transition-all ease-in duration-100 focus:outline-none focus-visible:ring-4 focus-visible:ring-(--focus-ring);
 }
 
 .purple-bg {

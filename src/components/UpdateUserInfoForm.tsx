@@ -56,7 +56,7 @@ function UpdateUserInfoForm() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-6 mb-8">
       {isPending && <LoadingSpinner />}
 
-      <fieldset className="rounded-[0.875rem] border border-[rgba(0,0,0,0.1)] p-6">
+      <fieldset className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6">
         {/* This legend is for screen readers only */}
         <legend className="sr-only">User image</legend>
 
@@ -74,13 +74,13 @@ function UpdateUserInfoForm() {
           <button
             aria-label="Upload new profile picture"
             type="button"
-            className="relative cursor-pointer group"
+            className="relative cursor-pointer group transition-and-focus-ring rounded-full"
             onClick={handleFocus}
           >
             <img
               src={image ? image : guestImage}
               alt="Current user image"
-              className="w-[92px] h-[92px] rounded-full transition-all duration-300 group-hover:brightness-75"
+              className="w-[92px] h-[92px] rounded-full transition-all duration-300 group-hover:brightness-75 object-cover"
             />
             <motion.span
               whileHover={{ scale: 1.1 }}
@@ -121,7 +121,7 @@ function UpdateUserInfoForm() {
         </div>
       </fieldset>
 
-      <fieldset className="rounded-[0.875rem] border border-[rgba(0,0,0,0.1)] p-6">
+      <fieldset className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6">
         {/* This legend is for screen readers only */}
         <legend className="sr-only">Basic user information</legend>
 
@@ -199,7 +199,7 @@ function UpdateUserInfoForm() {
 
       <section
         aria-labelledby="account-info-heading"
-        className="rounded-[0.875rem] border border-[rgba(0,0,0,0.1)] p-6"
+        className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6"
       >
         <h2
           id="account-info-heading"
@@ -251,14 +251,14 @@ function UpdateUserInfoForm() {
       <section aria-label="Action buttons" className="flex gap-3 justify-end">
         <button
           type="button"
-          className="py-2 px-4 text-sm font-semibold rounded-lg border border-[rgba(0,0,0,0.10)] bg-white cursor-pointer hover:bg-[#e9ebef] transition-colors duration-200 ease-in-out"
+          className="py-2 px-4 text-sm font-semibold rounded-lg border border-[rgba(0,0,0,0.10)] bg-white cursor-pointer hover:bg-[#e9ebef] transition-and-focus-ring"
           onClick={handleReset}
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-(--text-color-2) rounded-lg cursor-pointer disabled:opacity-50"
+          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-(--text-color-2) rounded-lg cursor-pointer disabled:opacity-50 transition-and-focus-ring"
         >
           <Save size={16} aria-hidden="true" /> Save Changes
         </button>

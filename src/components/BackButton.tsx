@@ -18,7 +18,7 @@ function BackButton({ text, addedClasses, to }: BackButtonProps) {
           navigate(to);
         } else navigate(-1);
       }}
-      className={`flex items-center gap-2 text-(--text-color) text-sm font-semibold cursor-pointer hover:text-(--nav-links-hover) ${addedClasses}`}
+      className={`flex items-center gap-2 text-(--text-color) text-sm font-semibold cursor-pointer hover:text-(--nav-links-hover) transition-and-focus-ring ${addedClasses}`}
     >
       <span>
         <ArrowLeft size={16} aria-hidden="true" />

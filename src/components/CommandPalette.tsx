@@ -149,10 +149,10 @@ export function CommandPalette({
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="fixed left-1/2 top-[15%] z-50 w-full max-w-xl -translate-x-1/2 px-4"
           >
-            <div className="rounded-xl border border-border/50 bg-linear-to-b from-white to-gray-50 shadow-2xl overflow-hidden">
+            <div className="rounded-xl border border-border/50 bg-(--comments-section-bg) shadow-2xl overflow-hidden">
               {/* Search Input */}
-              <div className="flex items-center gap-3 border-b border-gray-300 px-4 py-4 bg-white/50 backdrop-blur-sm">
-                <Search className="h-5 w-5 text-muted-foreground" />
+              <div className="flex items-center gap-3 border-b border-(--border-color) text-(--text-color) px-4 py-4 bg-(--comments-section-bg) backdrop-blur-sm">
+                <Search className="h-5 w-5" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -177,7 +177,7 @@ export function CommandPalette({
                       <button
                         key={index}
                         onClick={() => handleSelect(command)}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all hover:bg-[#e9ebef] cursor-pointer hover:shadow-sm active:scale-[0.98] group ${
+                        className={`w-full flex text-(--text-color) items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all hover:bg-(--border-color) cursor-pointer hover:shadow-sm active:scale-[0.98] group transition-and-focus-ring ${
                           command.label === "Sign out" ? "text-red-700" : ""
                         }`}
                       >

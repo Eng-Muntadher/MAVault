@@ -17,11 +17,11 @@ function SignInForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[0.875rem] border border-[rgba(0,0,0,0.10)] bg-white p-6 w-md max-w-full"
+      className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6 w-md max-w-full"
     >
       <h2 className="text-(--text-color) font-semibold mb-1.5">Sign Up</h2>
       <p className="block text-(--input-placeholder-2) mb-6">
-        Enter your details to create a new account{" "}
+        Enter your details to create a new account
       </p>
 
       <label

@@ -38,11 +38,11 @@ function UserProfileMainSection() {
         <div className="flex flex-col gap-2 grow">
           <div className="flex items-center justify-between max-md:justify-center">
             <h1 className="text-4xl text-white" id="user-profile-heading">
-              {userInfo?.at(0)?.userName}
+              {userInfo?.at(0)?.user_name}
             </h1>
 
             <button
-              className="flex items-center gap-2 bg-[#ECEEF2] px-3 py-2 rounded-lg text-sm font-semibold max-md:hidden hover:bg-[#cccdd1] cursor-pointer transition-colors duration-200"
+              className="flex items-center gap-2 bg-[#ECEEF2] px-3 py-2 rounded-lg text-sm font-semibold max-md:hidden hover:bg-[#cccdd1] cursor-pointer transition-all ease-in duration-100 focus:outline-none focus:ring-4 focus:ring-[#155dfc]"
               onClick={() => navigate("/user-settings/9")}
             >
               <Settings size={16} aria-hidden="true" />

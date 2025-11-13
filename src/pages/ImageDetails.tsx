@@ -30,7 +30,7 @@ function ImageDetails() {
   }, [image]);
 
   return (
-    <div className="bg-[#F9FAFB] pt-8 border-t border-b border-gray-200 backdrop-blur-md mb-8">
+    <div className="bg-(--drag-upload-bg) pt-8 border-t border-b border-(--border-color) backdrop-blur-md mb-8">
       <BackButton text="Back to Gallery" addedClasses="px-4 sm:px-6 lg:px-6" />
 
       <div className="flex gap-8 mt-8 justify-center px-4 sm:px-6 lg:px-6 max-[1140px]:flex-col">

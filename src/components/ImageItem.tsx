@@ -15,9 +15,8 @@ interface ImageItemProps {
   likes: number;
   publisherId: string;
   describtion: string;
-  imageWidth?: number;
-  imageheight?: number;
 }
+
 function ImageItem({
   image,
   imageId,
@@ -45,13 +44,14 @@ function ImageItem({
     >
       <Link
         to={`/image-details/${imageId}`}
-        className="min-w-[286px] relative group"
+        className="min-w-[286px] relative group focus:outline-none"
       >
         <div className="relative overflow-hidden rounded-xl mb-3">
           <img
             loading="lazy"
             src={image}
-            className="rounded-xl transition-transform duration-500 group-hover:scale-110 max-h-72 w-full object-cover"
+            alt={describtion}
+            className="rounded-xl transition-all duration-500 group-hover:scale-110 group-focus:scale-115 max-h-72 min-h-72 w-full object-cover group-focus:brightness-50"
           />
 
           {/* Image info on hover */}
@@ -65,6 +65,7 @@ function ImageItem({
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                tabIndex={-1}
                 className={`p-2 rounded-full transition-colors cursor-pointer ${
                   isAlreadyLiked ? "bg-red-600" : "bg-white/40"
                 }`}
@@ -85,6 +86,7 @@ function ImageItem({
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                tabIndex={-1}
                 className={`p-2 rounded-full transition-colors cursor-pointer ${
                   isAlreadySaved ? "bg-green-600" : "bg-white/40"
                 }`}
@@ -113,7 +115,7 @@ function ImageItem({
           </motion.div>
         </div>
 
-        <span className="flex px-3 py-1 text-xs text-(--text-color-2) absolute left-3 top-[0.85rem] rounded-full bg-black/50 backdrop-blur-sm">
+        <span className="flex px-3 py-1 text-xs text-white absolute left-3 top-[0.85rem] rounded-full bg-black/50 backdrop-blur-sm">
           {category}
         </span>
 

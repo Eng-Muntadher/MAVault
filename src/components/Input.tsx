@@ -34,7 +34,7 @@ function Input({
   max,
 }: InputProps) {
   const styles =
-    "bg-(--input-color) text-(--text-color) placeholder-(--input-placeholder-2) rounded-lg px-3 py-2 focus:outline-none focus:ring-3 focus:ring-(--text-color-secondary) transition-all ease-in duration-100";
+    "bg-(--input-color) border border-(--border-color) text-(--text-color) placeholder-(--input-placeholder-2) rounded-lg px-3 py-2 transition-and-focus-ring";
 
   return (
     <>
