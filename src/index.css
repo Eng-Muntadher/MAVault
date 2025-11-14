@@ -83,6 +83,29 @@
   }
 }
 
+/* Page selection styles */
+::selection {
+  background-color: var(--focus-ring); /* soft indigo */
+  color: var(--text-color);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--focus-ring) transparent; /* Firefox thumb/track */
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: var(--focus-ring); /* Tailwind sky-400 */
+  border-radius: 9999px;
+}
+
 .active {
   color: var(--nav-links-hover);
 }

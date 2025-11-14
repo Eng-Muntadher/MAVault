@@ -8,6 +8,7 @@ interface UploadImageArguments {
   describtion: string;
   category: string;
   tags: string;
+  dimensions: string;
 }
 
 export interface CommentStructure {
@@ -93,6 +94,7 @@ export async function uploadImage({
   describtion,
   category,
   tags,
+  dimensions,
 }: UploadImageArguments) {
   // Ensure a file was provided
   if (!file) throw new Error("No file provided");
@@ -132,7 +134,17 @@ export async function uploadImage({
   const { data: image, error: imageError } = await supabase
     .from("Images")
     .insert([
-      { title, describtion, category, tags, url, likes, views, publisher_id },
+      {
+        title,
+        describtion,
+        category,
+        tags,
+        url,
+        likes,
+        views,
+        publisher_id,
+        dimensions,
+      },
     ])
     .select()
     .single();
@@ -173,4 +185,56 @@ export async function increaseViews(imageId: number) {
     .eq("id", imageId);
 
   if (updateError) throw updateError;
+}
+
+// This function is used to validate the user input for the image tags when uploading an image
+export function validateCSV(input: unknown): string | null {
+  if (typeof input !== "string") return null;
+
+  const items = input
+    .split(",")
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+
+  const seen = new Set<string>();
+  for (const item of items) {
+    const lower = item.toLowerCase();
+    if (seen.has(lower)) {
+      return null; // duplicate found → invalid
+    }
+    seen.add(lower);
+  }
+
+  return items.length > 0 ? input : null; // return original string if valid
+}
+
+// This function is used to convert the CSV string comming from the database to a tags array for rendering
+export function csvToArray(csv: unknown): string[] {
+  if (typeof csv !== "string") return []; // not a string → return empty array
+
+  return csv
+    .split(",") // split by comma
+    .map((item) => item.trim()) // trim spaces
+    .filter((item) => item.length > 0); // remove empty entries
+}
+
+// This functions is used to get the dimensions of an image before uploading
+export function getImageDimensionsString(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const dimensionString = `${img.width} × ${img.height} px`;
+      resolve(dimensionString);
+      URL.revokeObjectURL(objectUrl); // free memory
+    };
+
+    img.onerror = () => {
+      reject(new Error("Failed to load image"));
+      URL.revokeObjectURL(objectUrl);
+    };
+
+    img.src = objectUrl;
+  });
 }

@@ -5,11 +5,14 @@ import Input from "./Input";
 import { type FileRejection } from "react-dropzone";
 import { useUploadImage } from "../hooks/useUploadImage";
 import LoadingSpinner from "./LoadingSpinner";
+import CustomSelect from "./CustomSelect";
+import toast from "react-hot-toast";
+import { getImageDimensionsString, validateCSV } from "../services/imagesApi";
 
 function UploadImageForm() {
   const [title, setTitle] = useState("");
   const [describtion, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("Sky");
   const [tags, setTags] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
@@ -58,14 +61,27 @@ function UploadImageForm() {
 
   // Derived state for form validation
   const checkBeforeSubmit =
-    title.trim() !== "" && category.trim() !== "" && file;
+    title.trim() !== "" && category.trim() !== "" && !!file;
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (checkBeforeSubmit) {
-      uploadImage({ title, describtion, category, tags, file });
+      console.log(checkBeforeSubmit);
+      const isTagsCSV = validateCSV(tags);
+      if (!isTagsCSV) {
+        toast.error(
+          "Please make sure the image tags are in correct format! (No repetition allowed)"
+        );
+        return;
+      }
+
+      // file is guaranteed to exist due to checkBeforeSubmit
+      const dimensions = await getImageDimensionsString(file!);
+      uploadImage({ title, describtion, category, tags, file, dimensions });
       handleReset();
+    } else {
+      toast.error("Please fill all the required fields and select an image!");
     }
   }
 
@@ -185,16 +201,10 @@ function UploadImageForm() {
         >
           Category <span className="text-red-600">*</span>
         </label>
-        <Input
-          type="text"
-          value={category}
-          id="image-category"
-          name="image-category"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setCategory(e.target.value)
-          }
-          addedClasses="text-sm w-full mb-4"
-          placeholder="Select a category"
+        <CustomSelect
+          optionsArray={["Sky", "Nature", "Portrait", "Urban"]}
+          onChange={(x) => setCategory(x)}
+          addedClasses="text-sm w-full mb-4 bg-(--input-color)"
         />
 
         <label
@@ -230,7 +240,6 @@ function UploadImageForm() {
         <button
           type="submit"
           className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-(--text-color-2) rounded-lg cursor-pointer disabled:opacity-50 transition-and-focus-ring"
-          disabled={!checkBeforeSubmit}
         >
           <UploadIcon size={16} aria-hidden="true" /> Upload Image
         </button>

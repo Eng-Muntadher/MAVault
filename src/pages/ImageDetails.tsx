@@ -28,6 +28,7 @@ function ImageDetails() {
     if (!image) return; // exit if image not ready
     increaseViews(image.id);
   }, [image]);
+  console.log(image);
 
   return (
     <div className="bg-(--drag-upload-bg) pt-8 border-t border-b border-(--border-color) backdrop-blur-md mb-8">
@@ -40,7 +41,10 @@ function ImageDetails() {
             animate={{ opacity: 1, y: 0 }}
           >
             {isPending ? (
-              <SkeletonImageLoading heightClass="h-[555px]" />
+              <SkeletonImageLoading
+                heightClass="h-[555px]"
+                addedClasses="grow"
+              />
             ) : (
               <img
                 className="rounded-[0.875rem] h-[555px] w-3xl max-[1140px]:w-full mx-auto object-cover"
@@ -74,6 +78,7 @@ function ImageDetails() {
           views={image?.views}
           tags={image?.tags}
           publisherId={image?.publisher_id}
+          dimensions={image?.dimensions}
         />
       </div>
     </div>

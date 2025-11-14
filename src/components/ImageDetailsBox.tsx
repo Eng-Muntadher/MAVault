@@ -11,6 +11,7 @@ interface ImageDetailsBoxProps {
   views: number;
   tags: string;
   publisherId: string;
+  dimensions: string;
 }
 function ImageDetailsBox({
   title,
@@ -19,6 +20,7 @@ function ImageDetailsBox({
   views,
   tags,
   publisherId,
+  dimensions,
 }: ImageDetailsBoxProps) {
   const { data } = useGetUserInfo(publisherId);
   return (
@@ -26,11 +28,15 @@ function ImageDetailsBox({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       aria-label="image details"
-      className="flex flex-col gap-4 p-6 rounded-[0.875rem] border border-(--border-color) bg-(--comments-section-bg) lg:min-w-96 min-h-[555px] h-fit sticky top-8 z-10 max-[1140px]:max-w-full max-[1140px]:mb-8"
+      className="flex flex-col gap-4 p-6 rounded-[0.875rem] border border-(--border-color) bg-(--comments-section-bg) min-[1140px]:w-96 min-h-[555px] h-fit sticky top-8 z-10 max-[1140px]:max-w-full max-[1140px]:mb-8"
     >
-      <h1 className="text-(--text-color) text-2xl">{title}</h1>
+      <h1 className="text-(--text-color) text-2xl max-w-full max-h-9 overflow-auto scrollbar-thin">
+        {title}
+      </h1>
 
-      <p className="text-(--input-placeholder)">{describtion}</p>
+      <p className="text-(--input-placeholder) max-w-full max-h-9 overflow-auto scrollbar-thin">
+        {describtion}
+      </p>
 
       <div>
         <h2 className="text-[#6A7282] text-sm mb-3">Uploaded by</h2>
@@ -91,7 +97,13 @@ function ImageDetailsBox({
 
       <div>
         <h4 className="text-[#6A7282] text-sm">Dimensions</h4>
-        <span className="text-(--text-color) text-sm">1080 × 720 px</span>
+        <span className="text-(--text-color) text-sm">
+          {dimensions === undefined
+            ? "loading"
+            : dimensions === null
+            ? "Unknown"
+            : dimensions}
+        </span>
       </div>
     </motion.section>
   );

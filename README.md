@@ -36,13 +36,13 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - ✅ Authentication & authorization system with Supabase
 - ✅ A fully functional Upload, like, and comment system for authenticated users
 - ✅ User profile customization including user info and profile picture
+- ✅ Dark mode
 
 ---
 
 ## ✨ Future Features
 
 - ⏳ Image filtering, sorting, and search with pagination
-- ⏳ Dark mode toggle
 
 ---
 
@@ -57,7 +57,7 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - **Single Image Page**
 - **Sign Up / Sign In**
 
-_All are fully responsive and optimized for all screen sizes._
+_All pages are fully responsive and optimized for all common screen sizes._
 
 ---
 
