@@ -1,7 +1,12 @@
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
+import type { ImageFilters } from "../services/imagesApi";
 
-function HeroSection() {
+interface HeroSectionProps {
+  handleFilterChange: (newFilters: Partial<ImageFilters>) => void;
+}
+
+function HeroSection({ handleFilterChange }: HeroSectionProps) {
   return (
     <motion.section
       initial={{ opacity: 0, y: -20 }}
@@ -35,15 +40,18 @@ function HeroSection() {
         >
           {/* Sr only label */}
           <label htmlFor="search-images" className="sr-only">
-            Search images, tags, or artists
+            Search images, tags, or categories
           </label>
 
           <input
             type="text"
             name="search-images"
             id="search-images"
+            placeholder="Search images, tags, or categories..."
+            onChange={(e) =>
+              handleFilterChange({ search: e.target.value || undefined })
+            }
             className="text-sm py-3.5 pr-4 pl-12 bg-(--input-color) rounded-lg w-full transition-all ease-in duration-200 focus:outline-none focus:ring-4 focus:ring-[#155dfc]"
-            placeholder="Search images, tags, or artists..."
           />
           <Search
             aria-hidden="true"

@@ -5,10 +5,10 @@ import ImageDetailsBox from "../components/ImageDetailsBox";
 import ImageCommentsBox from "../components/ImageCommentsBox";
 import ImageDetailsButtons from "../components/ImageDetailsButtons";
 import { useParams } from "react-router-dom";
-import { useGetImages } from "../hooks/useGetImages";
 import dayjs from "dayjs";
 import { increaseViews } from "../services/imagesApi";
 import SkeletonImageLoading from "../components/SkeletonImageLoading";
+import { useGetImage } from "../hooks/useGetImage";
 
 function ImageDetails() {
   /* This use effect resets the scroll of the page so that when
@@ -19,9 +19,7 @@ function ImageDetails() {
 
   const { imageId } = useParams(); // get the image id from the URL
 
-  const { data: images, isPending } = useGetImages();
-
-  const image = images?.find((img) => img?.id === Number(imageId));
+  const { data: image, isPending } = useGetImage(Number(imageId));
 
   // Update the views in the DB for the image when someone clicks it
   useEffect(() => {

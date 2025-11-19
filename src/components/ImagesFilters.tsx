@@ -1,6 +1,23 @@
+import { useSearchParams } from "react-router-dom";
+import type { ImageFilters } from "../services/imagesApi";
 import CustomSelect from "./CustomSelect";
 
-function ImagesFilters() {
+interface ImagesFiltersProps {
+  imagesCount: number;
+  isPending: boolean;
+  handleFilterChange: (newFilters: Partial<ImageFilters>) => void;
+}
+
+function ImagesFilters({
+  imagesCount,
+  isPending,
+  handleFilterChange,
+}: ImagesFiltersProps) {
+  const [searchParams] = useSearchParams();
+
+  const category = searchParams.get("category");
+  const sortBy = searchParams.get("sortBy");
+
   return (
     <section
       aria-label="Filter images by category and date"
@@ -16,20 +33,24 @@ function ImagesFilters() {
               "Portrait",
               "Urban",
             ]}
-            onChange={(x) => console.log(x)}
+            value={category}
+            onChange={(value) =>
+              handleFilterChange({ category: value || undefined })
+            }
             addedClasses="w-44"
           />
 
           <CustomSelect
             optionsArray={["Most Recent", "Most Popular", "Older First"]}
-            onChange={(x) => console.log(x)}
+            value={sortBy}
+            onChange={(value) => handleFilterChange({ sortBy: value })}
             addedClasses="w-44"
           />
         </div>
 
         {/* I used aria-live="polite" so that screen readers announce the number of images automatically*/}
         <p className="text-sm text-(--input-placeholder)" aria-live="polite">
-          12 images found
+          {isPending ? "Loading..." : imagesCount + " images found"}
         </p>
       </div>
     </section>

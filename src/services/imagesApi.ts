@@ -2,7 +2,7 @@ import supabase from "./supabase";
 
 // types
 
-interface UploadImageArguments {
+export interface UploadImageArguments {
   file: File;
   title: string;
   describtion: string;
@@ -16,14 +16,114 @@ export interface CommentStructure {
   comment: string;
 }
 
-export async function getImages() {
-  const { data, error } = await supabase
+// types/database.ts
+export interface Image {
+  id: number;
+  created_at: string;
+  title: string;
+  category: string;
+  tags: string;
+  url: string;
+  likes: number;
+  views: number;
+  publisher_id: string;
+  describtion: string;
+  dimensions: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  count: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface ImageFilters {
+  category?: "nature" | "sky" | "portrait" | "urban" | "All Categories";
+  sortBy?: "Most Recent" | "Most Popular" | "Older First";
+  search?: string;
+}
+
+export async function getImages(
+  page: number = 1,
+  pageSize: number = 12,
+  filters: ImageFilters = {}
+): Promise<PaginatedResponse<Image>> {
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  // Build the base query
+  let query = supabase.from("Images").select("*", { count: "exact" });
+
+  // 1. FILTER BY CATEGORY
+  if (filters.category && filters.category !== "All Categories") {
+    query = query.eq("category", filters.category);
+  }
+
+  // 3. SEARCH FUNCTION (searches in title, tags, and category)
+  if (filters.search && filters.search.trim() !== "") {
+    const searchTerm = filters.search.trim();
+    query = query.or(
+      `title.ilike.%${searchTerm}%,tags.ilike.%${searchTerm}%,category.ilike.%${searchTerm}%`
+    );
+  }
+
+  // 2. SORT (ascending, descending, or by likes)
+  if (filters.sortBy === "Most Popular") {
+    query = query.order("likes", { ascending: false });
+  } else if (filters.sortBy === "Older First") {
+    query = query.order("created_at", { ascending: true });
+  } else {
+    // Default to descending by created_at
+    query = query.order("created_at", { ascending: false });
+  }
+
+  // Get total count with filters applied
+  const countQuery = supabase
+    .from("Images")
+    .select("*", { count: "exact", head: true });
+
+  // Apply same filters to count query
+  let finalCountQuery = countQuery;
+  if (filters.category && filters.category !== "All Categories") {
+    finalCountQuery = finalCountQuery.eq("category", filters.category);
+  }
+  if (filters.search && filters.search.trim() !== "") {
+    const searchTerm = filters.search.trim();
+    finalCountQuery = finalCountQuery.or(
+      `title.ilike.%${searchTerm}%,tags.ilike.%${searchTerm}%,category.ilike.%${searchTerm}%`
+    );
+  }
+
+  const { count, error: countError } = await finalCountQuery;
+  if (countError) throw countError;
+
+  // Get paginated data with all filters and sorting applied
+  const { data, error } = await query.range(from, to);
+  if (error) throw error;
+
+  const totalPages = Math.ceil((count || 0) / pageSize);
+
+  return {
+    data: data || [],
+    count: count || 0,
+    page,
+    pageSize,
+    totalPages,
+  };
+}
+
+export async function getImage(imageId: number) {
+  const { data: images, error } = await supabase
     .from("Images")
     .select("*")
-    .order("created_at", { ascending: true }); // <-- stable order
+    .eq("id", imageId)
+    .single();
 
-  if (error) throw error;
-  return data;
+  if (error) throw new Error("There was an error fetching image!");
+
+  return images;
 }
 
 export async function getUserImages(filter: string) {

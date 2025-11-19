@@ -55,14 +55,14 @@ function UserProfileMainSection() {
             <div className="flex gap-2 items-center text-white">
               <MapPin size={16} aria-hidden="true" />
               <span className="text-(--text-color-secondary) text-sm">
-                {userInfo?.at(0)?.location}
+                {userInfo?.at(0)?.location || "Add loaction..."}
               </span>
             </div>
 
             <div className="flex gap-2 items-center text-white">
               <Calendar size={16} />
               <span className="text-(--text-color-secondary) text-sm">
-                Joined{" "}
+                Joined
                 {user?.confirmed_at
                   ? dayjs(user.confirmed_at).format("MMMM D, YYYY")
                   : "Unknown"}

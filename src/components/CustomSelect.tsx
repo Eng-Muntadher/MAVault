@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from "react";
 
 interface SelectOptions {
   optionsArray: string[];
-  onChange: (value: string) => void;
+  onChange: (value: any) => void;
   addedClasses?: string;
-  value?: string;
+  value?: string | null;
 }
 
 function CustomSelect({

@@ -41,7 +41,7 @@ function AboutArticleList() {
         iconBgColor="var(--about-page-icons-bg-purple)"
         headingText="My Coding Journey"
         bodyText={[
-          `My first lines of code were written in college about 4 years ago. My journey into web development began nearly 2 years ago with curiosity about how websites work, and quickly grew into a deep passion for creating digital experiences for others.`,
+          `I wrote my first lines of code in college about three years ago, and my journey into web development began nearly a year and a half ago with curiosity about how websites work, and quickly grew into a deep passion for creating digital experiences for others.`,
 
           `I’ve spent countless hours exploring new technologies, building projects, and learning from the developer community. Each challenge taught me valuable lessons about problem-solving, persistence, and the importance of continuous learning in the ever-evolving tech industry.`,
 
