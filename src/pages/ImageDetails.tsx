@@ -26,7 +26,6 @@ function ImageDetails() {
     if (!image) return; // exit if image not ready
     increaseViews(image.id);
   }, [image]);
-  console.log(image);
 
   return (
     <div className="bg-(--drag-upload-bg) pt-8 border-t border-b border-(--border-color) backdrop-blur-md mb-8">

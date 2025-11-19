@@ -124,6 +124,7 @@ function ImageItem({
           <div className="flex items-center gap-2">
             {/* Publisher image */}
             <img
+              loading="lazy"
               src={publisher?.at(0)?.avatar || GuestImage}
               className="h-[26px] w-[26px] rounded-full"
               alt="Publisher image"
@@ -139,7 +140,9 @@ function ImageItem({
           </div>
         </div>
 
-        <p className="text-(--text-color)">{title}</p>
+        <p className="text-(--text-color) max-w-full overflow-auto scrollbar-thin">
+          {title}
+        </p>
       </Link>
     </motion.div>
   );

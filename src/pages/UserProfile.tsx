@@ -1,14 +1,19 @@
+import { useState } from "react";
+import { useGetUserImages } from "../hooks/useGetUserImages";
 import { Bookmark, Heart, MessageSquare, Upload } from "lucide-react";
 import ExploreImagesFilterOptionsList from "../components/ExploreImagesFilterOptionsList";
-import ImagesList from "../components/ImagesList";
 import UserProfileMainSection from "../components/UserProfileMainSection";
-import { useGetUserImages } from "../hooks/useGetUserImages";
-import { useState } from "react";
+import UserImagesList from "../components/UserImagesList";
 
 function UserProfile() {
   const [imageFilter, setImageFilter] = useState("uploads");
 
-  const { data: images, isPending } = useGetUserImages(imageFilter);
+  const {
+    data: images,
+    isPending,
+    error,
+    isError,
+  } = useGetUserImages(imageFilter.toLowerCase());
 
   const filterButtonsData = [
     { icon: Upload, name: "Uploads" },
@@ -29,10 +34,12 @@ function UserProfile() {
           ariaLabel="Filter the images by the ones you uploaded, liked, bookmarked or commented on"
           setterFunction={(filter) => setImageFilter(filter)}
         />
-        <ImagesList
-          images={images}
+
+        <UserImagesList
+          images={images || []}
           isPending={isPending}
-          usedOutsideHomePage={true}
+          error={error}
+          isError={isError}
           addedClasses="grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-sm:grid-cols-1"
         />
       </div>

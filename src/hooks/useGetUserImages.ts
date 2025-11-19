@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserImages } from "../services/imagesApi";
 
 export function useGetUserImages(filter: string) {
-  const { data, isPending } = useQuery({
+  const { data, isPending, isError, error } = useQuery({
     queryKey: ["userImages", filter],
     queryFn: ({ queryKey }) => {
       const [, filter] = queryKey; // "likedImages" is first, imagesLabel is second
@@ -10,5 +10,5 @@ export function useGetUserImages(filter: string) {
     },
   });
 
-  return { data, isPending };
+  return { data, isPending, isError, error };
 }

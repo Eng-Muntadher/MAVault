@@ -12,7 +12,7 @@ interface buttonsDataProp {
   addedClassesForContainer?: string;
   addedClassesForElements?: string;
   ariaLabel?: string;
-  setterFunction: (filter: string) => void;
+  setterFunction: (value: string) => void;
 }
 
 function ExploreImagesFilterOptionsList({
@@ -24,9 +24,9 @@ function ExploreImagesFilterOptionsList({
 }: buttonsDataProp) {
   const [selectedBtn, setSelectedBtn] = useState(buttonsData[0].name);
 
-  function handleClick(name: string) {
-    setSelectedBtn(name);
-    setterFunction(name?.toLowerCase());
+  function handleClick(value: string) {
+    setSelectedBtn(value);
+    setterFunction(value);
   }
 
   return (

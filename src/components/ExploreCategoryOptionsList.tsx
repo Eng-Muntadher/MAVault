@@ -1,21 +1,35 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, Flame, Star, Stars, TrendingUp } from "lucide-react";
 import ExploreCategoryOption from "./ExploreCategoryOption";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import type { LucideIcon } from "lucide-react";
 
-const buttonsData = [
-  { icon: Stars, name: "All", count: 1247 },
-  { icon: TrendingUp, name: "Nature", count: 456 },
-  { icon: Star, name: "Architecture", count: 234 },
-  { icon: Flame, name: "Art", count: 189 },
-  { icon: Clock, name: "Urban", count: 368 },
-];
+interface ButtonsDataShape {
+  icon: LucideIcon;
+  name: string;
+  count: number;
+}
 
-function ExploreCategoryOptionsList() {
+interface OptionsListProps {
+  buttonsData: ButtonsDataShape[];
+}
+function ExploreCategoryOptionsList({ buttonsData }: OptionsListProps) {
   const [selectedBtn, setSelectedBtn] = useState("All");
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const handleCategoryChange = (category: string) => {
+    // Set the URL with new category parameter
+    // This will trigger a refetch because the queryKey includes the filters
+    const params = new URLSearchParams(searchParams);
+    params.set("category", category);
+    navigate(`?${params.toString()}`, { replace: true });
+  };
 
   function handleClick(name: string) {
     setSelectedBtn(name);
+    handleCategoryChange(name);
   }
 
   return (

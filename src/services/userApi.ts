@@ -1,6 +1,8 @@
 import type { User } from "@supabase/supabase-js";
 import supabase from "./supabase";
 
+//types
+
 export interface LoginArguments {
   email: string;
   password: string;
@@ -13,6 +15,9 @@ export interface userUpdatedData {
   location: string;
   avatar: File | null;
 }
+/////////////////////////////////////////////////////////////////////////
+
+// functions
 
 export async function login({ email, password }: LoginArguments) {
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -136,42 +141,6 @@ export async function updateUserData({
 
   console.log(sheep);
 }
-
-// export async function uploadUserImage(file: File | null) {
-//   // Ensure a file was provided
-//   if (!file) return;
-
-//   // Get current user
-//   const {
-//     data: { user },
-//     error: userError,
-//   } = await supabase.auth.getUser();
-//   if (userError || !user) throw new Error("User not signed in");
-
-//   // Create a unique filename (avoids overwriting)
-//   const fileName = `avatar-${user.id}-${file.name}`;
-
-//   // Upload image to the 'images' bucket
-//   const { error: uploadError } = await supabase.storage
-//     .from("avatars")
-//     .upload(fileName, file);
-
-//   if (uploadError) throw new Error(`Error uploading ${uploadError.message}`);
-
-//   // Get the public URL of the uploaded image
-//   const { data } = supabase.storage.from("avatars").getPublicUrl(fileName);
-//   if (!data?.publicUrl) throw new Error(`Failed to get public URL`);
-
-//   const url = data.publicUrl;
-
-//   // Update user metadata
-//   const { error: updateError } = await supabase
-//     .from("users_info")
-//     .update({ avatar: url })
-//     .eq("user_id", user.id);
-
-//   if (updateError) throw new Error("Error updating user avatar");
-// }
 
 export async function getUserData(userId: string) {
   if (!userId) return;

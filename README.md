@@ -27,7 +27,7 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 
 ---
 
-## ✨ Current Features
+## ✨ Features
 
 - ✅ Project routing structure initialized with React Router
 - ✅ Full Static layout for all pages with states and basic interaction
@@ -37,12 +37,7 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - ✅ A fully functional Upload, like, and comment system for authenticated users
 - ✅ User profile customization including user info and profile picture
 - ✅ Dark mode
-
----
-
-## ✨ Future Features
-
-- ⏳ Image filtering, sorting, and search with pagination
+- ✅ Image filtering, sorting, and search with pagination and Infinite scroll
 
 ---
 
