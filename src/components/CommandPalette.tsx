@@ -17,6 +17,7 @@ import {
   User,
   LogInIcon,
 } from "lucide-react";
+import { createPortal } from "react-dom";
 
 interface Command {
   label: string;
@@ -28,12 +29,14 @@ interface CommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   user: userType | null;
+  toggleDarkMode: () => void;
 }
 
 export function CommandPalette({
   open,
   onOpenChange,
   user,
+  toggleDarkMode,
 }: CommandPaletteProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -76,7 +79,10 @@ export function CommandPalette({
     {
       label: "Toggle Theme",
       icon: <Moon className="w-5 h-5" />,
-      onSelect: () => document.documentElement.classList.toggle("dark"),
+      onSelect: () => {
+        toggleDarkMode();
+        console.log("new new");
+      },
     },
     {
       label: `${user ? "Sign out" : "Sign in"}`,
@@ -127,7 +133,7 @@ export function CommandPalette({
     onOpenChange(false);
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {open && (
         <>
@@ -138,7 +144,7 @@ export function CommandPalette({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleBackdropClick}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-900 bg-black/60 backdrop-blur-sm"
           />
 
           {/* Command Palette */}
@@ -147,7 +153,7 @@ export function CommandPalette({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed left-1/2 top-[15%] z-50 w-full max-w-xl -translate-x-1/2 px-4"
+            className="fixed left-1/2 top-[15%] z-999 w-full max-w-xl -translate-x-1/2 px-4"
           >
             <div className="rounded-xl border border-border/50 bg-(--comments-section-bg) shadow-2xl overflow-hidden">
               {/* Search Input */}
@@ -199,6 +205,7 @@ export function CommandPalette({
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

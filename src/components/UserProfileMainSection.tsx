@@ -1,13 +1,11 @@
 import { Calendar, MapPin, Settings } from "lucide-react";
 import { motion } from "framer-motion";
-import guestImage from "../assets/guest.jpeg";
-import UserStatsCardsList from "../components/UserStatsCardsList";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 import { useGetUserInfo } from "../hooks/useGetUserInfo";
 import { useUser } from "../hooks/useUser";
-
-// interface userData {}
+import UserStatsCardsList from "../components/UserStatsCardsList";
+import guestImage from "../assets/guest.jpeg";
+import dayjs from "dayjs";
 
 function UserProfileMainSection() {
   const { data: user } = useUser();
@@ -50,8 +48,10 @@ function UserProfileMainSection() {
             </button>
           </div>
           <p className="text-(--text-color-secondary) mb-2">{user?.email}</p>
+
           <p className="text-white opacity-90 mb-2">{userInfo?.at(0)?.bio}</p>
-          <div className="flex gap-4 flex-wrap max-[350px]:justify-center">
+
+          <div className="flex gap-4 flex-wrap max-md:justify-center">
             <div className="flex gap-2 items-center text-white">
               <MapPin size={16} aria-hidden="true" />
               <span className="text-(--text-color-secondary) text-sm">
@@ -62,7 +62,7 @@ function UserProfileMainSection() {
             <div className="flex gap-2 items-center text-white">
               <Calendar size={16} />
               <span className="text-(--text-color-secondary) text-sm">
-                Joined
+                Joined{" "}
                 {user?.confirmed_at
                   ? dayjs(user.confirmed_at).format("MMMM D, YYYY")
                   : "Unknown"}

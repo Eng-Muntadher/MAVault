@@ -17,7 +17,7 @@ export function useUpdateUserData() {
       toast.success("Profile successfully edited!");
       queryClient.invalidateQueries({
         queryKey: ["currentUserInfo"],
-        exact: true,
+        exact: false, // allow partial match
       });
     },
     onError: (err) => {

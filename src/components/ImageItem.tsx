@@ -66,6 +66,7 @@ function ImageItem({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 tabIndex={-1}
+                aria-label="Like this image"
                 className={`p-2 rounded-full transition-colors cursor-pointer ${
                   isAlreadyLiked ? "bg-red-600" : "bg-white/40"
                 }`}
@@ -87,6 +88,7 @@ function ImageItem({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 tabIndex={-1}
+                aria-label="Bookmark this image"
                 className={`p-2 rounded-full transition-colors cursor-pointer ${
                   isAlreadySaved ? "bg-green-600" : "bg-white/40"
                 }`}
@@ -107,7 +109,7 @@ function ImageItem({
 
             {/* Bottom Info */}
             <div className="text-white">
-              <h3 className="text-lg mb-1 line-clamp-1">{title}</h3>
+              <h2 className="text-lg mb-1 line-clamp-1">{title}</h2>
               <p className="text-sm text-gray-200 line-clamp-2 mb-3">
                 {describtion}
               </p>

@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
+import { useUpdateUserData } from "../hooks/useUpdateUser";
+import { useUser } from "../hooks/useUser";
+import { useGetUserInfo } from "../hooks/useGetUserInfo";
+import { useNavigate } from "react-router-dom";
 import guestImage from "../assets/guest.jpeg";
 import Input from "./Input";
-import { useUpdateUserData } from "../hooks/useUpdateUser";
 import LoadingSpinner from "./LoadingSpinner";
-import { useUser } from "../hooks/useUser";
 import dayjs from "dayjs";
-import { useGetUserInfo } from "../hooks/useGetUserInfo";
+import toast from "react-hot-toast";
 
 function UpdateUserInfoForm() {
   const { data: user } = useUser();
+  const navigate = useNavigate();
 
   const { data: userData, isPending: isFetchingData } = useGetUserInfo(
     user?.id || ""
@@ -22,6 +25,12 @@ function UpdateUserInfoForm() {
   const [location, setLocation] = useState("");
   const [charCount, setCharCount] = useState(0);
   const [avatar, setAvatar] = useState<File | null>(null);
+
+  if (isFetchingData) {
+    setBio("Loading...");
+    setLocation("Loading...");
+    setUsername("Loading...");
+  }
 
   useEffect(() => {
     setImage(userData?.at(0)?.avatar);
@@ -37,8 +46,14 @@ function UpdateUserInfoForm() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (charCount > 120) {
+      toast.error(
+        "Please make sure the bio length is not more than 120 characters!"
+      );
+      return;
+    }
     updateUserData({ avatar, userName, bio, location });
-    handleReset();
+    navigate("/user-profile");
   }
 
   function handleReset() {
@@ -85,6 +100,7 @@ function UpdateUserInfoForm() {
             <motion.span
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              tabIndex={-1}
               className="btn-bg p-2 absolute right-0 bottom-0 text-white rounded-full shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)]"
             >
               <Plus size={16} aria-hidden="true" />
@@ -128,9 +144,11 @@ function UpdateUserInfoForm() {
         <h2 className="text-(--text-color) font-semibold mb-1.5">
           Basic Information
         </h2>
+
         <p className="block text-(--input-placeholder-2) mb-6">
           Update your profile information
         </p>
+
         <label
           htmlFor="username"
           className="block text-(--text-color) text-sm font-semibold mb-2"
@@ -140,7 +158,8 @@ function UpdateUserInfoForm() {
         <Input
           type="text"
           disabled={isFetchingData || isPending}
-          value={isFetchingData ? "loading..." : userName}
+          value={userName || ""}
+          maxLength={25}
           id="username"
           name="username"
           required={true}
@@ -161,7 +180,7 @@ function UpdateUserInfoForm() {
         <Input
           type="textarea"
           disabled={isFetchingData || isPending}
-          value={isFetchingData ? "loading..." : bio}
+          value={isFetchingData ? "loading..." : bio || ""}
           id="bio"
           name="bio"
           autoComplete="bio"
@@ -173,7 +192,7 @@ function UpdateUserInfoForm() {
           placeholder="Tell us about yourself..."
         />
         <p className="text-[#6A7282] text-xs mb-3">
-          {charCount}/200 characters
+          {charCount}/120 characters
         </p>
 
         <label
@@ -185,7 +204,8 @@ function UpdateUserInfoForm() {
         <Input
           type="text"
           disabled={isFetchingData || isPending}
-          value={isFetchingData ? "loading..." : location}
+          maxLength={50}
+          value={isFetchingData ? "loading..." : location || ""}
           id="location"
           name="location"
           autoComplete="location"
@@ -258,7 +278,7 @@ function UpdateUserInfoForm() {
         </button>
         <button
           type="submit"
-          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-(--text-color-2) rounded-lg cursor-pointer disabled:opacity-50 transition-and-focus-ring"
+          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-white rounded-lg cursor-pointer disabled:opacity-50 transition-and-focus-ring"
         >
           <Save size={16} aria-hidden="true" /> Save Changes
         </button>

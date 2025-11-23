@@ -28,7 +28,7 @@ function ImageDetailsBox({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       aria-label="image details"
-      className="flex flex-col gap-4 p-6 rounded-[0.875rem] border border-(--border-color) bg-(--comments-section-bg) min-[1140px]:w-96 min-h-[555px] h-fit sticky top-8 z-10 max-[1140px]:max-w-full max-[1140px]:mb-8"
+      className="flex flex-col gap-4 p-6 rounded-[0.875rem] border border-(--border-color) bg-(--comments-section-bg) min-[1140px]:w-96 min-h-[555px] h-fit sticky top-18 z-10 max-[1140px]:max-w-full max-[1140px]:mb-8"
     >
       <h1 className="text-(--text-color) text-2xl max-w-full max-h-9 overflow-auto scrollbar-thin">
         {title}
@@ -64,7 +64,7 @@ function ImageDetailsBox({
           <Calendar size={20} aria-hidden="true" />
           <div>
             <span className="block text-[#6A7282] text-xs">Published</span>
-            <time dateTime="" className="text-sm">
+            <time dateTime={date} className="text-sm">
               {date}
             </time>
           </div>
@@ -74,7 +74,9 @@ function ImageDetailsBox({
           <Eye size={20} aria-hidden="true" />
           <div>
             <span className="block text-[#6A7282] text-xs">Views</span>
-            <span className="text-sm">{views}</span>
+            <span className="text-sm">
+              {dimensions === undefined ? "Loading" : views}
+            </span>
           </div>
         </div>
       </div>

@@ -71,7 +71,7 @@ function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
 
         {/* Display images */}
         {!isLoading && images.length === 0 ? (
-          <p className="text-xl text-(--text-color) mb-5 col-span-3 text-center">
+          <p className="text-xl text-(--text-color) mb-5 col-span-4 text-center">
             No Images Found!
           </p>
         ) : (

@@ -3,55 +3,22 @@ import { Menu, Moon, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import guestImage from "../assets/guest.jpeg";
 import { useGetUserInfo } from "../hooks/useGetUserInfo";
-import { useLayoutEffect, useState } from "react";
 
 interface NavActionsProps {
   openCommandPallete: () => void;
   openMobileNavBar: () => void;
   user: User | null;
+  toggleDarkMode: () => void;
 }
 
 function NavActions({
   openCommandPallete,
   openMobileNavBar,
   user,
+  toggleDarkMode,
 }: NavActionsProps) {
   // get the user data if there is a signed in user
   const { data: userData } = useGetUserInfo(user?.id || "");
-
-  const [darkMode, setDarkMode] = useState(() => {
-    try {
-      const stored = localStorage.getItem("theme");
-      if (stored === "dark") return true;
-      if (stored === "light") return false;
-      return (
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      );
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  });
-
-  function toggleDarkMode() {
-    setDarkMode((prev) => !prev);
-  }
-
-  useLayoutEffect(() => {
-    const el = document.documentElement;
-    try {
-      if (darkMode) {
-        el.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        el.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }, [darkMode]);
 
   return (
     <div className="flex gap-3 items-center justify-end">
@@ -75,16 +42,18 @@ function NavActions({
 
       {/* Dark mode toggle */}
       <button
+        aria-label="Toggle Dark mode"
         onClick={toggleDarkMode}
         className="w-9 h-9 flex items-center justify-center cursor-pointer text-(--text-color) hover:bg-(--border-color) rounded-full transition-and-focus-ring"
       >
-        <Moon size={16} />
+        <Moon size={16} aria-hidden="true" />
       </button>
 
       {/* Auth buttons */}
       {user ? (
         <Link
           to="/user-profile"
+          aria-label="Go to profile page"
           className="max-[890px]:hidden transition-and-focus-ring rounded-full"
         >
           <img
@@ -114,6 +83,7 @@ function NavActions({
 
       {/* Burger icon shown on smaller screens */}
       <button
+        aria-label="Open navigation menu"
         className="w-9 h-9 justify-center items-center rounded-md max-[890px]:flex min-[890px]:hidden cursor-pointer text-(--text-color) hover:bg-(--border-color)"
         onClick={openMobileNavBar}
       >

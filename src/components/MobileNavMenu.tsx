@@ -13,6 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import type { User as userType } from "@supabase/supabase-js";
 import { useSignOut } from "../hooks/useSignOut";
+import { createPortal } from "react-dom";
 
 interface Command {
   label: string;
@@ -96,7 +97,7 @@ function MobileNavMenu({ open, onOpenChange, user }: CommandPaletteProps) {
     onOpenChange(false);
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {open && (
         <>
@@ -107,7 +108,7 @@ function MobileNavMenu({ open, onOpenChange, user }: CommandPaletteProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleBackdropClick}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-900 bg-black/60 backdrop-blur-sm"
           />
 
           {/* Command Palette */}
@@ -116,7 +117,7 @@ function MobileNavMenu({ open, onOpenChange, user }: CommandPaletteProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed left-1/2 top-[15%] z-50 w-full max-w-xl -translate-x-1/2 px-4"
+            className="fixed left-1/2 top-[15%] z-999 w-full max-w-xl -translate-x-1/2 px-4"
           >
             <div className="rounded-xl border border-(--border-color) bg-(--comments-section-bg) text-(--text-color) shadow-2xl overflow-hidden">
               {/* Command List */}
@@ -144,7 +145,8 @@ function MobileNavMenu({ open, onOpenChange, user }: CommandPaletteProps) {
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
 

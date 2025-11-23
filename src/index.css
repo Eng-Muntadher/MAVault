@@ -29,6 +29,7 @@
   --drag-drop-upload-bg: #eff6ff;
   --command-pallete-hover: #e5e7eb;
   --command-pallete-text-hover: #101828;
+  --filters-bg: #fff;
 
   .skill-class {
     /* Border */
@@ -47,9 +48,9 @@
     );
   }
 }
-
 :root.dark {
   --landing-page-bg: oklch(0.13 0.03 261.7);
+  --filters-bg: oklch(0.2 0.03 264.95);
   background-color: oklch(0.2 0.03 264.95);
   --nav-links-color: oklch(0.8 0.01 264.66);
   --text-color: #fff;
@@ -81,6 +82,16 @@
   .sign-up-bg {
     background: oklch(0.19 0.03 264.5);
   }
+}
+
+html {
+  transition: background-color 0.4s ease, color 0.4s ease,
+    border-color 0.4s ease, fill 0.3s ease, stroke 0.3s ease;
+}
+
+.delay {
+  transition: background-color 0.4s ease, color 0.4s ease,
+    border-color 0.4s ease, fill 0.3s ease, stroke 0.3s ease;
 }
 
 /* Page selection styles */

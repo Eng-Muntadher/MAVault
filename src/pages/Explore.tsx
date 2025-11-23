@@ -6,12 +6,18 @@ import UploadImageFromExplore from "../components/UploadImageFromExplore";
 import InfiniteImagesList from "../components/InfiniteImagesList";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useGetCategoriesCount } from "../hooks/useGetCategoriesCount";
+import { useEffect } from "react";
 
 function Explore() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const { data: categories } = useGetCategoriesCount();
+
+  // This use effect resets the scroll of the page to the top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleSortByChange = (sortBy: string) => {
     // Set the URL with new sortBy parameter
@@ -36,7 +42,7 @@ function Explore() {
   ];
 
   return (
-    <div className="bg-(--landing-page-bg) pt-8 border-t border-b border-(--border-color) backdrop-blur-md mb-8">
+    <div className="bg-(--landing-page-bg) pt-8 border-b border-(--border-color) backdrop-blur-md mb-8 delay">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ExplorePageHeader />
 

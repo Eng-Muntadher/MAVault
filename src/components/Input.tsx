@@ -15,6 +15,7 @@ interface InputProps {
   autoComplete?: string;
   min?: string;
   max?: string;
+  maxLength?: number;
 }
 
 function Input({
@@ -32,6 +33,7 @@ function Input({
   defaultValue,
   min,
   max,
+  maxLength,
 }: InputProps) {
   const styles =
     "bg-(--input-color) border border-(--border-color) text-(--text-color) placeholder-(--input-placeholder-2) rounded-lg px-3 py-2 transition-and-focus-ring";
@@ -43,6 +45,7 @@ function Input({
           id={id}
           name={name}
           value={value}
+          maxLength={maxLength}
           disabled={disabled}
           defaultValue={defaultValue}
           onChange={onChange as React.ChangeEventHandler<HTMLTextAreaElement>}
@@ -60,6 +63,7 @@ function Input({
           defaultValue={defaultValue}
           min={min}
           max={max}
+          maxLength={maxLength}
           onChange={onChange as React.ChangeEventHandler<HTMLInputElement>}
           disabled={disabled}
           placeholder={placeholder}

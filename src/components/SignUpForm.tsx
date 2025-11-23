@@ -43,6 +43,7 @@ function SignUpForm() {
         type="text"
         required={true}
         value={userName}
+        maxLength={25}
         id="username"
         name="username"
         autoComplete="username"

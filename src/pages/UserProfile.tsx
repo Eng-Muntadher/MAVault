@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetUserImages } from "../hooks/useGetUserImages";
 import { Bookmark, Heart, MessageSquare, Upload } from "lucide-react";
 import ExploreImagesFilterOptionsList from "../components/ExploreImagesFilterOptionsList";
@@ -7,6 +7,11 @@ import UserImagesList from "../components/UserImagesList";
 
 function UserProfile() {
   const [imageFilter, setImageFilter] = useState("uploads");
+
+  // This use effect resets the scroll of the page to the top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const {
     data: images,
@@ -26,7 +31,7 @@ function UserProfile() {
     <>
       <UserProfileMainSection />
 
-      <div className="bg-(--landing-page-bg) px-40 max-sm:px-6 max-xl:px-6 pt-8 pb-10">
+      <div className="bg-(--landing-page-bg) px-40 max-sm:px-6 max-xl:px-6 pt-8 pb-10 delay">
         <ExploreImagesFilterOptionsList
           buttonsData={filterButtonsData}
           addedClassesForContainer="w-[672px]"

@@ -17,8 +17,8 @@ function ExploreImagesFilterOption({
   return (
     <button
       onClick={onClick}
-      aria-pressed={isSelected}
       role="radio"
+      aria-checked={isSelected}
       className={`flex items-center justify-center w-1/3 gap-2 p-1.5 cursor-pointer rounded-[0.875rem] transition-and-focus-ring ${
         isSelected ? "bg-(--text-color-2)" : ""
       }`}

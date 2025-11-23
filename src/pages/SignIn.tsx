@@ -1,12 +1,17 @@
+import { useEffect } from "react";
 import SignInForm from "../components/SignInForm";
 import { motion } from "framer-motion";
 
 function SignIn() {
+  // This use effect resets the scroll of the page to the top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center py-12 sign-up-bg border-t border-b border-(--border-color) backdrop-blur-md mb-8 px-4 sm:px-6 lg:px-6"
+      className="flex flex-col items-center py-12 sign-up-bg border-b border-(--border-color) backdrop-blur-md mb-8 px-4 sm:px-6 lg:px-6 delay"
     >
       <h1 className="text-3xl text-(--text-color) mb-2 text-center">
         Welcome back

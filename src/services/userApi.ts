@@ -1,5 +1,6 @@
 import type { User } from "@supabase/supabase-js";
 import supabase from "./supabase";
+import toast from "react-hot-toast";
 
 //types
 
@@ -32,12 +33,12 @@ export async function login({ email, password }: LoginArguments) {
 }
 
 export async function signUp({ email, password, userName }: LoginArguments) {
-  // const emailIsTaken = await checkEmailExists(email);
+  const emailIsTaken = await checkEmailExists(email);
 
-  // if (emailIsTaken) {
-  //   toast.error("This email is already taken. Try signing in instead");
-  //   throw Error("Email is taken");
-  // }
+  if (emailIsTaken) {
+    toast.error("This email is already taken. Try signing in instead");
+    throw Error("Email is taken");
+  }
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -51,25 +52,29 @@ export async function signUp({ email, password, userName }: LoginArguments) {
     throw new Error(error.message);
   }
 
-  // Insert into users_info (temporary, linked to auth.user.id)
   if (!error) {
-    // Supabase returns the user id immediately even before email confirmation
     const userId = data.user?.id;
     await supabase.from("users_info").upsert({
       user_id: userId, // FK to auth.users
       user_name: userName,
+      email,
     });
   }
 
-  // Add the email to the "emails" table in Supabase
-  // const { error: insertError } = await supabase
-  //   .from("emails")
-  //   .insert([{ email }])
-  //   .select();
-
-  // if (insertError) throw new Error(insertError.message);
-
   return data;
+}
+
+async function checkEmailExists(email: string) {
+  const { data, error } = await supabase
+    .from("users_info")
+    .select()
+    .eq("email", email);
+
+  if (error) throw new Error("Couldn't check if email exsists!");
+
+  console.log(data);
+
+  return data.length > 0;
 }
 
 export async function getCurrentUser(): Promise<User | null> {
@@ -104,8 +109,6 @@ export async function updateUserData({
   } = await supabase.auth.getUser();
   if (userError || !user) throw new Error("User not signed in");
 
-  console.log(user.id);
-
   // Prepare update object
   const updateObj: Record<string, string> = {
     user_name: userName,
@@ -129,7 +132,6 @@ export async function updateUserData({
     updateObj.avatar = data.publicUrl;
   }
 
-  console.log(updateObj);
   // Update users_info in one go
   const { error, data: sheep } = await supabase
     .from("users_info")
@@ -174,7 +176,7 @@ export async function getPublishersInfo(userId: string) {
 export async function toggleImageLike(imageId: number) {
   if (!imageId) throw new Error("Invalid image ID");
 
-  // 1️⃣ Get user and current image likes in parallel
+  // Get user and current image likes in parallel
   const [
     { data: userData, error: userError },
     { data: imageData, error: fetchError },
@@ -188,7 +190,7 @@ export async function toggleImageLike(imageId: number) {
   if (userError || !user) throw new Error("User not authenticated");
   if (fetchError || !imageData) throw new Error("Image not found");
 
-  // 2️⃣ Compute new likes
+  // Compute new likes
   const likedImages: number[] = user.user_metadata?.liked_images || [];
 
   const alreadyLiked = likedImages.includes(imageId);
@@ -196,12 +198,12 @@ export async function toggleImageLike(imageId: number) {
     ? Math.max(imageData.likes - 1, 0)
     : imageData.likes + 1;
 
-  // 3️⃣ Prepare updates
+  // Prepare updates
   const updatedLikedImages = alreadyLiked
     ? likedImages.filter((id) => id !== imageId)
     : [...likedImages, imageId];
 
-  // 4️⃣ Run the updates in parallel
+  // Run the updates in parallel
   const [{ error: updateError }, { error: metaError }] = await Promise.all([
     supabase.from("Images").update({ likes: newLikes }).eq("id", imageId),
     supabase.auth.updateUser({
@@ -215,7 +217,7 @@ export async function toggleImageLike(imageId: number) {
   if (updateError) throw new Error("Failed to update image likes");
   if (metaError) throw new Error("Failed to update user metadata");
 
-  // 5️⃣ Return the new like state and count
+  // Return the new like state and count
   return {
     liked: !alreadyLiked,
     likes: newLikes,
@@ -250,4 +252,15 @@ export async function bookmarkImage(imageId: number) {
   });
 
   if (metaError) throw new Error("Failed to update user metadata");
+}
+
+export async function fetchMyOwnInfo() {
+  const { data: info, error } = await supabase
+    .from("my-info")
+    .select("email, github, linkedin, portfolio")
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return info;
 }

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "lucide-react";
-import Input from "./Input";
-import { type FileRejection } from "react-dropzone";
+import { getImageDimensionsString, validateCSV } from "../services/imagesApi";
 import { useUploadImage } from "../hooks/useUploadImage";
+import { type FileRejection } from "react-dropzone";
+import Input from "./Input";
 import LoadingSpinner from "./LoadingSpinner";
 import CustomSelect from "./CustomSelect";
 import toast from "react-hot-toast";
-import { getImageDimensionsString, validateCSV } from "../services/imagesApi";
 
 function UploadImageForm() {
   const [title, setTitle] = useState("");
@@ -16,6 +16,7 @@ function UploadImageForm() {
   const [tags, setTags] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
+  const [charCount, setCharCount] = useState(0);
 
   const { uploadImage, isPending } = useUploadImage();
 
@@ -65,13 +66,18 @@ function UploadImageForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (charCount > 45) {
+      toast.error(
+        "Please make sure the description length is not more than 45 characters!"
+      );
+      return;
+    }
 
     if (checkBeforeSubmit) {
-      console.log(checkBeforeSubmit);
       const isTagsCSV = validateCSV(tags);
       if (!isTagsCSV) {
         toast.error(
-          "Please make sure the image tags are in correct format! (No repetition allowed)"
+          "Please make sure the image tags are in correct format! (No repetition allowed and at least one must be provided)"
         );
         return;
       }
@@ -168,6 +174,7 @@ function UploadImageForm() {
         <Input
           type="text"
           value={title}
+          maxLength={25}
           id="image-title"
           name="image-title"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -188,19 +195,19 @@ function UploadImageForm() {
           value={describtion}
           id="image-description"
           name="image-description"
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setDescription(e.target.value)
-          }
-          addedClasses="text-sm w-full mb-4 min-h-16"
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            setDescription(e.target.value);
+            setCharCount(e.target.value.length);
+          }}
+          addedClasses="text-sm w-full min-h-16"
           placeholder="Describe your image..."
         />
 
-        <label
-          htmlFor="image-category"
-          className="block text-(--text-color) text-sm font-semibold mb-2"
-        >
+        <p className="text-[#6A7282] text-xs mb-4">{charCount}/45 characters</p>
+
+        <span className="block text-(--text-color) text-sm font-semibold mb-2">
           Category <span className="text-red-600">*</span>
-        </label>
+        </span>
         <CustomSelect
           optionsArray={["Sky", "Nature", "Portrait", "Urban"]}
           onChange={(x) => setCategory(x)}
@@ -239,7 +246,7 @@ function UploadImageForm() {
         </button>
         <button
           type="submit"
-          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-(--text-color-2) rounded-lg cursor-pointer disabled:opacity-50 transition-and-focus-ring"
+          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-white rounded-lg cursor-pointer disabled:opacity-50 transition-and-focus-ring"
         >
           <UploadIcon size={16} aria-hidden="true" /> Upload Image
         </button>

@@ -23,16 +23,16 @@ export interface CommentStructure {
 
 export interface Image {
   id: number;
-  created_at: string;
+  created_at?: string;
   title: string;
   category: string;
-  tags: string;
+  tags?: string;
   url: string;
   likes: number;
-  views: number;
+  views?: number;
   publisher_id: string;
   describtion: string;
-  dimensions: string;
+  dimensions?: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -67,7 +67,11 @@ export async function getImages(
   const to = from + pageSize - 1;
 
   // Build the base query
-  let query = supabase.from("Images").select("*", { count: "exact" });
+  let query = supabase
+    .from("Images")
+    .select("id, title, category, url, likes, publisher_id, describtion", {
+      count: "exact",
+    });
 
   // 1. FILTER BY CATEGORY
   if (filters.category && filters.category !== "All Categories") {
@@ -138,7 +142,10 @@ export async function getInfiniteImages({
 }> {
   if (sortBy === "Featured") {
     const ids = [10, 11, 12, 13];
-    let query = supabase.from("Images").select("*").in("id", ids);
+    let query = supabase
+      .from("Images")
+      .select("id, title, category, url, likes, publisher_id, describtion")
+      .in("id", ids);
 
     if (
       filters.category &&
@@ -155,7 +162,11 @@ export async function getInfiniteImages({
     return { images };
   }
 
-  let query = supabase.from("Images").select("*", { count: "exact" });
+  let query = supabase
+    .from("Images")
+    .select("id, title, category, url, likes, publisher_id, describtion", {
+      count: "exact",
+    });
 
   // Apply category filter
   if (
@@ -214,7 +225,7 @@ export async function getUserImages(filter: string) {
 
   const { data, error } = await supabase
     .from("Images")
-    .select("*")
+    .select("id, title, category, url, likes, publisher_id, describtion")
     .in("id", currentImageFilter); // Fetch all liked, uploaded, or bookmarked images images
 
   if (error) throw new Error(`could not fetch user ${filter} images`);
@@ -321,7 +332,6 @@ export async function uploadImage({
     ])
     .select()
     .single();
-  console.log(image);
 
   if (imageError)
     throw new Error(`Could not upload image ${imageError.message}`);

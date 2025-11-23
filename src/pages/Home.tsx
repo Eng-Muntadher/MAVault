@@ -67,6 +67,11 @@ function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // This use effect resets the scroll of the page to the top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Calculate visible page numbers (responsive based on screen size)
   const getVisiblePages = () => {
     if (!images) return [];
@@ -105,6 +110,8 @@ function Home() {
     if (filters.sortBy && filters.sortBy !== "Most Recent")
       params.set("sortBy", filters.sortBy);
     if (filters.search) params.set("search", filters.search);
+
+    window.scrollTo(0, 0);
 
     navigate(`/home?${params.toString()}`);
   };

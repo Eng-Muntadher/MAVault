@@ -25,8 +25,8 @@ function ImageDetailsButtons({
   const { bookmark, isPending: isSaving } = useBookMarkImage();
   const { data } = useUser();
 
-  const isAlreadyLiked = data?.user_metadata?.liked_images.includes(imageId);
-  const isAlreadySaved = data?.user_metadata?.saved_images.includes(imageId);
+  const isAlreadyLiked = data?.user_metadata?.liked_images?.includes(imageId);
+  const isAlreadySaved = data?.user_metadata?.saved_images?.includes(imageId);
 
   async function handleDownload(url: string, title: string) {
     const response = await fetch(url);
@@ -55,7 +55,7 @@ function ImageDetailsButtons({
   const buttons = [
     {
       icon: Heart,
-      label: `Likes (${likes})`,
+      label: `Likes (${likes ?? "..."})`,
       aria: `Like this image, ${likes} likes`,
       addedClasses: `${
         isAlreadyLiked ? "bg-red-600 text-white hover:bg-red-700" : ""

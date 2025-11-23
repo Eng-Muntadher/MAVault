@@ -1,9 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toggleImageLike } from "../services/userApi";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 export function useLikeImage() {
   const queryClient = useQueryClient();
+
+  const { imageId } = useParams(); // get the image id from the URL
 
   const {
     mutate: toggleLike,
@@ -19,6 +22,7 @@ export function useLikeImage() {
       queryClient.invalidateQueries({
         queryKey: ["userImages", "liked"],
       });
+      queryClient.invalidateQueries({ queryKey: ["image", Number(imageId)] });
     },
     onError: (error) => {
       console.error(error.message);

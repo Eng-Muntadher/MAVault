@@ -20,7 +20,6 @@ export default function AuthCallback() {
       }
 
       if (data?.session) {
-        console.log("User logged in:", data.session.user);
         navigate("/");
       } else {
         navigate("/");
