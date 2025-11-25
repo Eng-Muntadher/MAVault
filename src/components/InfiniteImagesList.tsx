@@ -76,10 +76,11 @@ function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
             No Images Found!
           </p>
         ) : (
-          images.map((image) => (
+          images.map((image, index) => (
             <ImageItem
               key={image.id}
               image={image.url}
+              index={index}
               imageId={image.id}
               title={image.title}
               category={image.category}
