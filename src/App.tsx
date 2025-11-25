@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorComponent from "./pages/ErrorPage";
 import LoadingSpinner from "./components/LoadingSpinner";
 import Home from "./pages/Home";
+import AuthCallback from "./pages/AuthCallback";
 
 // Lazy load all pages
 const About = lazy(() => import("./pages/About"));
@@ -15,7 +16,6 @@ const UserSettings = lazy(() => import("./pages/UserSettings"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 const SignIn = lazy(() => import("./pages/SignIn"));
 const ImageDetails = lazy(() => import("./pages/ImageDetails"));
-const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 
 // Wrapper component to apply Suspense to lazy pages
 const LazyPage = ({ component: Component }: { component: React.ReactNode }) => (

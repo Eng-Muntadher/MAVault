@@ -46,7 +46,7 @@ export async function signUp({ email, password, userName }: LoginArguments) {
     email,
     password,
     options: {
-      emailRedirectTo: "http://localhost:5173/auth/callback",
+      emailRedirectTo: "https://ma-vault.vercel.app/auth/callback",
     },
   });
 
