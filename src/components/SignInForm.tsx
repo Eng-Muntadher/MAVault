@@ -18,6 +18,7 @@ function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // A custom hook for sign in with React Query mutations and redirect state
   const { signIn, isPending } = useSignIn(redirectTo || "/");
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

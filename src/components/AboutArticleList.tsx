@@ -1,7 +1,8 @@
 import { Code, Rocket, Target } from "lucide-react";
-import AboutArticle from "./AboutArticle";
 import { motion } from "framer-motion";
+import AboutArticle from "./AboutArticle";
 
+// This will define how cards will animate
 const cardsAnimations = {
   hidden: { opacity: 0 },
   visible: {

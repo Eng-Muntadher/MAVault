@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -87,49 +88,55 @@ function CustomSelect({
         </span>
       </button>
 
-      {menuIsOpen && (
-        <div
-          ref={dropdownRef}
-          className="border border-(--border-color) text-sm bg-(--text-color-2) text-(--text-color) rounded-lg absolute w-full px-1.5 py-2 flex flex-col mt-1.5 transition-all ease-in-out duration-300 z-10"
-        >
-          <ul role="listbox">
-            {optionsArray.map((option, i) => (
-              <li
-                key={option}
-                role="option"
-                ref={(el) => {
-                  optionRefs.current[i] = el;
-                }}
-                tabIndex={0}
-                className="px-1 py-2 rounded-sm cursor-pointer hover:bg-(--border-color) focus:bg-(--input-color) outline-none"
-                onClick={() => handleChangeStatus(option)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleChangeStatus(option);
-                  } else if (e.key === "ArrowDown") {
-                    e.preventDefault();
-                    const next = optionRefs.current[i + 1];
-                    (next || optionRefs.current[0])?.focus(); // loop
-                  } else if (e.key === "ArrowUp") {
-                    e.preventDefault();
-                    const prev = optionRefs.current[i - 1];
-                    (
-                      prev || optionRefs.current[optionsArray.length - 1]
-                    )?.focus(); // loop
-                  } else if (e.key === "Escape") {
-                    e.preventDefault();
-                    setMenuIsOpen(false);
-                    buttonRef.current?.focus();
-                  }
-                }}
-              >
-                {option}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <AnimatePresence>
+        {menuIsOpen && (
+          <motion.div
+            ref={dropdownRef}
+            className="border border-(--border-color) text-sm bg-(--text-color-2) text-(--text-color) rounded-lg absolute w-full px-1.5 py-2 flex flex-col mt-1.5 z-10"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.1, ease: "easeInOut" }}
+          >
+            <ul role="listbox">
+              {optionsArray.map((option, i) => (
+                <li
+                  key={option}
+                  role="option"
+                  ref={(el) => {
+                    optionRefs.current[i] = el;
+                  }}
+                  tabIndex={0}
+                  className="px-1 py-2 rounded-sm cursor-pointer hover:bg-(--border-color) focus:bg-(--input-color) outline-none"
+                  onClick={() => handleChangeStatus(option)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleChangeStatus(option);
+                    } else if (e.key === "ArrowDown") {
+                      e.preventDefault();
+                      const next = optionRefs.current[i + 1];
+                      (next || optionRefs.current[0])?.focus(); // loop
+                    } else if (e.key === "ArrowUp") {
+                      e.preventDefault();
+                      const prev =
+                        optionRefs.current[i - 1] ||
+                        optionRefs.current[optionsArray.length - 1];
+                      prev?.focus(); // loop
+                    } else if (e.key === "Escape") {
+                      e.preventDefault();
+                      setMenuIsOpen(false);
+                      buttonRef.current?.focus();
+                    }
+                  }}
+                >
+                  {option}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

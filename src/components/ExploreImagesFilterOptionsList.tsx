@@ -1,6 +1,6 @@
+import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import ExploreImagesFilterOption from "./ExploreImagesFilterOption";
-import { useState } from "react";
 
 interface buttonsDataShape {
   icon: LucideIcon;
@@ -15,6 +15,7 @@ interface buttonsDataProp {
   setterFunction: (value: string) => void;
 }
 
+// This component is used to sort images with Sync to the URL
 function ExploreImagesFilterOptionsList({
   buttonsData,
   addedClassesForContainer,

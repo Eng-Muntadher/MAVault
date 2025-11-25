@@ -5,7 +5,7 @@ interface ImagePlaceholderProps {
 }
 
 function SkeletonImageLoading({
-  heightClass = "h-50",
+  heightClass = "h-52",
   widthClass = "w-full",
   addedClasses,
 }: ImagePlaceholderProps) {

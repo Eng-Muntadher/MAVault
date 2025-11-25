@@ -1,3 +1,5 @@
+// This file has all types, functions and variables used for fetching and updating images with Supabase
+
 import supabase from "./supabase";
 
 // variables
@@ -78,7 +80,7 @@ export async function getImages(
     query = query.eq("category", filters.category);
   }
 
-  // 3. SEARCH FUNCTION (searches in title, tags, and category)
+  // 2. SEARCH FUNCTION
   if (filters.search && filters.search.trim() !== "") {
     const searchTerm = filters.search.trim();
     query = query.or(
@@ -86,17 +88,16 @@ export async function getImages(
     );
   }
 
-  // 2. SORT (ascending, descending, or by likes)
+  // 3. SORT
   if (filters.sortBy === "Most Popular") {
     query = query.order("likes", { ascending: false });
   } else if (filters.sortBy === "Older First") {
     query = query.order("created_at", { ascending: true });
   } else {
-    // Default to descending by created_at
     query = query.order("created_at", { ascending: false });
   }
 
-  // Get total count with filters applied
+  // Run count and data queries in parallel
   const countQuery = supabase
     .from("Images")
     .select("*", { count: "exact", head: true });
@@ -113,17 +114,21 @@ export async function getImages(
     );
   }
 
-  const { count, error: countError } = await finalCountQuery;
-  if (countError) throw countError;
+  // Run both queries in parallel
+  const [countResult, dataResult] = await Promise.all([
+    finalCountQuery,
+    query.range(from, to),
+  ]);
 
-  // Get paginated data with all filters and sorting applied
-  const { data, error } = await query.range(from, to);
-  if (error) throw error;
+  if (countResult.error) throw countResult.error;
+  if (dataResult.error) throw dataResult.error;
 
+  const count = countResult.count;
+  const data = dataResult.data || [];
   const totalPages = Math.ceil((count || 0) / pageSize);
 
   return {
-    data: data || [],
+    data,
     count: count || 0,
     page,
     pageSize,
@@ -212,6 +217,7 @@ export async function getImage(imageId: number) {
   return images;
 }
 
+// Get the current user's liked, bookmarked, uploaded and commented on images
 export async function getUserImages(filter: string) {
   // Get the current user
   const {
@@ -226,7 +232,7 @@ export async function getUserImages(filter: string) {
   const { data, error } = await supabase
     .from("Images")
     .select("id, title, category, url, likes, publisher_id, describtion")
-    .in("id", currentImageFilter); // Fetch all liked, uploaded, or bookmarked images images
+    .in("id", currentImageFilter);
 
   if (error) throw new Error(`could not fetch user ${filter} images`);
 
@@ -291,7 +297,10 @@ export async function uploadImage({
     .from("images")
     .upload(fileName, file);
 
-  if (uploadError) console.error(`Error uploading ${uploadError.message}`);
+  if (uploadError) {
+    console.error(`Error uploading ${uploadError.message}`);
+    throw new Error("Unable to upload");
+  }
 
   // Get the public URL of the uploaded image
   const { data } = supabase.storage.from("images").getPublicUrl(fileName);
@@ -351,6 +360,7 @@ export async function uploadImage({
   return image;
 }
 
+// Function used to increment the views count for an image in the database when someone clicks it
 export async function increaseViews(imageId: number) {
   const { data, error } = await supabase
     .from("Images")
@@ -370,6 +380,7 @@ export async function increaseViews(imageId: number) {
   if (updateError) throw updateError;
 }
 
+// Get number of images in each category
 export async function getCategoriesCounts() {
   const { data, error } = await supabase.from("Images").select("category");
 
@@ -439,4 +450,75 @@ export function getImageDimensionsString(file: File): Promise<string> {
 
     img.src = objectUrl;
   });
+}
+
+// This function is only used if the user uploads an image of HEIC extention
+export async function normalizeImage(file: File): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return reject(new Error("Canvas conversion failed"));
+          const normalizedFile = new File([blob], file.name, {
+            type: "image/jpeg",
+          });
+          resolve(normalizedFile);
+        },
+        "image/jpeg",
+        1 // maximum quality
+      );
+    };
+
+    img.onerror = (err) => reject(err);
+  });
+}
+
+// Transform a Supabase image URL to add quality and width parameters
+// This drastically reduces file size without losing quality on mobile
+export function optimizeImageUrl(
+  url: string,
+  options: {
+    width?: number;
+    quality?: number;
+  } = {}
+): string {
+  if (!url) return url;
+
+  const { width = 1000, quality = 80 } = options;
+
+  // If it's not a Supabase URL, return as is
+  if (!url.includes("supabase.co")) {
+    return url;
+  }
+
+  // Add parameters to the URL
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}width=${width}&quality=${quality}`;
+}
+
+// Get multiple size variants for responsive images
+export function getResponsiveImageSizes(url: string): {
+  mobile: string;
+  tablet: string;
+  desktop: string;
+} {
+  return {
+    mobile: optimizeImageUrl(url, { width: 500, quality: 80 }),
+    tablet: optimizeImageUrl(url, { width: 1000, quality: 85 }),
+    desktop: optimizeImageUrl(url, { width: 1500, quality: 90 }),
+  };
+}
+
+// Helper for avatar images (tiny thumbnails)
+export function optimizeAvatarUrl(url: string): string {
+  return optimizeImageUrl(url, { width: 100, quality: 75 });
 }

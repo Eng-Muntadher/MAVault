@@ -21,6 +21,7 @@ function UserSettings() {
           addedClasses="mb-6 h-9"
           to="/user-profile"
         />
+
         <h1 className="text-(--text-color) text-3xl mb-8">Profile Settings</h1>
 
         <UpdateUserInfoForm />

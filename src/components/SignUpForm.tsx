@@ -11,6 +11,7 @@ function SignUpForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // A custom hook for sign up with React Query mutations
   const { signUp, isPending } = useSignUp();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -21,6 +22,7 @@ function SignUpForm() {
       toast.error("Passwords must match!");
     }
   }
+
   return (
     <form
       onSubmit={handleSubmit}

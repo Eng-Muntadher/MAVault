@@ -10,6 +10,7 @@ interface UserImagesListProps {
   isPending: boolean;
 }
 
+// Number of skeleton loaders for images
 const skeleton = Array.from({ length: 12 }, (_, i) => i + 1);
 
 function UserImagesList({

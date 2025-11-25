@@ -8,6 +8,7 @@ export function useDarkMode() {
       if (stored === "dark") return true;
       if (stored === "light") return false;
 
+      // check for the system's default theme
       return window.matchMedia("(prefers-color-scheme: dark)").matches;
     } catch {
       return false;

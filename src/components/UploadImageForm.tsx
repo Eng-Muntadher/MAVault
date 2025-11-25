@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "lucide-react";
-import { getImageDimensionsString, validateCSV } from "../services/imagesApi";
 import { useUploadImage } from "../hooks/useUploadImage";
+import {
+  getImageDimensionsString,
+  normalizeImage,
+  validateCSV,
+} from "../services/imagesApi";
 import { type FileRejection } from "react-dropzone";
 import Input from "./Input";
 import LoadingSpinner from "./LoadingSpinner";
@@ -15,32 +19,62 @@ function UploadImageForm() {
   const [category, setCategory] = useState("Sky");
   const [tags, setTags] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [fileError, setFileError] = useState("");
   const [charCount, setCharCount] = useState(0);
+
+  // state to indicate if there is an error with file upload
+  const [fileError, setFileError] = useState("");
+
+  // This state indicates loading state only if the user uploads an image that needs transforming (like HEIC)
+  const [isConverting, setIsConverting] = useState(false);
 
   const { uploadImage, isPending } = useUploadImage();
 
   const maxSize = 10 * 1024 * 1024; // 10MB
+
   const acceptedFormats = {
     "image/png": [],
     "image/jpeg": [],
     "image/jpg": [],
     "image/gif": [],
     "image/webp": [],
+    "image/heic": [], // added
+    "image/heif": [], // added
   };
 
-  function onDrop(acceptedFiles: File[], fileRejections: FileRejection[]) {
-    // Reset error
+  // Load heic2any from CDN
+  async function loadHeic2any() {
+    if ((window as any).heic2any) {
+      return (window as any).heic2any;
+    }
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src =
+        "https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.js";
+      script.onload = () => {
+        resolve((window as any).heic2any);
+      };
+      script.onerror = () => {
+        reject(new Error("Failed to load heic2any library"));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  // Drag and drop event handler
+  async function onDrop(
+    acceptedFiles: File[],
+    fileRejections: FileRejection[]
+  ) {
     setFileError("");
 
-    // Handle rejected files
     if (fileRejections.length > 0) {
       const error = fileRejections[0].errors[0];
       if (error.code === "file-too-large") {
         setFileError("File is too large. Maximum size is 10MB.");
       } else if (error.code === "file-invalid-type") {
         setFileError(
-          "Invalid file type. Only PNG, JPG, GIF, WEBP are allowed."
+          "Invalid file type. Only PNG, JPG, GIF, WEBP, HEIC are allowed."
         );
       } else {
         setFileError(error.message);
@@ -49,8 +83,49 @@ function UploadImageForm() {
       return;
     }
 
-    // Accept file
-    setFile(acceptedFiles[0]);
+    let fileToUse = acceptedFiles[0];
+
+    // HEIC / HEIF conversion (only if needed)
+    if (
+      fileToUse.type === "image/heic" ||
+      fileToUse.type === "image/heif" ||
+      fileToUse.name.toLowerCase().endsWith(".heic")
+    ) {
+      try {
+        toast.loading("Converting HEIC image...", { id: "heic" });
+        setIsConverting(true);
+
+        // Load heic2any from CDN
+        const heic2any = await loadHeic2any();
+
+        const convertedBlob = await heic2any({
+          blob: fileToUse,
+          toType: "image/jpeg",
+          quality: 1,
+        });
+
+        let tempFile = new File(
+          [convertedBlob as Blob],
+          fileToUse.name.replace(/\.heic$/i, ".jpg"),
+          { type: "image/jpeg" }
+        );
+
+        // Normalize colors to sRGB
+        tempFile = await normalizeImage(tempFile);
+
+        fileToUse = tempFile;
+
+        toast.success("Image converted and ready!", { id: "heic" });
+      } catch (err) {
+        console.error("HEIC conversion failed:", err);
+        toast.error("Failed to convert HEIC image.");
+        setIsConverting(false);
+        return;
+      }
+      setIsConverting(false);
+    }
+
+    setFile(fileToUse);
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -102,11 +177,12 @@ function UploadImageForm() {
 
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-      {isPending && <LoadingSpinner />}
-      <div className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6">
+      {(isPending || isConverting) && <LoadingSpinner />}
+      <div className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6 delay">
         <h2 className="text-(--text-color) font-semibold mb-1.5">
           Upload Image
         </h2>
+
         <label
           htmlFor="image-input"
           className="block text-(--input-placeholder-2) mb-6"
@@ -115,7 +191,7 @@ function UploadImageForm() {
         </label>
 
         <fieldset
-          className={`flex flex-col items-center border-2 border-dashed border-(--drag-upload-border) rounded-[0.875rem] p-12 bg-(--drag-upload-bg) hover:bg-(--drag-drop-upload-bg) hover:border-blue-400 focus:outline-none focus:bg-(--drag-drop-upload-bg) focus:border-blue-400 transition-all duration-200 cursor-pointer text-center max-sm:p-8 
+          className={`flex flex-col items-center border-2 border-dashed border-(--drag-upload-border) delay rounded-[0.875rem] p-12 bg-(--drag-upload-bg) hover:bg-(--drag-drop-upload-bg) hover:border-blue-400 focus:outline-none focus:bg-(--drag-drop-upload-bg) focus:border-blue-400 transition-all duration-200 cursor-pointer text-center max-sm:p-8 
             ${
               isDragActive
                 ? "border-blue-400 bg-blue-50"
@@ -126,7 +202,9 @@ function UploadImageForm() {
           {/* This legend is for screen readers only */}
           <legend className="sr-only">Image Upload</legend>
 
+          {/* Hidden input */}
           <input {...getInputProps()} id="image-input" />
+
           <UploadIcon
             aria-hidden="true"
             size={72}
@@ -140,8 +218,9 @@ function UploadImageForm() {
           ) : (
             <p className="mb-2">
               <span className="text-(--selected-btn-pagination) underline">
-                Click to upload
-              </span>{" "}
+                Click to upload{" "}
+              </span>
+
               <span className="text-(--text-color)">or drag and drop</span>
             </p>
           )}
@@ -154,13 +233,14 @@ function UploadImageForm() {
         </fieldset>
       </div>
 
-      <fieldset className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6">
+      <fieldset className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6 delay">
         {/* This legend is for screen readers only */}
         <legend className="sr-only">Image details</legend>
 
         <h2 className="text-(--text-color) font-semibold mb-1.5">
           Image Details
         </h2>
+
         <p className="block text-(--input-placeholder-2) mb-6">
           Provide information about your image
         </p>

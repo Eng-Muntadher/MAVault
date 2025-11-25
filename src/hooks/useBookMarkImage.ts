@@ -19,6 +19,7 @@ export function useBookMarkImage() {
       queryClient.invalidateQueries({
         queryKey: ["userImages", "saved"],
       });
+      // After the revalidation, the user should see the bookmark added and the icon changes
     },
     onError: (error) => {
       console.error(error.message);

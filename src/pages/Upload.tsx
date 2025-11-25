@@ -1,8 +1,9 @@
+import { useEffect, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import UploadImageHeading from "../components/UploadImageHeading";
-import UploadImageForm from "../components/UploadImageForm";
 import BackButton from "../components/BackButton";
-import { useEffect } from "react";
+
+const UploadImageForm = lazy(() => import("../components/UploadImageForm"));
 
 function Upload() {
   // This use effect resets the scroll of the page to the top
@@ -18,8 +19,12 @@ function Upload() {
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <BackButton text="Back" addedClasses="mb-8" />
+
         <UploadImageHeading />
-        <UploadImageForm />
+
+        <Suspense fallback={<div className="h-dvh w-full"></div>}>
+          <UploadImageForm />
+        </Suspense>
       </div>
     </motion.div>
   );

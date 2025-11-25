@@ -24,20 +24,19 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - **React Dropzone**
 - **Framer Motion**
 - **React Error Boundary**
+- **heic2any**
 
 ---
 
 ## ✨ Features
 
-- ✅ Project routing structure initialized with React Router
-- ✅ Full Static layout for all pages with states and basic interaction
-- ✅ Framer Motion animations for all pages
-- ✅ A fully functional command pallete with search, keyboard navigation and full page navigation
 - ✅ Authentication & authorization system with Supabase
 - ✅ A fully functional Upload, like, and comment system for authenticated users
 - ✅ User profile customization including user info and profile picture
-- ✅ Dark mode
 - ✅ Image filtering, sorting, and search with pagination and Infinite scroll
+- ✅ A fully functional command pallete with search, keyboard navigation and full page navigation
+- ✅ Framer Motion animations for all pages
+- ✅ Dark mode
 
 ---
 
@@ -52,7 +51,7 @@ All the images on it are taken by me and uploaded to the app. It also allows use
 - **Single Image Page**
 - **Sign Up / Sign In**
 
-_All pages are fully responsive and optimized for all common screen sizes._
+_All pages are fully responsive and optimized for common screen sizes._
 
 ---
 

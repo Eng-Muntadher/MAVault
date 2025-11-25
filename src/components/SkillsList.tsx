@@ -1,10 +1,11 @@
 import Skill from "./Skill";
 
+// These are the skills/technologies I used to build this app 💯
 const skills = [
   "React",
   "TypeScript",
   "Tailwind CSS",
-  "Motion/React",
+  "Framer Motion",
   "React Router",
   "React Query",
   "React Hot Toast",
@@ -13,6 +14,7 @@ const skills = [
   "React Dropzone",
   "Day.js",
   "React Error Boundary",
+  "heic2any",
 ];
 
 function SkillsList() {

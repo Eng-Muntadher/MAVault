@@ -14,12 +14,15 @@ function UploadImageFromExplore() {
       aria-labelledby="upload-heading"
     >
       <Stars size={48} className="mb-4" aria-hidden="true" />
+
       <h2 className="text-2xl mb-2" id="upload-heading">
         Want to see your work here?
       </h2>
+
       <p className="text-(--text-color-secondary) mb-6">
-        Upload your best shots and get featured in our explore section
+        Upload your best shots and get featured in my explore section
       </p>
+
       <button
         className="py-3 px-6 text-(--selected-btn-pagination) bg-white rounded-[0.625rem] cursor-pointer 
              shadow-sm transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-800 hover:shadow-lg hover:bg-gray-50 hover:-translate-y-0.5 active:translate-y-0"

@@ -20,10 +20,13 @@ dayjs.extend(relativeTime);
 function ImageCommentsBox({ imageId }: { imageId: number }) {
   const [comment, setComment] = useState("");
 
+  // Get the currently signed in user (if there is one)
   const { data: user } = useUser();
 
+  // Fetch the current signed in user's data from the users-info table and cach it
   const { data: userInfo } = useGetUserInfo(user?.id || "");
 
+  // Fetch all comments for this image and cach it
   const { data: comments, isPending } = useGetComments(imageId);
 
   const { postComment, isPending: isCommenting } = usePostComment(imageId);
@@ -40,6 +43,7 @@ function ImageCommentsBox({ imageId }: { imageId: number }) {
     setComment("");
   }
 
+  // Format the date format fetched for each comment
   function formatDate(dateString: string) {
     const date = dayjs(dateString);
     const now = dayjs();

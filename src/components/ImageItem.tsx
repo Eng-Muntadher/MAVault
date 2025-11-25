@@ -1,11 +1,15 @@
+import { useUser } from "../hooks/useUser";
 import { motion } from "framer-motion";
 import { Bookmark, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFetchPublisherInfo } from "../hooks/useFetchPublisherInfo";
-import GuestImage from "../assets/guest.jpeg";
-import { useUser } from "../hooks/useUser";
-import { useBookMarkImage } from "../hooks/useBookMarkImage";
 import { useLikeImage } from "../hooks/useLikeImage";
+import { useBookMarkImage } from "../hooks/useBookMarkImage";
+import {
+  getResponsiveImageSizes,
+  optimizeAvatarUrl,
+} from "../services/imagesApi";
+import GuestImage from "../assets/guest.jpeg";
 
 interface ImageItemProps {
   image: string;
@@ -15,6 +19,7 @@ interface ImageItemProps {
   likes: number;
   publisherId: string;
   describtion: string;
+  index: number;
 }
 
 function ImageItem({
@@ -22,18 +27,30 @@ function ImageItem({
   imageId,
   category,
   likes,
+  index,
   describtion,
   publisherId,
   title,
 }: ImageItemProps) {
+  // Get the publisher of the image (happens via a join in the Supabase tables and we get the data)
   const { data: publisher } = useFetchPublisherInfo(publisherId || "");
+
+  // Mutation functions for image actions
   const { bookmark } = useBookMarkImage();
   const { toggleLike } = useLikeImage();
 
+  // Get the current signed in user
   const { data: user } = useUser();
 
+  // check if the user has liked or bookmarked this image before
   const isAlreadyLiked = user?.user_metadata?.liked_images?.includes(imageId);
   const isAlreadySaved = user?.user_metadata?.saved_images?.includes(imageId);
+
+  // Ths function offers better performance by resizing images
+  const sizes = getResponsiveImageSizes(image);
+
+  // Only first images are "eager" loaded. The rest is "lazy" loaded
+  const isLCPImage = index < 4;
 
   return (
     <motion.div
@@ -48,8 +65,15 @@ function ImageItem({
       >
         <div className="relative overflow-hidden rounded-xl mb-3">
           <img
-            loading="lazy"
-            src={image}
+            src={sizes.mobile}
+            srcSet={`
+                  ${sizes.mobile} 500w,
+                  ${sizes.tablet} 1000w,
+                  ${sizes.desktop} 1500w
+                `}
+            sizes="(max-width: 640px) 500px, (max-width: 1024px) 1000px, 1500px"
+            loading={isLCPImage ? "eager" : "lazy"}
+            fetchPriority={isLCPImage ? "high" : "auto"}
             alt={describtion}
             className="rounded-xl transition-all duration-500 group-hover:scale-110 group-focus:scale-115 max-h-72 min-h-72 w-full object-cover group-focus:brightness-50"
           />
@@ -60,7 +84,7 @@ function ImageItem({
             whileHover={{ opacity: 1 }}
             className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4"
           >
-            {/* Top Actions */}
+            {/* Image Actions */}
             <div className="flex justify-end gap-2">
               <motion.button
                 whileHover={{ scale: 1.1 }}
@@ -126,8 +150,8 @@ function ImageItem({
           <div className="flex items-center gap-2">
             {/* Publisher image */}
             <img
+              src={optimizeAvatarUrl(publisher?.at(0)?.avatar || GuestImage)}
               loading="lazy"
-              src={publisher?.at(0)?.avatar || GuestImage}
               className="h-[26px] w-[26px] rounded-full"
               alt="Publisher image"
             />

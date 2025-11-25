@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import ExploreCategoryOption from "./ExploreCategoryOption";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
+import ExploreCategoryOption from "./ExploreCategoryOption";
 
 interface ButtonsDataShape {
   icon: LucideIcon;
@@ -13,6 +13,8 @@ interface ButtonsDataShape {
 interface OptionsListProps {
   buttonsData: ButtonsDataShape[];
 }
+
+// This component is used to filter the category of images in Explore page
 function ExploreCategoryOptionsList({ buttonsData }: OptionsListProps) {
   const [selectedBtn, setSelectedBtn] = useState("All");
 
@@ -21,7 +23,7 @@ function ExploreCategoryOptionsList({ buttonsData }: OptionsListProps) {
 
   const handleCategoryChange = (category: string) => {
     // Set the URL with new category parameter
-    // This will trigger a refetch because the queryKey includes the filters
+    // This will trigger a refetch because the queryKey of React Query includes the filters
     const params = new URLSearchParams(searchParams);
     params.set("category", category);
     navigate(`?${params.toString()}`, { replace: true });

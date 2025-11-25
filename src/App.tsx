@@ -1,17 +1,34 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home";
-import About from "./pages/About";
 import AppLayout from "./components/AppLayout";
-import Explore from "./pages/Explore";
-import Upload from "./pages/Upload";
-import UserProfile from "./pages/UserProfile";
-import UserSettings from "./pages/UserSettings";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
-import ImageDetails from "./pages/ImageDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
-import AuthCallback from "./pages/AuthCallback";
 import ErrorComponent from "./pages/ErrorPage";
+import LoadingSpinner from "./components/LoadingSpinner";
+import Home from "./pages/Home";
+
+// Lazy load all pages
+const About = lazy(() => import("./pages/About"));
+const Explore = lazy(() => import("./pages/Explore"));
+const Upload = lazy(() => import("./pages/Upload"));
+const UserProfile = lazy(() => import("./pages/UserProfile"));
+const UserSettings = lazy(() => import("./pages/UserSettings"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const SignIn = lazy(() => import("./pages/SignIn"));
+const ImageDetails = lazy(() => import("./pages/ImageDetails"));
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
+
+// Wrapper component to apply Suspense to lazy pages
+const LazyPage = ({ component: Component }: { component: React.ReactNode }) => (
+  <Suspense
+    fallback={
+      <div className="w-full h-dvh bg-(--text-color-2)">
+        <LoadingSpinner />
+      </div>
+    }
+  >
+    {Component}
+  </Suspense>
+);
 
 const router = createBrowserRouter([
   {
@@ -20,59 +37,59 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <LazyPage component={<Home />} />,
       },
       {
         path: "/home",
-        element: <Home />,
+        element: <LazyPage component={<Home />} />,
       },
       {
         path: "/explore",
-        element: <Explore />,
+        element: <LazyPage component={<Explore />} />,
       },
       {
         path: "/upload",
         element: (
           <ProtectedRoute>
-            <Upload />
+            <LazyPage component={<Upload />} />
           </ProtectedRoute>
         ),
       },
       {
         path: "/about",
-        element: <About />,
+        element: <LazyPage component={<About />} />,
       },
       {
         path: "/user-profile",
         element: (
           <ProtectedRoute>
-            <UserProfile />
+            <LazyPage component={<UserProfile />} />
           </ProtectedRoute>
         ),
       },
       {
         path: "/auth/callback",
-        element: <AuthCallback />,
+        element: <LazyPage component={<AuthCallback />} />,
       },
       {
         path: "/user-settings",
         element: (
           <ProtectedRoute>
-            <UserSettings />
+            <LazyPage component={<UserSettings />} />
           </ProtectedRoute>
         ),
       },
       {
         path: "/sign-up",
-        element: <SignUp />,
+        element: <LazyPage component={<SignUp />} />,
       },
       {
         path: "/sign-in",
-        element: <SignIn />,
+        element: <LazyPage component={<SignIn />} />,
       },
       {
         path: "/image-details/:imageId",
-        element: <ImageDetails />,
+        element: <LazyPage component={<ImageDetails />} />,
       },
     ],
   },

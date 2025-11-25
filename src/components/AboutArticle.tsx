@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 interface AboutArticleProps {
   icon: LucideIcon;
   iconColor: string; // accept CSS variables or normal values like #fff
-  iconBgColor: string; // accept CSS variables or normal values like #fff
+  iconBgColor: string; // same as above
   headingText: string;
   bodyText: string[]; // each element is a text to be used in a seperate p element with margin to seperate them
   ariaLabelledBy: string; // passing a label to link the section to the h2
@@ -25,7 +25,7 @@ function AboutArticle({
   return (
     <motion.article
       variants={animations}
-      className="rounded-[0.875rem] border-2 border-(--border-color) bg-(--text-color-2) shadow-lg p-8 pb-2"
+      className="rounded-[0.875rem] border-2 border-(--border-color) bg-(--text-color-2) shadow-lg p-8 pb-2 delay"
       aria-labelledby={ariaLabelledBy}
     >
       <h2 className="flex gap-3 items-center mb-6" id={ariaLabelledBy}>

@@ -40,7 +40,6 @@ function ImagesFilters({
               }
               addedClasses="w-44"
             />
-
             <CustomSelect
               optionsArray={["Most Recent", "Most Popular", "Older First"]}
               value={sortBy}

@@ -9,6 +9,7 @@ interface InfiniteImagesListProps {
 
 const skeleton = Array.from({ length: 12 }, (_, i) => i + 1);
 
+// This component uses the React query infinite scroll mechanism
 function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
   const {
     data,
@@ -93,7 +94,7 @@ function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
         {isFetchingNextPage &&
           skeleton.map((el) => <SkeletonImageLoading key={`loading-${el}`} />)}
 
-        {/* Intersection observer target */}
+        {/* Intersection observer target (fetch more images when we reach this scroll space) */}
         <div ref={observerTarget} className="h-10" />
       </section>
     </div>

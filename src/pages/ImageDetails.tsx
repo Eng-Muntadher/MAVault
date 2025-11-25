@@ -1,14 +1,14 @@
-import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useGetImage } from "../hooks/useGetImage";
+import { useIncreaseViews } from "../hooks/useIncreaseViews";
+import dayjs from "dayjs";
 import BackButton from "../components/BackButton";
 import ImageDetailsBox from "../components/ImageDetailsBox";
 import ImageCommentsBox from "../components/ImageCommentsBox";
 import ImageDetailsButtons from "../components/ImageDetailsButtons";
-import dayjs from "dayjs";
 import SkeletonImageLoading from "../components/SkeletonImageLoading";
-import { useIncreaseViews } from "../hooks/useIncreaseViews";
 
 function ImageDetails() {
   const { imageId } = useParams(); // get the image id from the URL
@@ -50,7 +50,7 @@ function ImageDetails() {
             )}
 
             {/* Image description for accessibility */}
-            <figcaption className="sr-only">...</figcaption>
+            <figcaption className="sr-only">{image?.describtion}</figcaption>
           </motion.figure>
 
           <ImageDetailsButtons

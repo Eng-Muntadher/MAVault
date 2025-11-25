@@ -12,9 +12,12 @@ import dayjs from "dayjs";
 import toast from "react-hot-toast";
 
 function UpdateUserInfoForm() {
-  const { data: user } = useUser();
   const navigate = useNavigate();
 
+  // Get the current signed in user
+  const { data: user } = useUser();
+
+  // Fetch the current user's info
   const { data: userData, isPending: isFetchingData } = useGetUserInfo(
     user?.id || ""
   );
@@ -32,6 +35,7 @@ function UpdateUserInfoForm() {
     setUsername("Loading...");
   }
 
+  // When the user's info arrives, we set it as input values
   useEffect(() => {
     setImage(userData?.at(0)?.avatar);
     setUsername(userData?.at(0)?.user_name);
@@ -48,7 +52,7 @@ function UpdateUserInfoForm() {
     e.preventDefault();
     if (charCount > 120) {
       toast.error(
-        "Please make sure the bio length is not more than 120 characters!"
+        "Please make sure the bio length is no more than 120 characters!"
       );
       return;
     }
@@ -71,7 +75,7 @@ function UpdateUserInfoForm() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-6 mb-8">
       {isPending && <LoadingSpinner />}
 
-      <fieldset className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6">
+      <fieldset className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6 delay">
         {/* This legend is for screen readers only */}
         <legend className="sr-only">User image</legend>
 
@@ -137,7 +141,7 @@ function UpdateUserInfoForm() {
         </div>
       </fieldset>
 
-      <fieldset className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6">
+      <fieldset className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6 delay">
         {/* This legend is for screen readers only */}
         <legend className="sr-only">Basic user information</legend>
 
@@ -219,7 +223,7 @@ function UpdateUserInfoForm() {
 
       <section
         aria-labelledby="account-info-heading"
-        className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6"
+        className="rounded-[0.875rem] border border-(--border-color) bg-(--text-color-2) p-6 delay"
       >
         <h2
           id="account-info-heading"

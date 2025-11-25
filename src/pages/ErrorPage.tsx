@@ -1,3 +1,4 @@
+// This page is sgown if an error is caught by React Router in any Route, or by React error boundary globally
 import {
   useRouteError,
   useNavigate,

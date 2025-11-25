@@ -11,6 +11,7 @@ function ImageComment({ date, commentText, userId }: ImageCommentProps) {
   const { data } = useGetUserInfo(userId);
   return (
     <article className="flex gap-3 mb-7 items-center">
+      {/* The user image for the user who commented */}
       <img
         src={data?.at(0)?.avatar || guestImage}
         alt="user image"

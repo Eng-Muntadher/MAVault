@@ -13,6 +13,7 @@ function UserProfile() {
     window.scrollTo(0, 0);
   }, []);
 
+  // This React Query custom hook gets the current user's liked, bookmarked and uploaded images based on the URL
   const {
     data: images,
     isPending,

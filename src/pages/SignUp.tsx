@@ -7,6 +7,7 @@ function SignUp() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -20,6 +21,7 @@ function SignUp() {
       <p className="text-(--input-placeholder) mb-8 text-center">
         Join my community of creative minds 😊
       </p>
+
       <SignUpForm />
     </motion.div>
   );

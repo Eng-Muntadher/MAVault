@@ -1,17 +1,36 @@
+import { useEffect } from "react";
+import { lazy, Suspense } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useGetCategoriesCount } from "../hooks/useGetCategoriesCount";
 import { Clock, Flame, Star, Stars, TrendingUp } from "lucide-react";
 import ExploreCategoryOptionsList from "../components/ExploreCategoryOptionsList";
 import ExploreImagesFilterOptionsList from "../components/ExploreImagesFilterOptionsList";
 import ExplorePageHeader from "../components/ExplorePageHeader";
 import UploadImageFromExplore from "../components/UploadImageFromExplore";
-import InfiniteImagesList from "../components/InfiniteImagesList";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useGetCategoriesCount } from "../hooks/useGetCategoriesCount";
-import { useEffect } from "react";
+import SkeletonImageLoading from "../components/SkeletonImageLoading";
+
+// This is a relativally large component (and not needed up front) so we lazy load it
+const InfiniteImagesList = lazy(
+  () => import("../components/InfiniteImagesList")
+);
+
+// Placeholders until the images list arrives from the server
+function InfiniteImagesListSkeleton() {
+  const skeleton = Array.from({ length: 12 }, (_, i) => i + 1);
+  return (
+    <div className="grid grid-cols-4 gap-4">
+      {skeleton.map((el) => (
+        <SkeletonImageLoading key={el} />
+      ))}
+    </div>
+  );
+}
 
 function Explore() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  // We use this custom hook to calculate how many images in each category in the database
   const { data: categories } = useGetCategoriesCount();
 
   // This use effect resets the scroll of the page to the top
@@ -55,7 +74,9 @@ function Explore() {
           setterFunction={handleSortByChange}
         />
 
-        <InfiniteImagesList addedClasses="grid grid-cols-4 gap-6 max-xl:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1" />
+        <Suspense fallback={<InfiniteImagesListSkeleton />}>
+          <InfiniteImagesList addedClasses="grid grid-cols-4 gap-6 max-xl:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1" />
+        </Suspense>
 
         <UploadImageFromExplore />
       </div>

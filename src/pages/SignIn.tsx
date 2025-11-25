@@ -7,6 +7,7 @@ function SignIn() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,6 +34,7 @@ function SignIn() {
         >
           Demo Access Emails
         </h2>
+
         <ul className="space-y-2 list-disc ml-5 text-(--text-color)">
           <li>a@b.com</li>
           <li>Ahmed@b.com</li>

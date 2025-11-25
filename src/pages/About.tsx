@@ -1,9 +1,9 @@
+import { useEffect } from "react";
 import AboutPageKeyHighlights from "../components/AboutPageKeyHighlights";
 import TechStack from "../components/TechStack";
 import AboutPageConnectInfo from "../components/AboutPageConnectInfo";
 import AboutPageHeading from "../components/AboutPageHeading";
 import AboutArticleList from "../components/AboutArticleList";
-import { useEffect } from "react";
 
 function About() {
   // This use effect resets the scroll of the page to the top

@@ -18,22 +18,7 @@ function Footer() {
               className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover) transition-and-focus-ring w-fit"
             >
               <Globe size={16} aria-hidden="true" />
-              <span>MuntadherAhmed.com</span>
-            </a>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <h2 className="text-(--text-color) text-sm mb-3">GitHub</h2>
-          <div className="flex justify-center">
-            <a
-              href={data?.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover) transition-and-focus-ring w-fit"
-            >
-              <Github size={16} aria-hidden="true" />
-              <span>Eng-Muntadher.com</span>
+              <span>MuntadherAhmed</span>
             </a>
           </div>
         </div>
@@ -50,6 +35,21 @@ function Footer() {
             >
               <Mail size={16} aria-hidden="true" />
               <span>Muntadheralshammari@gmail.com</span>
+            </a>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <h2 className="text-(--text-color) text-sm mb-3">GitHub</h2>
+          <div className="flex justify-center">
+            <a
+              href={data?.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex gap-2 justify-center items-center text-(--input-placeholder) text-sm hover:text-(--nav-links-hover) transition-and-focus-ring w-fit"
+            >
+              <Github size={16} aria-hidden="true" />
+              <span>Eng-Muntadher</span>
             </a>
           </div>
         </div>

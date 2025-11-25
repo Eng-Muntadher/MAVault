@@ -1,3 +1,5 @@
+// This file has all types and functions used for fetching and updating user data with Supabase
+
 import type { User } from "@supabase/supabase-js";
 import supabase from "./supabase";
 import toast from "react-hot-toast";
@@ -168,11 +170,9 @@ export async function getPublishersInfo(userId: string) {
   return data;
 }
 
-/**
- * Toggles like state for a specific image:
- * - Updates image likes count in DB
- * - Updates liked_images array in user's metadata
- */
+/* Function to Toggle like state for an image +
+   Updates image likes count in DB +
+   updates liked_images array in user's metadata */
 export async function toggleImageLike(imageId: number) {
   if (!imageId) throw new Error("Invalid image ID");
 
@@ -254,6 +254,7 @@ export async function bookmarkImage(imageId: number) {
   if (metaError) throw new Error("Failed to update user metadata");
 }
 
+// My contact info is fetched dynamically from the database in this app
 export async function fetchMyOwnInfo() {
   const { data: info, error } = await supabase
     .from("my-info")

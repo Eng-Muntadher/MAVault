@@ -21,13 +21,18 @@ function ImageDetailsButtons({
   url,
   imageId,
 }: ImageDetailsButtonsProps) {
+  // Mutation functions for image actions
   const { toggleLike, isPending } = useLikeImage();
   const { bookmark, isPending: isSaving } = useBookMarkImage();
+
+  // Get the current signed in user (if there is one)
   const { data } = useUser();
 
+  // check if the user liked/bookmarked this image before
   const isAlreadyLiked = data?.user_metadata?.liked_images?.includes(imageId);
   const isAlreadySaved = data?.user_metadata?.saved_images?.includes(imageId);
 
+  // download the image action
   async function handleDownload(url: string, title: string) {
     const response = await fetch(url);
     const blob = await response.blob();
@@ -42,6 +47,7 @@ function ImageDetailsButtons({
     window.URL.revokeObjectURL(blobUrl);
   }
 
+  // copy URL to clipboard action
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(url);
