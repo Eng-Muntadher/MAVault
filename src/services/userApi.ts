@@ -3,6 +3,11 @@
 import type { User } from "@supabase/supabase-js";
 import supabase from "./supabase";
 import toast from "react-hot-toast";
+import {
+  loadHeic2any,
+  normalizeImage,
+  resizeImageForStorage,
+} from "./imagesApi";
 
 //types
 
@@ -120,30 +125,77 @@ export async function updateUserData({
 
   // If avatar exists, upload it and add the URL to update object
   if (avatar) {
-    const fileName = `avatar-${user.id}-${avatar.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from("avatars")
-      .upload(fileName, avatar, { upsert: true });
+    let processedAvatar = avatar;
 
-    if (uploadError)
-      throw new Error(`Error uploading avatar: ${uploadError.message}`);
+    // STEP 1: HEIC / HEIF conversion (only if needed)
+    if (
+      avatar.type === "image/heic" ||
+      avatar.type === "image/heif" ||
+      avatar.name.toLowerCase().endsWith(".heic")
+    ) {
+      try {
+        // Load heic2any from CDN
+        const heic2any = await loadHeic2any();
+        const convertedBlob = await heic2any({
+          blob: avatar,
+          toType: "image/jpeg",
+          quality: 1,
+        });
+        let tempFile = new File(
+          [convertedBlob as Blob],
+          avatar.name.replace(/\.heic$/i, ".jpg"),
+          { type: "image/jpeg" }
+        );
+        // Normalize colors to sRGB
+        tempFile = await normalizeImage(tempFile);
+        processedAvatar = tempFile;
+      } catch (err) {
+        console.error("HEIC conversion failed:", err);
+        toast.error("Failed to convert HEIC avatar image!");
+        return;
+      }
+    }
 
-    const { data } = supabase.storage.from("avatars").getPublicUrl(fileName);
-    if (!data?.publicUrl) throw new Error("Failed to get avatar public URL");
+    // STEP 2: Resize and convert to WebP
+    try {
+      processedAvatar = await resizeImageForStorage(processedAvatar, 500); // Avatar max 500px
+    } catch (err) {
+      console.error("Avatar resizing failed:", err);
+      toast.error("Failed to process avatar image!");
+      return;
+    }
 
-    updateObj.avatar = data.publicUrl;
+    // STEP 3: Upload to Supabase
+    try {
+      // Create new filename with timestamp to distinguish versions
+      const fileName = `avatar-${user.id}-${Date.now()}.webp`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(fileName, processedAvatar, { upsert: true });
+
+      if (uploadError) {
+        toast.error("Could not upload avatar!");
+        throw new Error(`Error uploading avatar: ${uploadError.message}`);
+      }
+
+      const { data } = supabase.storage.from("avatars").getPublicUrl(fileName);
+      if (!data?.publicUrl) throw new Error("Failed to get avatar public URL");
+      updateObj.avatar = data.publicUrl;
+    } catch (err) {
+      console.error("Avatar upload error:", err);
+      throw err;
+    }
   }
 
-  // Update users_info in one go
-  const { error, data: sheep } = await supabase
+  // STEP 4: Update users_info in database
+  const { error } = await supabase
     .from("users_info")
     .update(updateObj)
     .eq("user_id", user.id)
     .select();
 
   if (error) throw new Error("Failed to update user data: " + error.message);
-
-  console.log(sheep);
 }
 
 export async function getUserData(userId: string) {

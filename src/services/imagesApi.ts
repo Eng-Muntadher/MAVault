@@ -146,7 +146,7 @@ export async function getInfiniteImages({
   nextPage?: number | null;
 }> {
   if (sortBy === "Featured") {
-    const ids = [10, 11, 12, 13];
+    const ids = [155, 119, 116, 95];
     let query = supabase
       .from("Images")
       .select("id, title, category, url, likes, publisher_id, describtion")
@@ -292,10 +292,16 @@ export async function uploadImage({
   // Create a unique filename (avoids overwriting)
   const fileName = `${Date.now()}-${file.name}`;
 
+  const sanitizedFileName = fileName
+    .replace(/[^a-zA-Z0-9._-]/g, "-") // Replace special chars with dash
+    .replace(/-+/g, "-") // Remove multiple consecutive dashes
+    .replace(/^-+|-+$/g, "") // Remove leading/trailing dashes
+    .toLowerCase();
+
   // Upload image to the 'images' bucket
   const { error: uploadError } = await supabase.storage
     .from("images")
-    .upload(fileName, file);
+    .upload(sanitizedFileName, file);
 
   if (uploadError) {
     console.error(`Error uploading ${uploadError.message}`);
@@ -303,7 +309,9 @@ export async function uploadImage({
   }
 
   // Get the public URL of the uploaded image
-  const { data } = supabase.storage.from("images").getPublicUrl(fileName);
+  const { data } = supabase.storage
+    .from("images")
+    .getPublicUrl(sanitizedFileName);
   if (!data?.publicUrl) throw new Error(`Failed to get public URL`);
 
   const url = data.publicUrl;
@@ -521,4 +529,160 @@ export function getResponsiveImageSizes(url: string): {
 // Helper for avatar images (tiny thumbnails)
 export function optimizeAvatarUrl(url: string): string {
   return optimizeImageUrl(url, { width: 100, quality: 75 });
+}
+
+// Add this helper function to convert images to WebP
+export async function convertToWebP(
+  file: File,
+  quality: number = 0.8
+): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Failed to get canvas context"));
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error("Failed to convert to WebP"));
+              return;
+            }
+
+            const webpFile = new File(
+              [blob],
+              file.name.replace(/\.[^.]+$/, ".webp"),
+              { type: "image/webp" }
+            );
+
+            resolve(webpFile);
+          },
+          "image/webp",
+          quality
+        );
+      };
+
+      img.onerror = () => {
+        reject(new Error("Failed to load image"));
+      };
+
+      img.src = e.target?.result as string;
+    };
+
+    reader.onerror = () => {
+      reject(new Error("Failed to read file"));
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+export async function resizeImageForStorage(
+  file: File,
+  maxWidth: number = 2000
+): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) {
+      reject(new Error("Failed to get canvas context"));
+      return;
+    }
+
+    img.onload = () => {
+      // Calculate new dimensions
+      let newWidth = img.width;
+      let newHeight = img.height;
+
+      if (img.width > maxWidth) {
+        newWidth = maxWidth;
+        newHeight = Math.round((img.height / img.width) * maxWidth);
+      }
+
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+
+      // Draw and compress as WebP
+      ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            reject(new Error("Canvas blob conversion failed"));
+            return;
+          }
+
+          const resizedFile = new File(
+            [blob],
+            file.name.replace(/\.[^.]+$/, ".webp"),
+            { type: "image/webp" }
+          );
+
+          const originalSizeKB = (file.size / 1024).toFixed(2);
+          const newSizeKB = (blob.size / 1024).toFixed(2);
+
+          console.log(`✅ Resize complete:`);
+          console.log(
+            `   Original: ${originalSizeKB} KB (${img.width}×${img.height}px)`
+          );
+          console.log(
+            `   Resized: ${newSizeKB} KB (${newWidth}×${newHeight}px)`
+          );
+          console.log(
+            `   Savings: ${(100 - (blob.size / file.size) * 100).toFixed(1)}%`
+          );
+
+          resolve(resizedFile);
+        },
+        "image/webp",
+        0.85
+      );
+    };
+
+    img.onerror = () => {
+      reject(new Error("Failed to load image"));
+    };
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = () => {
+      reject(new Error("Failed to read file"));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// Load heic2any from CDN
+export async function loadHeic2any() {
+  if ((window as any).heic2any) {
+    return (window as any).heic2any;
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.js";
+    script.onload = () => {
+      resolve((window as any).heic2any);
+    };
+    script.onerror = () => {
+      reject(new Error("Failed to load heic2any library"));
+    };
+    document.head.appendChild(script);
+  });
 }

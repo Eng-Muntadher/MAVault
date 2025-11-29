@@ -53,7 +53,7 @@ function SignInForm() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setEmail(e.target.value)
         }
-        addedClasses="text-sm w-full mb-4"
+        addedClasses="text-sm max-sm:text-base w-full mb-4"
         placeholder="Enter your email"
       />
 
@@ -73,12 +73,12 @@ function SignInForm() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setPassword(e.target.value)
         }
-        addedClasses="text-sm w-full mb-1"
+        addedClasses="text-sm max-sm:text-base w-full mb-1.5"
         placeholder="Enter your password"
       />
 
       <p className="text-xs mb-4 text-gray-500">
-        Enter the password "00" if you want demo access
+        Enter the password "ttoo2323" if you want demo access
       </p>
 
       <button className="btn-bg text-(--text-color-2) text-sm font-semibold text-center py-2 px-4 w-full mb-4 rounded-lg cursor-pointer">

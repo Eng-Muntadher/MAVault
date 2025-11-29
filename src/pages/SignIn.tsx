@@ -38,6 +38,7 @@ function SignIn() {
         <ul className="space-y-2 list-disc ml-5 text-(--text-color)">
           <li>muntadheralshammari33@gmail.com</li>
           <li>montadaralshammary051@gmail.com</li>
+          <li>tonymontadar2323@gmail.com</li>
         </ul>
       </section>
     </motion.div>

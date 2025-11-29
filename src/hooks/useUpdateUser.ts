@@ -2,9 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { updateUserData as updateUserDataApi } from "../services/userApi";
 import type { userUpdatedData } from "../services/userApi";
+import { useNavigate } from "react-router-dom";
 
 export function useUpdateUserData() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate: updateUserData, isPending } = useMutation<
     void, // Return type of mutation function
@@ -19,6 +21,7 @@ export function useUpdateUserData() {
         queryKey: ["currentUserInfo"],
         exact: false, // allow partial match
       });
+      navigate("/user-profile");
     },
     onError: (err) => {
       console.error(err);

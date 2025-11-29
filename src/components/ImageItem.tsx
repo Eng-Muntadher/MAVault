@@ -10,6 +10,7 @@ import {
   optimizeAvatarUrl,
 } from "../services/imagesApi";
 import GuestImage from "../assets/guest.jpeg";
+import { memo } from "react";
 
 interface ImageItemProps {
   image: string;
@@ -49,15 +50,15 @@ function ImageItem({
   // Ths function offers better performance by resizing images
   const sizes = getResponsiveImageSizes(image);
 
-  // Only first images are "eager" loaded. The rest is "lazy" loaded
-  const isLCPImage = index < 4;
+  // Only first image is "eager" loaded. The rest is "lazy" loaded
+  const isLCPImage = index === 0;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.3 }}
+      initial={index < 4 ? { opacity: 0, y: 20 } : false}
+      animate={index < 4 ? { opacity: 1, y: 0 } : false}
+      transition={index < 4 ? { duration: 0.3 } : undefined}
+      className="transition-transform duration-300 ease-out hover:-translate-y-2"
     >
       <Link
         to={`/image-details/${imageId}`}
@@ -71,12 +72,18 @@ function ImageItem({
                   ${sizes.tablet} 1000w,
                   ${sizes.desktop} 1500w
                 `}
-            sizes="(max-width: 640px) 500px, (max-width: 1024px) 1000px, 1500px"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             loading={isLCPImage ? "eager" : "lazy"}
             fetchPriority={isLCPImage ? "high" : "auto"}
-            alt={describtion}
-            className="rounded-xl transition-all duration-500 group-hover:scale-110 group-focus:scale-115 max-h-72 min-h-72 w-full object-cover group-focus:brightness-50"
+            alt={title}
+            width={2000}
+            height={2667}
+            className="rounded-xl transition-all duration-500 group-hover:scale-105 group-focus:scale-115 object-cover group-focus:brightness-50 will-change-transform h-[538.2px]"
           />
+
+          <span className="flex px-3 py-1 text-xs text-white absolute left-3 top-[0.85rem] rounded-full bg-black/50 backdrop-blur-sm z-50">
+            {category}
+          </span>
 
           {/* Image info on hover */}
           <motion.div
@@ -141,19 +148,22 @@ function ImageItem({
           </motion.div>
         </div>
 
-        <span className="flex px-3 py-1 text-xs text-white absolute left-3 top-[0.85rem] rounded-full bg-black/50 backdrop-blur-sm">
-          {category}
-        </span>
-
         {/* Image footer */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             {/* Publisher image */}
             <img
-              src={optimizeAvatarUrl(publisher?.at(0)?.avatar || GuestImage)}
+              src={
+                publisher?.at(0).avatar
+                  ? optimizeAvatarUrl(publisher[0].avatar)
+                  : GuestImage
+              }
               loading="lazy"
-              className="h-[26px] w-[26px] rounded-full"
               alt="Publisher image"
+              width={26}
+              height={26}
+              decoding="async"
+              className="h-[26px] w-[26px] rounded-full"
             />
             <span className="text-(--nav-links-color) text-sm">
               {publisher?.at(0)?.user_name || "loading..."}
@@ -174,4 +184,4 @@ function ImageItem({
   );
 }
 
-export default ImageItem;
+export default memo(ImageItem);

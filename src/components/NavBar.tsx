@@ -19,7 +19,7 @@ function NavBar() {
   const { toggleDarkMode } = useDarkMode();
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-lg bg-(--filters-bg)">
+    <header className="sticky top-0 z-800 backdrop-blur-lg bg-(--filters-bg)">
       <nav className="h-16 grid grid-cols-3 items-center px-4 sm:px-6 lg:px-6 max-[890px]:grid-cols-2 border-b-2 border-(--border-color) backdrop-blur-md">
         <Logo />
         <NavLinks />

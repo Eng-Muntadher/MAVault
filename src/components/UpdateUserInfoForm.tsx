@@ -4,7 +4,6 @@ import { Plus, Save } from "lucide-react";
 import { useUpdateUserData } from "../hooks/useUpdateUser";
 import { useUser } from "../hooks/useUser";
 import { useGetUserInfo } from "../hooks/useGetUserInfo";
-import { useNavigate } from "react-router-dom";
 import guestImage from "../assets/guest.jpeg";
 import Input from "./Input";
 import LoadingSpinner from "./LoadingSpinner";
@@ -12,8 +11,6 @@ import dayjs from "dayjs";
 import toast from "react-hot-toast";
 
 function UpdateUserInfoForm() {
-  const navigate = useNavigate();
-
   // Get the current signed in user
   const { data: user } = useUser();
 
@@ -57,7 +54,6 @@ function UpdateUserInfoForm() {
       return;
     }
     updateUserData({ avatar, userName, bio, location });
-    navigate("/user-profile");
   }
 
   function handleReset() {
@@ -171,7 +167,7 @@ function UpdateUserInfoForm() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setUsername(e.target.value);
           }}
-          addedClasses="text-sm w-full mb-4"
+          addedClasses="text-sm max-sm:text-base w-full mb-4"
           placeholder="Your username"
         />
 
@@ -192,7 +188,7 @@ function UpdateUserInfoForm() {
             setBio(e.target.value);
             setCharCount(e.target.value.length);
           }}
-          addedClasses="text-sm w-full min-h-16"
+          addedClasses="text-sm max-sm:text-base w-full min-h-16"
           placeholder="Tell us about yourself..."
         />
         <p className="text-[#6A7282] text-xs mb-3">
@@ -216,7 +212,7 @@ function UpdateUserInfoForm() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setLocation(e.target.value);
           }}
-          addedClasses="text-sm w-full mb-4"
+          addedClasses="text-sm max-sm:text-base w-full mb-4"
           placeholder="City, Country"
         />
       </fieldset>
@@ -247,7 +243,7 @@ function UpdateUserInfoForm() {
           id="email"
           name="email"
           onChange={() => {}}
-          addedClasses="text-sm w-full mb-4 opacity-70 cursor-not-allowed"
+          addedClasses="text-sm max-sm:text-base w-full mb-4 opacity-70 cursor-not-allowed"
           disabled={true}
         />
 
@@ -267,7 +263,7 @@ function UpdateUserInfoForm() {
           id="joindate"
           name="joindate"
           onChange={() => {}}
-          addedClasses="text-sm w-full mb-4 opacity-70 cursor-not-allowed"
+          addedClasses="text-sm max-sm:text-base w-full mb-4 opacity-70 cursor-not-allowed"
           disabled={true}
         />
       </section>

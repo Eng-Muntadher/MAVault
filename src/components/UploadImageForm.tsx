@@ -4,7 +4,9 @@ import { UploadIcon } from "lucide-react";
 import { useUploadImage } from "../hooks/useUploadImage";
 import {
   getImageDimensionsString,
+  loadHeic2any,
   normalizeImage,
+  resizeImageForStorage,
   validateCSV,
 } from "../services/imagesApi";
 import { type FileRejection } from "react-dropzone";
@@ -41,26 +43,6 @@ function UploadImageForm() {
     "image/heif": [], // added
   };
 
-  // Load heic2any from CDN
-  async function loadHeic2any() {
-    if ((window as any).heic2any) {
-      return (window as any).heic2any;
-    }
-
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src =
-        "https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.js";
-      script.onload = () => {
-        resolve((window as any).heic2any);
-      };
-      script.onerror = () => {
-        reject(new Error("Failed to load heic2any library"));
-      };
-      document.head.appendChild(script);
-    });
-  }
-
   // Drag and drop event handler
   async function onDrop(
     acceptedFiles: File[],
@@ -74,7 +56,7 @@ function UploadImageForm() {
         setFileError("File is too large. Maximum size is 10MB.");
       } else if (error.code === "file-invalid-type") {
         setFileError(
-          "Invalid file type. Only PNG, JPG, GIF, WEBP, HEIC are allowed."
+          "Invalid file type. Only PNG, JPG, JPEG, GIF, WEBP, HEIC are allowed."
         );
       } else {
         setFileError(error.message);
@@ -125,6 +107,22 @@ function UploadImageForm() {
       setIsConverting(false);
     }
 
+    // RESIZE for storage
+    try {
+      toast.loading("Converting to WebP...", { id: "webp" });
+      setIsConverting(true);
+
+      fileToUse = await resizeImageForStorage(fileToUse, 2000); // Max 2000px
+
+      setIsConverting(false);
+      toast.success("Converted to WebP!", { id: "webp" });
+    } catch (err) {
+      console.error("WebP conversion failed:", err);
+      setIsConverting(false);
+      toast.error("Failed to convert image to WebP.");
+      return;
+    }
+
     setFile(fileToUse);
   }
 
@@ -159,6 +157,7 @@ function UploadImageForm() {
 
       // file is guaranteed to exist due to checkBeforeSubmit
       const dimensions = await getImageDimensionsString(file!);
+
       uploadImage({ title, describtion, category, tags, file, dimensions });
       handleReset();
     } else {
@@ -169,10 +168,10 @@ function UploadImageForm() {
   function handleReset() {
     setTitle("");
     setDescription("");
-    setCategory("");
     setTags("");
     setFile(null);
     setFileError("");
+    setCharCount(0);
   }
 
   return (
@@ -226,7 +225,7 @@ function UploadImageForm() {
           )}
 
           <p className="text-sm text-[#4A5565]">
-            PNG, JPG, GIF, WEBP up to 10MB
+            PNG, JPG, JPEG, GIF, WEBP, HEIC up to 10MB
           </p>
 
           {fileError && <p className="text-red-600 mt-2">{fileError}</p>}
@@ -260,7 +259,7 @@ function UploadImageForm() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setTitle(e.target.value)
           }
-          addedClasses="text-sm w-full mb-4"
+          addedClasses="text-sm max-sm:text-base w-full mb-4"
           placeholder="Give your image a title"
         />
 
@@ -279,7 +278,7 @@ function UploadImageForm() {
             setDescription(e.target.value);
             setCharCount(e.target.value.length);
           }}
-          addedClasses="text-sm w-full min-h-16"
+          addedClasses="text-sm max-sm:text-base w-full min-h-16"
           placeholder="Describe your image..."
         />
 
@@ -291,7 +290,7 @@ function UploadImageForm() {
         <CustomSelect
           optionsArray={["Sky", "Nature", "Portrait", "Urban"]}
           onChange={(x) => setCategory(x)}
-          addedClasses="text-sm w-full mb-4 bg-(--input-color)"
+          addedClasses="text-sm max-sm:text-base w-full mb-4 bg-(--input-color)"
         />
 
         <label
@@ -308,7 +307,7 @@ function UploadImageForm() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setTags(e.target.value)
           }
-          addedClasses="text-sm w-full mb-2"
+          addedClasses="text-sm max-sm:text-base w-full mb-2"
           placeholder="landscape, mountain, sunset (comma-seperated)"
         />
         <p className="text-xs text-[#6A7282]">
@@ -326,7 +325,8 @@ function UploadImageForm() {
         </button>
         <button
           type="submit"
-          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-white rounded-lg cursor-pointer disabled:opacity-50 transition-and-focus-ring"
+          disabled={isConverting}
+          className="flex items-center text-sm font-semibold gap-2 py-2 px-3 btn-bg text-white rounded-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-and-focus-ring"
         >
           <UploadIcon size={16} aria-hidden="true" /> Upload Image
         </button>

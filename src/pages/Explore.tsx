@@ -26,6 +26,13 @@ function InfiniteImagesListSkeleton() {
   );
 }
 
+// Static Data for filter buttons
+const filterButtonsData = [
+  { icon: Flame, name: "Trending" },
+  { icon: Star, name: "Featured" },
+  { icon: Clock, name: "Recent" },
+];
+
 function Explore() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -46,12 +53,7 @@ function Explore() {
     navigate(`?${params.toString()}`, { replace: true });
   };
 
-  const filterButtonsData = [
-    { icon: Flame, name: "Trending" },
-    { icon: Star, name: "Featured" },
-    { icon: Clock, name: "Recent" },
-  ];
-
+  // Dynamic Data for Sort buttons
   const buttonsData = [
     { icon: Stars, name: "All", count: categories?.totalItems || 0 },
     { icon: TrendingUp, name: "Nature", count: categories?.counts.Nature || 0 },

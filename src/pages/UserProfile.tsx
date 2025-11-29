@@ -6,7 +6,7 @@ import UserProfileMainSection from "../components/UserProfileMainSection";
 import UserImagesList from "../components/UserImagesList";
 
 function UserProfile() {
-  const [imageFilter, setImageFilter] = useState("uploads");
+  const [imageFilter, setImageFilter] = useState("liked");
 
   // This use effect resets the scroll of the page to the top
   useEffect(() => {
@@ -22,8 +22,8 @@ function UserProfile() {
   } = useGetUserImages(imageFilter.toLowerCase());
 
   const filterButtonsData = [
-    { icon: Upload, name: "Uploads" },
     { icon: Heart, name: "Liked" },
+    { icon: Upload, name: "Uploads" },
     { icon: Bookmark, name: "Saved" },
     { icon: MessageSquare, name: "Comments" },
   ];

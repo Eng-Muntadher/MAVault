@@ -15,6 +15,7 @@ const skills = [
   "Day.js",
   "React Error Boundary",
   "heic2any",
+  "React Virtual",
 ];
 
 function SkillsList() {

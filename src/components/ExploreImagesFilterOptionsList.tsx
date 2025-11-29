@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import ExploreImagesFilterOption from "./ExploreImagesFilterOption";
+import { useSearchParams } from "react-router-dom";
 
 interface buttonsDataShape {
   icon: LucideIcon;
@@ -23,7 +24,12 @@ function ExploreImagesFilterOptionsList({
   ariaLabel,
   setterFunction,
 }: buttonsDataProp) {
-  const [selectedBtn, setSelectedBtn] = useState(buttonsData[0].name);
+  const [searchParams] = useSearchParams();
+
+  // Check if we have navigated to this page via history ⬅
+  const SortBy = searchParams.get("sortBy");
+
+  const [selectedBtn, setSelectedBtn] = useState(SortBy || buttonsData[0].name);
 
   function handleClick(value: string) {
     setSelectedBtn(value);

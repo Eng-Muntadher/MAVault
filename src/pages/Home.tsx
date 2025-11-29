@@ -1,12 +1,13 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetImages } from "../hooks/useGetImages";
 import HeroSection from "../components/HeroSection";
 import ImagesFilters from "../components/ImagesFilters";
-import type { ImageFilters } from "../services/imagesApi";
+import { type ImageFilters } from "../services/imagesApi";
+import ImagesList from "../components/ImagesList";
 
 // Lazy load the heavy ImagesList component
-const ImagesList = lazy(() => import("../components/ImagesList"));
+// const ImagesList = lazy(() => import("../components/ImagesList"));
 
 function Home() {
   const navigate = useNavigate();
@@ -147,22 +148,17 @@ function Home() {
         handleFilterChange={handleFilterChange}
       />
 
-      {/* Lazy load ImagesList with Suspense boundary */}
-      <Suspense
-        fallback={<div className="w-full h-96 bg-(--text-color-2)"></div>}
-      >
-        <ImagesList
-          images={images?.data}
-          isPending={isPending}
-          isError={isError}
-          error={error}
-          handlePagiantion={handlePageChange}
-          totalPages={images?.totalPages || 0}
-          currentPage={currentPage}
-          visiblePages={visiblePages}
-          addedClasses="grid grid-cols-3 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 max-lg:grid-cols-2 max-sm:grid-cols-1"
-        />
-      </Suspense>
+      <ImagesList
+        images={images?.data}
+        isPending={isPending}
+        isError={isError}
+        error={error}
+        handlePagiantion={handlePageChange}
+        totalPages={images?.totalPages || 0}
+        currentPage={currentPage}
+        visiblePages={visiblePages}
+        addedClasses="grid grid-cols-3 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 max-lg:grid-cols-2 max-sm:grid-cols-1"
+      />
     </>
   );
 }

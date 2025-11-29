@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Image } from "../services/imagesApi";
 import ImageItem from "./ImageItem";
 import SkeletonImageLoading from "./SkeletonImageLoading";
@@ -115,4 +116,4 @@ function ImagesList({
   );
 }
 
-export default ImagesList;
+export default memo(ImagesList);

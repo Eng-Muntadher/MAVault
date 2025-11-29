@@ -51,7 +51,7 @@ function HeroSection({ handleFilterChange }: HeroSectionProps) {
             onChange={(e) =>
               handleFilterChange({ search: e.target.value || undefined })
             }
-            className="text-sm py-3.5 pr-4 pl-12 bg-(--input-color) rounded-lg w-full transition-all ease-in duration-200 focus:outline-none focus:ring-4 focus:ring-[#155dfc]"
+            className="text-sm max-sm:text-base py-3.5 pr-4 pl-12 bg-(--input-color) rounded-lg w-full transition-all ease-in duration-200 focus:outline-none focus:ring-4 focus:ring-[#155dfc]"
           />
           <Search
             aria-hidden="true"

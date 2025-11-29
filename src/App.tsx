@@ -1,5 +1,9 @@
 import { lazy, Suspense } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import AppLayout from "./components/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorComponent from "./pages/ErrorPage";
@@ -37,11 +41,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <LazyPage component={<Home />} />,
+        element: <Navigate to="/home" replace />,
       },
       {
         path: "/home",
-        element: <LazyPage component={<Home />} />,
+        element: <Home />,
       },
       {
         path: "/explore",

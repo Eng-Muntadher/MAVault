@@ -36,14 +36,31 @@ function ImageDetailsButtons({
   async function handleDownload(url: string, title: string) {
     const response = await fetch(url);
     const blob = await response.blob();
-    const blobUrl = window.URL.createObjectURL(blob);
+
+    // Convert WebP blob → JPEG (or PNG)
+    const bitmap = await createImageBitmap(blob);
+
+    const canvas = document.createElement("canvas");
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(bitmap, 0, 0);
+
+    // Change to "image/jpeg"
+    const convertedBlob: Blob = await new Promise((resolve) =>
+      canvas.toBlob((b) => resolve(b!), "image/jpeg", 0.92)
+    );
+
+    const blobUrl = window.URL.createObjectURL(convertedBlob);
 
     const link = document.createElement("a");
     link.href = blobUrl;
-    link.download = title;
+    link.download = `${title}.jpg`; // final file extension
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
     window.URL.revokeObjectURL(blobUrl);
   }
 

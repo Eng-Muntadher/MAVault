@@ -52,7 +52,7 @@ function SignUpForm() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setUsername(e.target.value)
         }
-        addedClasses="text-sm w-full mb-4"
+        addedClasses="text-sm max-sm:text-base w-full mb-4"
         placeholder="Enter your username"
       />
 
@@ -72,7 +72,7 @@ function SignUpForm() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setEmail(e.target.value)
         }
-        addedClasses="text-sm w-full mb-4"
+        addedClasses="text-sm max-sm:text-base w-full mb-4"
         placeholder="Enter your email"
       />
 
@@ -92,7 +92,7 @@ function SignUpForm() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setPassword(e.target.value)
         }
-        addedClasses="text-sm w-full mb-4"
+        addedClasses="text-sm max-sm:text-base w-full mb-4"
         placeholder="Enter your password"
       />
 
@@ -112,7 +112,7 @@ function SignUpForm() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setConfirmPassword(e.target.value)
         }
-        addedClasses="text-sm w-full mb-5"
+        addedClasses="text-sm max-sm:text-base w-full mb-5"
         placeholder="Confirm your password"
       />
 

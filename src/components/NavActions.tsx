@@ -3,6 +3,7 @@ import { Menu, Moon, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import guestImage from "../assets/guest.jpeg";
 import { useGetUserInfo } from "../hooks/useGetUserInfo";
+import { useEffect } from "react";
 
 interface NavActionsProps {
   openCommandPallete: () => void;
@@ -19,6 +20,26 @@ function NavActions({
 }: NavActionsProps) {
   // get the user data if there is a signed in user
   const { data: userData } = useGetUserInfo(user?.id || "");
+
+  /* Opens the command palette via the keyboard shortcut (Ctrl+K on Windows/Linux, ⌘+K on macOS)
+     and prevents default browser actions */
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Detect Mac devices vs others
+      const isMac = /Mac/i.test(navigator.userAgent);
+
+      if (
+        (isMac && e.metaKey && e.key.toLowerCase() === "k") ||
+        (!isMac && e.ctrlKey && e.key.toLowerCase() === "k")
+      ) {
+        e.preventDefault();
+        openCommandPallete();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [openCommandPallete]);
 
   return (
     <div className="flex gap-3 items-center justify-end">

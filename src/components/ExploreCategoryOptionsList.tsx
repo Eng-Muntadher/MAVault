@@ -16,10 +16,14 @@ interface OptionsListProps {
 
 // This component is used to filter the category of images in Explore page
 function ExploreCategoryOptionsList({ buttonsData }: OptionsListProps) {
-  const [selectedBtn, setSelectedBtn] = useState("All");
-
   const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
+
+  // Check if we have navigated to this page via history ⬅
+  const category = searchParams.get("category");
+
+  const [selectedBtn, setSelectedBtn] = useState(category || "All");
 
   const handleCategoryChange = (category: string) => {
     // Set the URL with new category parameter

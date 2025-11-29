@@ -89,6 +89,7 @@ html {
     border-color 0.4s ease, fill 0.3s ease, stroke 0.3s ease;
 }
 
+/* This is used to add transition delay for many elements */
 .delay {
   transition: background-color 0.4s ease, color 0.4s ease,
     border-color 0.4s ease, fill 0.3s ease, stroke 0.3s ease;
@@ -100,11 +101,11 @@ html {
   color: var(--text-color);
 }
 
+/* Scroll bar styles */
 .scrollbar-thin {
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: var(--focus-ring) transparent; /* Firefox thumb/track */
 }
-
 .scrollbar-thin::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -117,10 +118,7 @@ html {
   border-radius: 9999px;
 }
 
-.active {
-  color: var(--nav-links-hover);
-}
-
+/* Adds focus and transition to a button or a link*/
 .transition-and-focus-ring {
   @apply transition-all ease-in duration-100 focus:outline-none focus-visible:ring-4 focus-visible:ring-(--focus-ring);
 }
