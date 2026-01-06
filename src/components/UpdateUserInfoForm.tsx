@@ -26,12 +26,6 @@ function UpdateUserInfoForm() {
   const [charCount, setCharCount] = useState(0);
   const [avatar, setAvatar] = useState<File | null>(null);
 
-  if (isFetchingData) {
-    setBio("Loading...");
-    setLocation("Loading...");
-    setUsername("Loading...");
-  }
-
   // When the user's info arrives, we set it as input values
   useEffect(() => {
     setImage(userData?.at(0)?.avatar);

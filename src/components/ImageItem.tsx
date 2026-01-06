@@ -163,7 +163,7 @@ function ImageItem({
               width={26}
               height={26}
               decoding="async"
-              className="h-[26px] w-[26px] rounded-full"
+              className="h-[26px] w-[26px] rounded-full object-cover"
             />
             <span className="text-(--nav-links-color) text-sm">
               {publisher?.at(0)?.user_name || "loading..."}

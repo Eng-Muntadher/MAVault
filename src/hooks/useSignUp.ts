@@ -23,7 +23,9 @@ export function useSignUp() {
       ),
     onError: (error) => {
       console.log(error);
-      toast.error("There was an error signing up! Please try again later");
+      if (error.message !== "Email is taken") {
+        toast.error("There was an error signing up! Please try again later");
+      }
     },
   });
   return { signUp, isPending };

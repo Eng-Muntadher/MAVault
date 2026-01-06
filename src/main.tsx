@@ -35,7 +35,7 @@ createRoot(document.getElementById("root")!).render(
                 "linear-gradient(170deg, #155dfc 0%, #9810fa 50%, #e60076 100%)",
             },
           }}
-        />{" "}
+        />
         <App />
       </QueryClientProvider>
     </ErrorBoundary>

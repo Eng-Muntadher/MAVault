@@ -45,7 +45,9 @@ function ImagesList({
       <section className={addedClasses}>
         {/* Show skeletons while fetching */}
         {isPending &&
-          skeletonArray.map((el) => <SkeletonImageLoading key={el} />)}
+          skeletonArray.map((el) => (
+            <SkeletonImageLoading key={el} addedClasses="h-[500px]" />
+          ))}
 
         {/* Show final images */}
         {!isPending && (

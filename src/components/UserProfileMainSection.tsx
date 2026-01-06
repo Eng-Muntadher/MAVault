@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Settings } from "lucide-react";
+import { Calendar, LogOut, MapPin, Settings } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useGetUserInfo } from "../hooks/useGetUserInfo";
@@ -6,9 +6,12 @@ import { useUser } from "../hooks/useUser";
 import UserStatsCardsList from "../components/UserStatsCardsList";
 import guestImage from "../assets/guest.jpeg";
 import dayjs from "dayjs";
+import { useSignOut } from "../hooks/useSignOut";
 
 function UserProfileMainSection() {
   const { data: user } = useUser();
+  const { signOutUser } = useSignOut();
+
   const userId = user?.id;
 
   const { data: userInfo } = useGetUserInfo(userId || "");
@@ -39,14 +42,26 @@ function UserProfileMainSection() {
               {userInfo?.at(0)?.user_name}
             </h1>
 
-            <button
-              className="flex items-center gap-2 bg-[#ECEEF2] px-3 py-2 rounded-lg text-sm font-semibold max-md:hidden hover:bg-[#cccdd1] cursor-pointer transition-all ease-in duration-100 focus:outline-none focus:ring-4 focus:ring-[#155dfc]"
-              onClick={() => navigate("/user-settings")}
-            >
-              <Settings size={16} aria-hidden="true" />
-              Edit Profile
-            </button>
+            {/* Normal screen buttons */}
+            <div className="flex items-center gap-4">
+              <button
+                className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-3 py-2 rounded-lg text-sm font-semibold text-white max-md:hidden cursor-pointer transition-all ease-in duration-100 focus:outline-none focus:ring-4 focus:ring-red-300"
+                onClick={() => signOutUser()}
+              >
+                <LogOut size={16} aria-hidden="true" />
+                Sign Out
+              </button>
+              <button
+                className="flex items-center gap-2 bg-[#ECEEF2] px-3 py-2 rounded-lg text-sm font-semibold max-md:hidden hover:bg-[#cccdd1] cursor-pointer transition-all ease-in duration-100 focus:outline-none focus:ring-4 focus:ring-[#155dfc]"
+                onClick={() => navigate("/user-settings")}
+              >
+                <Settings size={16} aria-hidden="true" />
+                Edit Profile
+              </button>
+            </div>
           </div>
+
+          {/* User info section */}
           <p className="text-(--text-color-secondary) mb-2">{user?.email}</p>
 
           <p className="text-white opacity-90 mb-2">{userInfo?.at(0)?.bio}</p>
@@ -69,16 +84,29 @@ function UserProfileMainSection() {
               </span>
             </div>
           </div>
-          <button
-            className="hidden items-center gap-2 bg-[#ECEEF2] hover:bg-[#cccdd1] px-3 py-2 rounded-lg text-sm font-semibold max-md:flex w-fit mx-auto mt-4 transition-colors duration-200 cursor-pointer"
-            onClick={() => navigate("/user-settings")}
-          >
-            <Settings size={16} />
-            Edit Profile
-          </button>
+
+          {/* Small screens buttons */}
+          <div className="flex items-center gap-4">
+            <button
+              className="hidden items-center gap-2 bg-[#ECEEF2] hover:bg-[#cccdd1] px-3 py-2 rounded-lg text-sm font-semibold max-md:flex w-fit mx-auto mt-4 transition-colors duration-200 cursor-pointer"
+              onClick={() => navigate("/user-settings")}
+            >
+              <Settings size={16} />
+              Edit Profile
+            </button>
+
+            <button
+              className="hidden items-center gap-2 bg-red-500 hover:bg-red-600 px-3 py-2 rounded-lg text-sm font-semibold text-white max-md:flex w-fit mx-auto mt-4 transition-colors duration-200 cursor-pointer"
+              onClick={() => signOutUser()}
+            >
+              <LogOut size={16} />
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
 
+      {/* Stats section */}
       <UserStatsCardsList
         uploads={uploadedImagesCount}
         likes={likedImagesCount}

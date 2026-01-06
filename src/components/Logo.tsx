@@ -5,7 +5,7 @@ function Logo() {
   return (
     <Link
       aria-label="Go to the home page"
-      to="/"
+      to="/home"
       className="flex gap-2 items-center w-fit transition-and-focus-ring"
     >
       <div className="p-2 purple-bg rounded-[0.625rem]">

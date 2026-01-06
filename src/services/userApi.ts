@@ -79,8 +79,6 @@ async function checkEmailExists(email: string) {
 
   if (error) throw new Error("Couldn't check if email exsists!");
 
-  console.log(data);
-
   return data.length > 0;
 }
 

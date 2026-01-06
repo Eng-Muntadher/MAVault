@@ -39,7 +39,8 @@ function ImageDetails() {
             {isPending ? (
               <SkeletonImageLoading
                 heightClass="h-[555px]"
-                addedClasses="grow"
+                widthClass="w-3xl"
+                addedClasses="grow max-[1140px]:w-full"
               />
             ) : (
               <img

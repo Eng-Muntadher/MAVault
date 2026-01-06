@@ -16,6 +16,14 @@ function SignUpForm() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // Password length check
+    if (password.length < 6) {
+      toast.error("Passwords must be at least 6 characters long!");
+      return;
+    }
+
+    // Passwords match check
     if (password === confirmPassword) {
       signUp({ email, password, userName });
     } else {
@@ -68,6 +76,7 @@ function SignUpForm() {
         value={email}
         id="email"
         name="email"
+        maxLength={35}
         autoComplete="email"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setEmail(e.target.value)
@@ -89,6 +98,7 @@ function SignUpForm() {
         id="password"
         name="password"
         autoComplete="password"
+        maxLength={15}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setPassword(e.target.value)
         }
@@ -109,6 +119,7 @@ function SignUpForm() {
         id="confirm-password"
         name="confirm-password"
         autoComplete="new-password"
+        maxLength={15}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setConfirmPassword(e.target.value)
         }

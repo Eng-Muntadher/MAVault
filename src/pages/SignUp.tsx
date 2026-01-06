@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import SignUpForm from "../components/SignUpForm";
 import { motion } from "framer-motion";
+import SignUpForm from "../components/SignUpForm";
 
 function SignUp() {
   // This use effect resets the scroll of the page to the top

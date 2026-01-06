@@ -304,6 +304,7 @@ function UploadImageForm() {
           value={tags}
           id="image-tags"
           name="image-tags"
+          maxLength={60}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setTags(e.target.value)
           }

@@ -8,8 +8,6 @@ interface InfiniteImagesListProps {
   addedClasses?: string;
 }
 
-const skeleton = Array.from({ length: 3 }, (_, i) => i + 1);
-
 function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
   const {
     data,
@@ -24,6 +22,8 @@ function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
   const parentRef = useRef<HTMLDivElement>(null);
   const observerTarget = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState(3);
+
+  const skeleton = Array.from({ length: columns }, (_, i) => i + 1);
 
   // Flatten all pages into a single array
   const images = useMemo(
@@ -114,7 +114,7 @@ function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
       <div className="bg-(--landing-page-bg) pt-12">
         <section className={addedClasses}>
           {skeleton.map((el) => (
-            <SkeletonImageLoading key={el} />
+            <SkeletonImageLoading key={el} addedClasses="h-[500px]" />
           ))}
         </section>
       </div>
@@ -137,6 +137,7 @@ function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
     <div
       className="bg-(--landing-page-bg) mt-12 h-screen overflow-y-auto scrollbar-thin delay"
       ref={parentRef}
+      style={{ overscrollBehavior: "contain" }}
     >
       <section
         className={addedClasses}
@@ -199,7 +200,7 @@ function InfiniteImagesList({ addedClasses }: InfiniteImagesListProps) {
       </section>
 
       {/* Hidden observer target for fetching */}
-      <div ref={observerTarget} className="h-10" />
+      <div ref={observerTarget} className="h-10 pt-20" />
     </div>
   );
 }

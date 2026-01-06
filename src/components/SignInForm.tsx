@@ -70,6 +70,7 @@ function SignInForm() {
         id="password"
         name="password"
         autoComplete="password"
+        maxLength={15}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setPassword(e.target.value)
         }
